@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\Web\MainController;
-use App\Http\Controllers\Web\MainController;
+use App\Http\Controllers\FE\MainController;
+use App\Http\Controllers\BE\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +20,5 @@ use App\Http\Controllers\Web\MainController;
 // });
 
 Route::get('/', [MainController::class, 'index'])->name('home');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+

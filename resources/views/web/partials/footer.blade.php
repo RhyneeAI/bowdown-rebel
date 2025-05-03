@@ -152,6 +152,8 @@
         </div>
     </div>
 </footer>
-<script src="{{ asset('assets') }}/js/jquery-1.11.0.min.js"></script>
-<script src="{{ asset('assets') }}/js/plugins.js"></script>
-<script src="{{ asset('assets') }}/js/script.js"></script>
+<script src="{{ asset('assets/web') }}/js/jquery-1.11.0.min.js"></script>
+<script src="{{ asset('assets/web') }}/js/plugins.js"></script>
+<script src="{{ asset('assets/web') }}/js/script.js"></script>
+<script src="{{ asset('assets') }}/flatpickr.min.js"></script>
+<script src="{{ asset('assets') }}/slimselect.min.js"></script>
