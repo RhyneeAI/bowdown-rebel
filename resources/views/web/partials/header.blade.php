@@ -8,8 +8,10 @@
 <meta name="keywords" content="Online Store">
 <meta name="description" content="Stylish - Shoes Online Store HTML Template">
 
-<link rel="stylesheet" href="{{ asset('assets/web') }}/css/vendor.css">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/web') }}/css/style.css">
+<link rel="stylesheet" href="{{ asset('assets') }}/web/css/vendor.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets') }}/web/css/style.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets') }}/css/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets') }}/css/slimselect.min.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
