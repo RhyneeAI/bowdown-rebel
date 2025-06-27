@@ -1,5 +1,5 @@
 <header id="header" class="site-header text-black">
-    <div class="header-top border-bottom py-2">
+    {{-- <div class="header-top border-bottom py-2">
         <div class="container-lg">
             <div class="row justify-content-evenly">
                 <div class="col">
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <nav id="header-nav" class="navbar navbar-expand-lg">
         <div class="container-lg">
             <a class="navbar-brand" href="index.html">
@@ -475,6 +475,7 @@
                 <a href="index.html" class="d-inline-block text-uppercase text-hover fw-bold">View all</a>
             </div>
         </div>
+    
         <div class="product-content padding-small">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
                 <div class="col mb-4 mb-3">
