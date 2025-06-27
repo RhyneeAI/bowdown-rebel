@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FE\MainController;
+use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\BE\DashboardController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,14 @@ use App\Http\Controllers\BE\DashboardController;
 //     return view('welcome');
 // });
 
-Route::get('/', [MainController::class, 'index'])->name('home');
+Route::get('/', [PageController::class, 'index'])->name('home');
+Route::get('/shop', [PageController::class, 'shop'])->name('shop');
+Route::get('/shop-detail', [PageController::class, 'detail'])->name('shop_detail');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+//auth
+Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 

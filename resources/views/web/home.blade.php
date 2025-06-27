@@ -1,260 +1,302 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+
 <head>
     @include('web.partials.header')
 </head>
+
 <body>
-    @include('web.partials.loader')
 
-    <!-- quick view -->
-    <div class="modal fade" id="modaltoggle" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="col-lg-12 col-md-12 me-3">
-                        <div class="image-holder">
-                            <img src="images/summary-item1.jpg" alt="Shoes">
+    <div class="fh5co-loader"></div>
+
+    <div id="page">
+        <!-- navbar -->
+        @include('web.partials.navbar')
+        <aside id="fh5co-hero" class="js-fullheight">
+            <div class="flexslider js-fullheight">
+                <ul class="slides">
+                    <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_1.png);">
+                        <div class="overlay-gradient"></div>
+                        <div class="container">
+                            <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
+                                <div class="slider-text-inner">
+                                    <div class="desc">
+                                        <h2>Gear Up in Style, Rule the Road</h2>
+                                        <p>Far beyond traffic lights and city noise, true riders know—performance is
+                                            nothing without presence.</p>
+                                        <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
+                                            </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_2.png);">
+                        <div class="container">
+                            <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
+                                <div class="slider-text-inner">
+                                    <div class="desc">
+                                        <h2>Built for Speed, Designed for You</h2>
+                                        <p>From the curves of the highway to the corners of your garage, our apparel
+                                            moves with your passion.</p>
+                                        <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
+                                            </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_3.png);">
+                        <div class="container">
+                            <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
+                                <div class="slider-text-inner">
+                                    <div class="desc">
+                                        <h2>Ride Hard, Wear Bold</h2>
+                                        <p>Not just clothing—it’s a statement for those who chase torque, thrill, and
+                                            timeless style.</p>
+                                        <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
+                                            </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <div id="fh5co-services" class="fh5co-bg-section">
+            <div class="row animate-box">
+                <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                    <span>Cool Stuff</span>
+                    <h2>CATEGORIES</h2>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <!-- Item 1 -->
+                    <div class="categories col-md-4 col-sm-4 text-center">
+                        <div class="category-card">
+                            <a href="#">
+
+                                <div class="image-container">
+                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/shirt1.png" alt="">
+                                    <h3 class="category-title">TEES</h3>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-md-12">
-                        <div class="summary">
-                            <div class="summary-content fs-6">
-                                <div class="product-header d-flex justify-content-between mt-4">
-                                    <h3 class="display-7">Running Shoes For Men</h3>
-                                    <div class="modal-close-btn">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close">
-                                        </button>
-                                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="categories col-md-4 col-sm-4 text-center">
+                        <div class="category-card">
+                            <a href="#">
+                                <div class="image-container">
+                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/longsleeve.png" alt="">
+                                    <h3 class="category-title">LONG SLEEVES & JERSEY</h3>
                                 </div>
-                                <span class="product-price fs-3">$99</span>
-                                <div class="product-details">
-                                    <p class="fs-7">Buy good shoes and a good mattress, because when you're not in one
-                                        you're in the
-                                        other. With four pairs of shoes, I can travel the world.</p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="categories col-md-4 col-sm-4 text-center">
+                        <div class="category-card">
+                            <a href="#">
+                                <div class="image-container">
+                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/topi.png" alt="">
+                                    <h3 class="category-title">ACCESSORIES</h3>
                                 </div>
-                                <ul class="select">
-                                    <li>
-                                        <strong>Colour Shown:</strong> Red, White, Black
-                                    </li>
-                                    <li>
-                                        <strong>Style:</strong> SM3018-100
-                                    </li>
-                                </ul>
-                                <div class="variations-form shopify-cart">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="quantity d-flex pb-4">
-                                                <div
-                                                    class="qty-number align-top qty-number-plus d-flex justify-content-center align-items-center text-center">
-                                                    <span class="increase-qty plus">
-                                                        <svg class="plus">
-                                                            <use xlink:href="#plus"></use>
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                                <input type="number" id="quantity_001" class="input-text text-center"
-                                                    step="1" min="1" name="quantity" value="1" title="Qty">
-                                                <div
-                                                    class="qty-number qty-number-minus d-flex justify-content-center align-items-center text-center">
-                                                    <span class="increase-qty minus">
-                                                        <svg class="minus">
-                                                            <use xlink:href="#minus"></use>
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <a rel="nofollow" data-no-instant="" href="#" class="out-stock button">Out
-                                                of stock</a>
-                                            <button type="submit"
-                                                class="btn btn-medium btn-black hvr-sweep-to-right">Add to cart</button>
-                                        </div>
-                                    </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row center-block">
+                    <!-- Item 1 -->
+                    <div class="categories col-md-6 col-sm-4 text-center">
+                        <div class="category-card">
+                            <a href="#">
+
+                                <div class="image-container">
+                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/workshirt.png" alt="">
+                                    <h3 class="category-title">SHIRT</h3>
                                 </div>
-                                <!-- variations-form -->
-                                <div class="categories d-flex flex-wrap pt-3">
-                                    <strong class="pe-2">Categories:</strong>
-                                    <a href="#" title="categories">Clothing,</a>
-                                    <a href="#" title="categories">Men's Clothes,</a>
-                                    <a href="#" title="categories">Tops & T-Shirts</a>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="categories col-md-6 col-sm-4 text-center">
+                        <div class="category-card">
+                            <a href="#">
+                                <div class="image-container">
+                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/outer.png" alt="">
+                                    <h3 class="category-title">OUTERWEAR</h3>
                                 </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fh5co-product">
+            <div class="container">
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <span>Bowdown</span>
+                        <h2>HOT Products.</h2>
+                        <p>Inspired by motorcycle, Bowdown Rebbel is a lifestyle brand that embodies the spirit of freedom and adventure.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/shirt1.png);">
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html">White Retro Power Tees</a></h3>
+                                <span class="price">Rp. 150.000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/outer.png);">
+                                {{-- <span class="sale">Sale</span> --}}
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html"></a>P&COF Trucker Jacket</h3>
+                                <span class="price">Rp. 600.000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/helm.png);">
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html">Retro Green Helmet</a></h3>
+                                <span class="price">Rp. 780.000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/worktshirt2.png);">
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html">Blue Plain Workshirt</a></h3>
+                                <span class="price">Rp. 200.000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/hoodie.png);">
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html">High Spirit Hoodie</a></h3>
+                                <span class="price">Rp. 150.000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center animate-box">
+                        <div class="product">
+                            <div class="product-grid"
+                                style="background-image:url({{ asset('assets') }}/web/images/pict_bowdown/scarf.png);">
+                                <div class="inner">
+                                    <p>
+                                        <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="desc">
+                                <h3><a href="single.html">Soul Stripper Classic</a></h3>
+                                <span class="price">Rp. 99.000</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Cart view -->
-    <div class="modal fade" id="modallong" tabindex="-1" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title fs-5">Cart</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div id="fh5co-started">
+            <div class="container">
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2 text-center fh5co-heading">
+                        <h2>Stay Up to Date with All News
+                            and Exclusive Offers</h2>
+                        <p>Just stay tune for our latest Product. Now you can subscribe</p>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="shopping-cart">
-                        <div class="shopping-cart-content">
-                            <div class="mini-cart cart-list p-0 mt-3">
-                                <div class="mini-cart-item d-flex border-bottom pb-3">
-                                    <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                                        <a href="#" title="product-image">
-                                            <img src="images/single-product-thumb1.jpg" class="img-fluid"
-                                                alt="single-product-item">
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
-                                        <div
-                                            class="product-header d-flex justify-content-between align-items-center mb-3">
-                                            <h4 class="product-title fs-6 me-5">Sport Shoes For Men</h4>
-                                            <a href="" class="remove" aria-label="Remove this item"
-                                                data-product_id="11913" data-cart_item_key="abc" data-product_sku="">
-                                                <svg class="close">
-                                                    <use xlink:href="#close"></use>
-                                                </svg>
-                                            </a>
-                                        </div>
-                                        <div class="quantity-price d-flex justify-content-between align-items-center">
-                                            <div class="input-group product-qty">
-                                                <button type="button"
-                                                    class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                                                    data-type="minus">
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#minus"></use>
-                                                    </svg>
-                                                </button>
-                                                <input type="text" name="quantity"
-                                                    class="form-control input-number quantity" value="1">
-                                                <button type="button"
-                                                    class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                                                    data-type="plus">
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#plus"></use>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="price-code">
-                                                <span class="product-price fs-6">$99</span>
-                                            </div>
-                                        </div>
-                                        <!-- quantity-price -->
-                                    </div>
+                <div class="row animate-box">
+                    <div class="col-md-8 col-md-offset-2">
+                        <form class="form-inline">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="email" class="sr-only">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Email">
                                 </div>
                             </div>
-                            <div class="mini-cart cart-list p-0 mt-3">
-                                <div class="mini-cart-item d-flex border-bottom pb-3">
-                                    <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                                        <a href="#" title="product-image">
-                                            <img src="images/single-product-thumb2.jpg" class="img-fluid"
-                                                alt="single-product-item">
-                                        </a>
-                                    </div>
-                                    <div class="col-lg-9 col-md-8 col-sm-8">
-                                        <div
-                                            class="product-header d-flex justify-content-between align-items-center mb-3">
-                                            <h4 class="product-title fs-6 me-5">Brand Shoes For Men</h4>
-                                            <a href="" class="remove" aria-label="Remove this item"
-                                                data-product_id="11913" data-cart_item_key="abc" data-product_sku="">
-                                                <svg class="close">
-                                                    <use xlink:href="#close"></use>
-                                                </svg>
-                                            </a>
-                                        </div>
-                                        <div class="quantity-price d-flex justify-content-between align-items-center">
-                                            <div class="input-group product-qty">
-                                                <button type="button"
-                                                    class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                                                    data-type="minus">
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#minus"></use>
-                                                    </svg>
-                                                </button>
-                                                <input type="text" name="quantity"
-                                                    class="form-control input-number quantity" value="1">
-                                                <button type="button"
-                                                    class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                                                    data-type="plus">
-                                                    <svg width="16" height="16">
-                                                        <use xlink:href="#plus"></use>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                            <div class="price-code">
-                                                <span class="product-price fs-6">$99</span>
-                                            </div>
-                                        </div>
-                                        <!-- quantity-price -->
-                                    </div>
-                                </div>
+                            <div class="col-md-6 col-sm-6">
+                                <button type="submit" class="btn btn-default btn-block">Subscribe</button>
                             </div>
-                            <!-- cart-list -->
-                            <div class="mini-cart-total d-flex justify-content-between py-4">
-                                <span class="fs-6">Subtotal:</span>
-                                <span class="special-price-code">
-                                    <span class="price-amount amount fs-6" style="opacity: 1;">
-                                        <bdi>
-                                            <span class="price-currency-symbol">$</span>198.00 </bdi>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="modal-footer my-4 justify-content-center">
-                                <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep">View
-                                    Cart</button>
-                                <button type="button"
-                                    class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Checkout</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Login -->
-    <div class="modal fade" id="modallogin" tabindex="-1" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered" role="document">
-            <div class="modal-content p-4">
-                <div class="modal-header mx-auto border-0">
-                    <h2 class="modal-title fs-3 fw-normal">Login</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="login-detail">
-                        <div class="login-form p-0">
-                            <div class="col-lg-12 mx-auto">
-                                <form id="login-form">
-                                    <input type="text" name="username" placeholder="Username or Email Address *"
-                                        class="mb-3 ps-3 text-input">
-                                    <input type="password" name="password" placeholder="Password"
-                                        class="ps-3 text-input">
-                                    <div class="checkbox d-flex justify-content-between mt-4">
-                                        <p class="checkbox-form">
-                                            <label class="">
-                                                <input name="rememberme" type="checkbox" id="remember-me"
-                                                    value="forever"> Remember me </label>
-                                        </p>
-                                        <p class="lost-password">
-                                            <a href="#">Forgot your password?</a>
-                                        </p>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="modal-footer mt-5 d-flex justify-content-center">
-                            <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep">Login</button>
-                            <button type="button"
-                                class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Register</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- footer and script -->
+        @include('web.partials.footer')
 
-    @include('web.partials.content')
 
-    @include('web.partials.footer')
 </body>
+
+</html>
