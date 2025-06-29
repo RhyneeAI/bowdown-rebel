@@ -20,13 +20,13 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#createModalCategory">
                             Tambah Kategori
                         </button>
                     </div>
                 </div>
 
-                {{-- @include('schedule.modal_add_schedule') --}}
+                @include('dashboard.category.create')
             </div>
             <table id="teacherTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
@@ -41,7 +41,7 @@
                         <td>1</td>
                         <th>Pakaian</th>
                         <th>
-                            <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="#editModalCategory" class="btn btn-primary btn-sm" data-bs-toggle="modal">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm">Hapus</a>
                         </th>
                         
@@ -56,6 +56,8 @@
                     @endforeach --}}
                 </tbody>
             </table>
+            @include('dashboard.category.edit')
+
         </div>
     </div>
 
