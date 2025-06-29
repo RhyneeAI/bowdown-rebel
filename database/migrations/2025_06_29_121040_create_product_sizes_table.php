@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('product_sizes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('size_code')->unique();
+            $table->enum('size_code', ['S', 'M', 'L', 'XL', 'XXL'])->default('L');
             $table->decimal('price', 7, 2);
             $table->integer('stock')->default(0);
             $table->integer('stock_min')->default(0);
