@@ -14,15 +14,23 @@ class ProductController extends Controller
     {
         // This method should return a view with a list of products
         // For example, you might return a view like this:
-        return view('dashboard.produk.index');
+        return view('dashboard.product.index');
     }
 
+    public function detail()
+    {
+        // This method should return a view with the details of a specific product
+        // For example, you might return a view like this:
+        return view('dashboard.product.edit');
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        // This method should return a view with a form to create a new product
+        // For example, you might return a view like this:
+        return view('dashboard.product.create');
     }
 
     /**
@@ -46,7 +54,8 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // This method should return a view with a form to edit the product
+        // For example, you might return a view like this:
     }
 
     /**
