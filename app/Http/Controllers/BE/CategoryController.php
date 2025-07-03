@@ -14,7 +14,7 @@ class CategoryController extends Controller
     {
         // This method should return a view with a list of categories
         // For example, you might return a view like this:
-        return view('dashboard.kategori.index');
+        return view('dashboard.category.index');
     }
 
     /**
