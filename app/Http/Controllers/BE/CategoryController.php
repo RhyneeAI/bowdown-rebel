@@ -22,7 +22,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        // This method should return a view with a form to create a new category
+        // For example, you might return a view like this:
+        return view('dashboard.category.create');
     }
 
     /**
@@ -46,7 +48,9 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // This method should return a view with a form to edit an existing category
+        // For example, you might return a view like this:
+        return view('dashboard.category.edit');
     }
 
     /**

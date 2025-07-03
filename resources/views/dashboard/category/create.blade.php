@@ -1,55 +1,47 @@
-<div class="modal fade" id="createModalCategory" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">Buat Kategori Baru</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+@extends('dashboard.partials.main')
 
-            <!-- FORM MULAI -->
-            <form id="createForm" method="POST" enctype="multipart/form-data">
+
+@push('css')
+<!-- Custom style jika diperlukan -->
+@endpush
+
+@section('title')
+    Buat Kategori Baru
+@endsection
+
+@section('content')
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <form id="createForm" method="POST" enctype="multipart/form-data" action="">
                 @csrf
                 @method('POST')
-                <div class="modal-body">
-                    <div class="card-body">
 
-                        <div class="row mb-3 mt-1">
-                            <div class="col-md-12">
-                                <label for="category_name" class="form-label">Nama Kategori</label>
-                                <input type="text" class="form-control" id="category_name" name="category_name" required>
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label for="category_name" class="form-label">Nama Kategori</label>
+                    <input type="text" class="form-control" id="category_name" name="category_name" required>
+                </div>
 
-                        <!-- Tambahkan input gambar -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="category_image" class="form-label">Gambar Kategori</label>
-                                <input type="file" class="form-control" id="category_image" name="category_image" accept="image/*">
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label for="category_image" class="form-label">Gambar Kategori</label>
+                    <input type="file" class="form-control" id="category_image" name="category_image" accept="image/*">
+                </div>
 
-                        <!-- Opsional: Preview gambar -->
-                        <div class="row" id="preview-container" style="display: none;">
-                            <div class="col-md-12 text-center">
-                                <img id="preview-image" src="#" alt="Preview" class="img-fluid rounded mt-2" style="max-height: 200px; object-fit: cover;">
-                            </div>
-                        </div>
+                <div class="mb-3 text-center" id="preview-container" style="display: none;">
+                    <img id="preview-image" src="#" alt="Preview" class="img-fluid rounded mt-2" style="max-height: 300px; object-fit: cover;">
+                </div>
 
-                        <div class="row">
-                            <div class="col-md-12 text-end">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-success">Simpan Data</button>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="text-end">
+                    <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+                    <button type="submit" class="btn btn-success">Simpan Data</button>
                 </div>
             </form>
-            <!-- FORM SELESAI -->
-
         </div>
     </div>
 </div>
+@endsection
+
+@push('script')
 <script>
 document.getElementById('category_image').addEventListener('change', function(event) {
     const file = event.target.files[0];
@@ -68,3 +60,4 @@ document.getElementById('category_image').addEventListener('change', function(ev
     }
 });
 </script>
+@endpush
