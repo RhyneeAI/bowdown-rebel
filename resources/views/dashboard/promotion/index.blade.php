@@ -20,13 +20,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#createModalPromotion">
                             Tambah Promosi
                         </button>
                     </div>
                 </div>
 
-                {{-- @include('schedule.modal_add_schedule') --}}
             </div>
             <table id="teacherTable" class="table table-striped table-bordered" style="width:100%">
                 <thead>
@@ -47,9 +46,9 @@
                         <td>2023-01-01</td>
                         <td>10%</td>
                         <th>
-                            <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="#editModalPromotion" class="btn btn-primary btn-sm">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                            <a href="#" class="btn btn-info btn-sm">Detail</a>
+                            <a href="{{ route('promotion.detail') }}" class="btn btn-info btn-sm">Detail</a>
                         </th>
                         
                     </tr>
@@ -63,6 +62,9 @@
                     @endforeach --}}
                 </tbody>
             </table>
+            @include('dashboard.promotion.create')
+            @include('dashboard.promotion.edit')
+
         </div>
     </div>
 

@@ -14,6 +14,13 @@ class PromotionController extends Controller
     {
         return view('dashboard.promotion.index');
     }
+    /**
+     * Display the promotion detail.
+     */
+    public function promotionDetail()
+    {
+        return view('dashboard.promotion.detail');
+    }
 
     /**
      * Show the form for creating a new resource.
