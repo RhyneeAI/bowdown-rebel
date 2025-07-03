@@ -37,7 +37,8 @@ Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 
 // Dashboard Routes
 Route::resource('dashboard/kategori', CategoryController::class);
-Route::resource('dashboard/produk', ProductController::class);
+Route::resource('dashboard/product', ProductController::class);
+Route::get('dashboard/detail', [ProductController::class, 'detail'])->name('dashboard.product.detail');
 Route::resource('dashboard/promotion', PromotionController::class);
 Route::resource('dashboard/user', UserController::class);
 
