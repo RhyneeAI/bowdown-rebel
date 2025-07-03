@@ -20,9 +20,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#createModalPromotion">
+                        <a href="{{ route('promotion.create') }}" class="btn btn-primary float-end">
                             Tambah Promosi
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@
                         <td>2023-01-01</td>
                         <td>10%</td>
                         <th>
-                            <a href="#editModalPromotion" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="#" class="btn btn-primary btn-sm">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm">Hapus</a>
                             <a href="{{ route('promotion.detail') }}" class="btn btn-info btn-sm">Detail</a>
                         </th>
@@ -62,8 +62,6 @@
                     @endforeach --}}
                 </tbody>
             </table>
-            @include('dashboard.promotion.create')
-            @include('dashboard.promotion.edit')
 
         </div>
     </div>
