@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_managements', function (Blueprint $table) {
+        Schema::create('kategori', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_id')->constrained('transactions')->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('transaction_status', ['Waiting', 'Processing', 'Completed', 'Sending', 'Cancelled'])->default('Waiting');
+            $table->string('nama_kategori', 30);
+            $table->string('foto', 40);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction_managements');
+        Schema::dropIfExists('kategori');
     }
 };
