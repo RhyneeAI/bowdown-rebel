@@ -3,13 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Promotion;
-use App\Models\PromotionImage;
-use App\Models\ProductSize;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -24,30 +22,40 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // Seed Users
-        User::create([
-            'nik' => '1234567890',
-            'name' => 'Trallalelo Trallala',
-            'birth_date' => '1990-01-01',
-            'phone' => '081234567890',
-            'email' => 'trallalelo@gmail.com',
-            'address' => 'Jl. Trallalelo No. 1, Trallala',
-            'role' => 'Admin',
-            'username' => 'admin',
-            'password' => bcrypt('password'),
+        // Seed Roles
+        DB::table('role')->insert([
+            ['role' => 'Admin'],
+            ['role' => 'User'],
         ]);
 
-        User::create([
-            'nik' => '1234567891',
-            'name' => 'Ballerina Cappucina',
-            'birth_date' => '2002-02-02',
-            'phone' => '081234567890',
-            'email' => 'Ballerina@gmail.com',
-            'address' => 'Jl. Ballerina No. 2, Cappucina',
-            'role' => 'User',
-            'username' => 'user',
-            'password' => bcrypt('password'),
+        // Seed Users
+        DB::table('user')->insert([
+            [
+                'nik' => '1234567890',
+                'nama' => 'Bowdown Admin',
+                'tanggal_lahir' => '1990-01-01',
+                'no_hp' => '081234567890',
+                'email' => 'bowdownadmin@gmail.com',
+                'id_role' => 1, 
+                'username' => 'admin',
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nik' => '1234567891',
+                'nama' => 'Bowdown User',
+                'tanggal_lahir' => '2002-02-02',
+                'no_hp' => '081234567890',
+                'email' => 'bowdownuser@gmail.com',
+                'id_role' => 2,
+                'username' => 'user',
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ]);
+
 
         // Seed Categories
         // $categories = [

@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_images', function (Blueprint $table) {
+        Schema::create('varian_produk', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('original_name');
-            $table->string('hashed_name');
+            $table->foreignId('id_produk')->constrained('produk')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('ukuran', 5);
+            $table->decimal('harga', 8, 2);
+            $table->integer('stok')->default(0);
+            $table->integer('min_stok')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_images');
+        Schema::dropIfExists('varian_produk');
     }
 };
