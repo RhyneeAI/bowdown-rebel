@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 @yield('dashboard')
 
-                <div class="card">
+                <div class="card" style="margin: -10px !important;">
                     <div class="card-body">
                     <h5 class="card-title fw-semibold mb-4">@yield('title')</h5>
                     @yield('content')

@@ -58,7 +58,7 @@
     <nav id="header-nav" class="navbar navbar-expand-lg">
         <div class="container-lg">
             <a class="navbar-brand" href="index.html">
-                <img src="{{ asset('assets/web') }}/images/main-logo.png" class="logo" alt="logo">
+                <img src="{{ asset() }}/assets/web/images/main-logo.png" class="logo" alt="logo">
             </a>
             <button class="navbar-toggler d-flex d-lg-none order-3 border-0 p-1 ms-2" type="button"
                 data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false"
@@ -70,7 +70,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar">
                 <div class="offcanvas-header px-4 pb-0">
                     <a class="navbar-brand ps-3" href="index.html">
-                        <img src="{{ asset('assets/web') }}/images/main-logo.png" class="logo" alt="logo">
+                        <img src="{{ asset() }}/assets/web/images/main-logo.png" class="logo" alt="logo">
                     </a>
                     <button type="button" class="btn-close btn-close-black p-5" data-bs-dismiss="offcanvas"
                         aria-label="Close" data-bs-target="#bdNavbar"></button>
@@ -172,7 +172,7 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="card d-flex flex-row align-items-end border-0 large jarallax-keep-img">
-                        <img src="{{ asset('assets/web') }}/images/card-image1.jpg" alt="shoes" class="img-fluid jarallax-img">
+                        <img src="{{ asset() }}/assets/web/images/card-image1.jpg" alt="shoes" class="img-fluid jarallax-img">
                         <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                             <h2 class="card-title display-3 light">Stylish shoes for Women</h2>
                             <a href="index.html"
@@ -185,7 +185,7 @@
                     <div class="row g-4">
                         <div class="col-lg-12 mb-4">
                             <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="{{ asset('assets/web') }}/images/card-image2.jpg" alt="shoes" class="img-fluid jarallax-img">
+                                <img src="{{ asset() }}/assets/web/images/card-image2.jpg" alt="shoes" class="img-fluid jarallax-img">
                                 <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                                     <h2 class="card-title style-2 display-4 light">Sports Wear</h2>
                                     <a href="index.html"
@@ -196,7 +196,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="{{ asset('assets/web') }}/images/card-image3.jpg" alt="shoes" class="img-fluid jarallax-img">
+                                <img src="{{ asset() }}/assets/web/images/card-image3.jpg" alt="shoes" class="img-fluid jarallax-img">
                                 <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                                     <h2 class="card-title style-2 display-4 light">Fashion Shoes</h2>
                                     <a href="index.html"
@@ -209,7 +209,7 @@
                 </div>
                 <div class="swiper-slide">
                     <div class="card d-flex flex-row align-items-end border-0 large jarallax-keep-img">
-                        <img src="{{ asset('assets/web') }}/images/card-image4.jpg" alt="shoes" class="img-fluid jarallax-img">
+                        <img src="{{ asset() }}/assets/web/images/card-image4.jpg" alt="shoes" class="img-fluid jarallax-img">
                         <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                             <h2 class="card-title display-3 light">Stylish shoes for men</h2>
                             <a href="index.html"
@@ -222,7 +222,7 @@
                     <div class="row g-4">
                         <div class="col-lg-12 mb-4">
                             <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="{{ asset('assets/web') }}/images/card-image5.jpg" alt="shoes" class="img-fluid jarallax-img">
+                                <img src="{{ asset() }}/assets/web/images/card-image5.jpg" alt="shoes" class="img-fluid jarallax-img">
                                 <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                                     <h2 class="card-title style-2 display-4 light">Men Shoes</h2>
                                     <a href="index.html"
@@ -233,7 +233,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="card d-flex flex-row align-items-end border-0 jarallax-keep-img">
-                                <img src="{{ asset('assets/web') }}/images/card-image6.jpg" alt="shoes" class="img-fluid jarallax-img">
+                                <img src="{{ asset() }}/assets/web/images/card-image6.jpg" alt="shoes" class="img-fluid jarallax-img">
                                 <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                                     <h2 class="card-title style-2 display-4 light">Women Shoes</h2>
                                     <a href="index.html"
@@ -284,7 +284,7 @@
                 <div class="col mb-4">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item1.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item1.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -314,7 +314,7 @@
                 <div class="col mb-4">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item2.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item2.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -344,7 +344,7 @@
                 <div class="col mb-4">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item3.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item3.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -374,7 +374,7 @@
                 <div class="col mb-4">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item4.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item4.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -404,7 +404,7 @@
                 <div class="col mb-4">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item5.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item5.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -441,7 +441,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 mb-4">
                 <div class="collection-card card border-0 d-flex flex-row align-items-end jarallax-keep-img">
-                    <img src="{{ asset('assets/web') }}/images/collection-item1.jpg" alt="product-item"
+                    <img src="{{ asset() }}/assets/web/images/collection-item1.jpg" alt="product-item"
                         class="border-rounded-10 img-fluid jarallax-img">
                     <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
                         <h3 class="card-title display-3">
@@ -453,7 +453,7 @@
             </div>
             <div class="col-lg-6 col-md-6">
                 <div class="collection-card card border-0 d-flex flex-row jarallax-keep-img">
-                    <img src="{{ asset('assets/web') }}/images/collection-item2.jpg" alt="product-item"
+                    <img src="{{ asset() }}/assets/web/images/collection-item2.jpg" alt="product-item"
                         class="border-rounded-10 img-fluid jarallax-img">
                     <div class="card-detail p-3 m-3 p-lg-5 m-lg-5">
                         <h3 class="card-title display-3">
@@ -481,7 +481,7 @@
                 <div class="col mb-4 mb-3">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item6.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item6.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -511,7 +511,7 @@
                 <div class="col mb-4 mb-3">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item7.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item7.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -541,7 +541,7 @@
                 <div class="col mb-4 mb-3">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item8.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item8.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -571,7 +571,7 @@
                 <div class="col mb-4 mb-3">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item9.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item9.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"
@@ -601,7 +601,7 @@
                 <div class="col mb-4 mb-3">
                     <div class="product-card position-relative">
                         <div class="card-img">
-                            <img src="{{ asset('assets/web') }}/images/card-item10.jpg" alt="product-item" class="product-image img-fluid">
+                            <img src="{{ asset() }}/assets/web/images/card-item10.jpg" alt="product-item" class="product-image img-fluid">
                             <div class="cart-concern position-absolute d-flex justify-content-center">
                                 <div class="cart-button d-flex gap-2 justify-content-center align-items-center">
                                     <button type="button" class="btn btn-light" data-bs-toggle="modal"

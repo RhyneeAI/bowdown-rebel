@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\BE;
 
 use App\Http\Controllers\Controller;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    private $service;
+    public function __construct() 
+    {
+        $this->service = new CategoryService();
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -32,7 +39,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $category = $this->service->create($request);
+
+            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil disimpan');
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+        }
     }
 
     /**
