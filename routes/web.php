@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\BE\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BE\CategoryController;
+use App\Http\Controllers\BE\ProductController;
+use App\Http\Controllers\BE\PromotionController;
+use App\Http\Controllers\BE\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +34,12 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 //auth
 Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+
+// Dashboard Routes
+Route::resource('dashboard/kategori', CategoryController::class);
+Route::resource('dashboard/product', ProductController::class);
+Route::get('dashboard/detail', [ProductController::class, 'detail'])->name('dashboard.product.detail');
+Route::resource('dashboard/promotion', PromotionController::class);
+Route::get('dashboard/promotion-detail', [PromotionController::class, 'promotionDetail'])->name('promotion.detail');
+Route::resource('dashboard/user', UserController::class);
 
