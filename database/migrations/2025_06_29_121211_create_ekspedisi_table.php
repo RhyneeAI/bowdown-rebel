@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('ekspedisi', function (Blueprint $table) {
             $table->id();
             $table->string('nama_ekspedisi', 30);
-            $table->string('perkiraan_sampai', 10);
             $table->decimal('biaya', 8, 2)->default(0.00);
+            $table->enum('status', ['Aktif', 'Non Aktif']);
             $table->timestamps();
             $table->softDeletes();
         });
