@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Http\Controllers\Controller;
-use App\Services\CategoryService;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
@@ -24,19 +26,33 @@ class CategoryController extends Controller
         return view('dashboard.category.index');
     }
 
+    public function datatable()
+    {
+        $category = $this->service->read(); 
+
+        return DataTables::of($category)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $actionBtn = '<a href="'. route('kategori.edit', $row->id) .'" style="cursor: pointer;">✏️</a> ';
+                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModalArticle" data-id="'. $row->id .'" style="cursor: pointer;">🗑️</span>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        // This method should return a view with a form to create a new category
-        // For example, you might return a view like this:
         return view('dashboard.category.create');
     }
 
     /**
      * Store a newly created resource in storage.
-     */
+    */
     public function store(Request $request)
     {
         try {
@@ -51,7 +67,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id = "")
     {
         //
     }

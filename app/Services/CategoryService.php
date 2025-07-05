@@ -24,4 +24,10 @@ class CategoryService
             'foto' => $filename,
         ]);
     }
+
+    public function read()
+    {
+        $category = Category::select(['id', 'nama_kategori', 'foto'])->get();
+        return $category;
+    }
 }

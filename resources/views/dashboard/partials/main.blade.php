@@ -15,7 +15,7 @@
 
                 <div class="card" style="margin: -10px !important;">
                     <div class="card-body">
-                    <h5 class="card-title fw-semibold mb-4">@yield('title')</h5>
+                    <h5 class="card-title fw-semibold mt-4 mb-1">@yield('title')</h5>
                     @yield('content')
                     </div>
                 </div>

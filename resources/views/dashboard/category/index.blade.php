@@ -4,77 +4,41 @@
 @endpush
 
 @section('title')
-    Kategori
+    Daftar Kategori
 @endsection
 
 @section('content')
     <div class="container-fluid">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Daftar Kategori</h5>
+            {{-- <h5 class="card-title fw-semibold mb-4">Daftar Kategori</h5> --}}
             <div class="row">
                 <div class="col-md-6">
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <input type="text" id="searchBar" class="form-control" placeholder="Cari Kategori...">
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mb-4">
                     <div class="mb-3">
                         <a href="{{ route('kategori.create') }}" class="btn btn-primary float-end">
                             Tambah Kategori
                         </a>
                     </div>
                 </div>
-
             </div>
-            <table id="teacherTable" class="table table-striped table-bordered" style="width:100%">
+            <table id="category_table" class="table table-responsive table-striped table-bordered" style="width: 100% !important">
                 <thead>
                     <tr>
-                        <th scope="col">No</th>
-                        <th>Nama Kategori</th>
-                        <th>Aksi</th>
+                        <th width="15%" class="text-center">No</th>
+                        <th width="70%" class="text-center">Nama Kategori</th>
+                        <th width="15%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <th>Pakaian</th>
-                        <th>
-                            <a href="{{ route('kategori.edit', 1) }}" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                        </th>
-                        
-                    </tr>
-                    {{-- @foreach($teachers as $teacher)
-                        <tr>
-                            <td>{{ $teacher->name }}</td>
-                            <td>{{ $teacher->email }}</td>
-                            <td>{{ $teacher->phone }}</td>
-                            <td>{{ $teacher->address }}</td>
-                        </tr>
-                    @endforeach --}}
-                </tbody>
+                <tbody></tbody>
             </table>
-
         </div>
     </div>
 
-    {{-- @push('scripts') --}}
-    {{-- <script>
-        $(document).ready(function() {
-            $('#teacherTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('teachers.data') }}',
-                columns: [
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone' },
-                    { data: 'address', name: 'address' }
-                ]
-            });
-        });
-    </script> --}}
 </div>
 @endsection
 
@@ -83,4 +47,20 @@
 @endsection
 
 @push('script')
+<script>
+$(document).ready(function() {
+    $('#category_table').DataTable({
+        processing: true,
+        serverSide: true,
+        orderable: true,
+        searchable: true,
+        ajax: "{{ route('kategori.datatable') }}",
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
+            { data: 'nama_kategori', name: 'nama_kategori' },
+            { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
+        ]
+    });
+});
+</script>
 @endpush
