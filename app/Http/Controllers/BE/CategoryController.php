@@ -33,7 +33,7 @@ class CategoryController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function($row){
                 $actionBtn = '<a href="'. route('kategori.edit', $row->slug) .'" style="cursor: pointer;">✏️</a> ';
-                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModalArticle" data-slug="'. $row->slug .'" style="cursor: pointer;">🗑️</span>';
+                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-route="'. route('kategori.destroy', $row->slug) .'" style="cursor: pointer;">🗑️</span>';
                 return $actionBtn;
             })
             ->rawColumns(['action'])
@@ -106,8 +106,14 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+   public function destroy(string $slug)
     {
-        //
+        try {
+            $category = $this->service->delete($slug);
+
+            return response()->json(['message' => 'Kategori berhasil dihapus.'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+        }   
     }
 }

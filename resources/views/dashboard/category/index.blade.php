@@ -49,18 +49,51 @@
 @push('script')
 <script>
 $(document).ready(function() {
-    $('#category_table').DataTable({
-        processing: true,
-        serverSide: true,
-        orderable: true,
-        searchable: true,
-        ajax: "{{ route('kategori.datatable') }}",
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
-            { data: 'nama_kategori', name: 'nama_kategori' },
-            { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
-        ]
+    let table = $('#category_table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    orderable: true,
+                    searchable: true,
+                    ajax: "{{ route('kategori.datatable') }}",
+                    columns: [
+                        { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
+                        { data: 'nama_kategori', name: 'nama_kategori' },
+                        { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
+                    ]
+                });
+
+    $(document).on('click', '.delete-btn', function () {
+        const route = $(this).data('route');
+
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: route, 
+                    type: 'DELETE',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        toastr.success(response.message, 'Berhasil!');
+                        table.ajax.reload();
+                    },
+                    error: function (xhr) {
+                        toastr.error(xhr.responseJSON?.message, 'Kesalahan!');
+                    }
+                });
+            }
+        });
     });
+
 });
 </script>
 @endpush
