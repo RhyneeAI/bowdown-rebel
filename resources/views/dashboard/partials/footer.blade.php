@@ -59,5 +59,11 @@
     @if (session('info'))
         toastr.info("{{ session('info') }}", "Informasi");
     @endif
+
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}", "Gagal!");
+        @endforeach
+    @endif
 </script>
 @stack('script')

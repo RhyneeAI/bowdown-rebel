@@ -11,3 +11,12 @@ function UploadFile($file, $folder)
 
     return $filename;
 }
+
+function DeleteFile($folder, $filename)
+{
+    $path = public_path('uploads/' . $folder . '/' . $filename);
+    if (file_exists($path)) {
+        unlink($path);
+    }
+}
+

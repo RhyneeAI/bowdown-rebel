@@ -4,15 +4,22 @@ namespace App\Services;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryService 
 {
     public function create($request)
     {
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string|max:30',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
 
         $filename = null;
         if ($request->hasFile('foto')) {
@@ -21,13 +28,51 @@ class CategoryService
 
         return Category::create([
             'nama_kategori' => $validated['nama_kategori'],
+            'slug' => MakeSlug($validated['nama_kategori']),
             'foto' => $filename,
         ]);
     }
 
-    public function read()
+    public function getAll()
     {
-        $category = Category::select(['id', 'nama_kategori', 'foto'])->get();
+        $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->get();
         return $category;
     }
+
+    public function getOne($slug = '')
+    {
+        $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->where('slug', $slug)->first();
+        return $category;
+    }
+
+    public function update($request, $slug)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string|max:30',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
+
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $filename = $category->foto; 
+        if ($request->hasFile('foto')) {
+            DeleteFile($category->foto, 'categories');
+
+            $filename = UploadFile($request->file('foto'), 'categories');
+        }
+
+        $category->update([
+            'nama_kategori' => $validated['nama_kategori'],
+            'slug' => MakeSlug($validated['nama_kategori']),
+            'foto' => $filename,
+        ]);
+
+        return $category;
+    }
+
 }

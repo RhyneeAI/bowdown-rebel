@@ -5,7 +5,7 @@
 <style>
     .preview-container {
         display: none;
-        width: 14rem;
+        width: 21rem;
         height: 14rem;
         margin: auto;
         border: 1px dashed #999;
@@ -21,6 +21,10 @@
         height: 100%;
         object-fit: cover;
         display: none;
+    }
+
+    small {
+        margin-left: 3rem !important;
     }
 </style>
 
@@ -43,7 +47,7 @@
                         <input type="text" class="form-control" id="nama_kategori" name="nama_kategori" required>
                     </div>
     
-                    <div class="col-md-4 mt-5">
+                    <div class="col-md-6 mt-5">
                         <label for="foto" class="form-label">Gambar Kategori</label>
                         <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                     </div>

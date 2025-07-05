@@ -1,13 +1,13 @@
 <?php
 
-function upload($file, $folder)
+function MakeSlug($text, $separator = '-')
 {
-    if (!$file || !$file->isValid()) {
-        return null;
-    }
+    $slug = strtolower($text);
+    $slug = preg_replace('/[\s_]+/', $separator, $slug);
+    $slug = preg_replace('/[^a-z0-9' . preg_quote($separator, '/') . ']/', '', $slug);
+    $slug = trim($slug, $separator);
+    $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
 
-    $filename = Str::random(30) . '.' . $file->getClientOriginalExtension();
-    $file->storeAs($folder, $filename, 'public');
-
-    return $filename;
+    return $slug;
 }
+

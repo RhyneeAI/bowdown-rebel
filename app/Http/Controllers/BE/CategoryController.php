@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BE;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
@@ -21,20 +22,18 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // This method should return a view with a list of categories
-        // For example, you might return a view like this:
         return view('dashboard.category.index');
     }
 
     public function datatable()
     {
-        $category = $this->service->read(); 
+        $category = $this->service->getAll(); 
 
         return DataTables::of($category)
             ->addIndexColumn()
             ->addColumn('action', function($row){
-                $actionBtn = '<a href="'. route('kategori.edit', $row->id) .'" style="cursor: pointer;">✏️</a> ';
-                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModalArticle" data-id="'. $row->id .'" style="cursor: pointer;">🗑️</span>';
+                $actionBtn = '<a href="'. route('kategori.edit', $row->slug) .'" style="cursor: pointer;">✏️</a> ';
+                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModalArticle" data-slug="'. $row->slug .'" style="cursor: pointer;">🗑️</span>';
                 return $actionBtn;
             })
             ->rawColumns(['action'])
@@ -58,6 +57,10 @@ class CategoryController extends Controller
         try {
             $category = $this->service->create($request);
 
+            if ($category instanceof RedirectResponse) {
+                return $category;
+            }
+
             return redirect()->route('kategori.index')->with('success', 'Kategori berhasil disimpan');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
@@ -75,19 +78,29 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        // This method should return a view with a form to edit an existing category
-        // For example, you might return a view like this:
-        return view('dashboard.category.edit');
+        $category = $this->service->getOne($slug);
+        
+        return view('dashboard.category.edit')->with('category', $category);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $slug)
     {
-        //
+        try {
+            $category = $this->service->update($request, $slug);
+
+            if ($category instanceof RedirectResponse) {
+                return $category;
+            }
+
+            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui');
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+        }
     }
 
     /**
