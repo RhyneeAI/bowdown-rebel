@@ -43,7 +43,7 @@
 @endsection
 
 @section('modal')
-    
+    @include('dashboard.category.modal-image')
 @endsection
 
 @push('script')
@@ -94,6 +94,10 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '.preview-btn', function () {
+        const imageUrl = $(this).data('image');
+        $('#modal-preview-image').attr('src', imageUrl);
+    });
 });
 </script>
 @endpush

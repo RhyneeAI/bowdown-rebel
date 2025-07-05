@@ -32,12 +32,23 @@ class CategoryController extends Controller
         return DataTables::of($category)
             ->addIndexColumn()
             ->addColumn('action', function($row){
-                $actionBtn = '<a href="'. route('kategori.edit', $row->slug) .'" style="cursor: pointer;">✏️</a> ';
-                $actionBtn .= '<span class="delete-btn" data-bs-toggle="modal" data-route="'. route('kategori.destroy', $row->slug) .'" style="cursor: pointer;">🗑️</span>';
-                return $actionBtn;
+                $previewBtn = '<span class="btn btn-sm btn-info preview-btn" data-bs-toggle="modal" data-bs-target="#previewModal" data-image="'. asset('storage/categories/' . $row->foto) .'" style="cursor: pointer;">
+                    <iconify-icon icon="mdi:eye" style="font-size: 18px;"></iconify-icon>
+                </span> ';
+
+                $editBtn = '<a href="'. route('kategori.edit', $row->slug) .'" class="btn btn-sm btn-warning" style="cursor: pointer;">
+                    <iconify-icon icon="mdi:pencil" style="font-size: 18px;"></iconify-icon>
+                </a> ';
+
+                $deleteBtn = '<span class="delete-btn btn btn-sm btn-danger" data-bs-toggle="modal" data-route="'. route('kategori.destroy', $row->slug) .'" style="cursor: pointer;">
+                    <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px;"></iconify-icon>
+                </span>';
+
+                return $previewBtn . $editBtn . $deleteBtn;
             })
             ->rawColumns(['action'])
             ->make(true);
+
     }
 
 

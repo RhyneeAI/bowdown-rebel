@@ -49,7 +49,7 @@ class CategoryService
     {
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string|max:30',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:4096',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
         if ($validator->fails()) {
