@@ -14,5 +14,58 @@
 <script src="{{ asset('assets') }}/dashboard/js/dashboard.js"></script>
 <script src="{{ asset('assets') }}/js/flatpickr.min.js"></script>
 <script src="{{ asset('assets') }}/js/slimselect.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+        "className": "custom-larger-toast"
+    };
+
+    toastr.options.onShown = function() {
+        $('.toast').css({
+            'width': '360px',
+            'font-size': '18px',
+            'min-height': '60px'
+        });
+        $('.toast .toast-title').css('font-size', '21px');
+        $('.toast .toast-message').css('font-size', '17px');
+    };
+
+    @if (session('success'))
+        toastr.success("{{ session('success') }}", "Berhasil!");
+    @endif
+
+    @if (session('error'))
+        toastr.error("{{ session('error') }}", "Gagal!");
+    @endif
+
+    @if (session('warning'))
+        toastr.warning("{{ session('warning') }}", "Perhatian!");
+    @endif
+
+    @if (session('info'))
+        toastr.info("{{ session('info') }}", "Informasi");
+    @endif
+
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}", "Gagal!");
+        @endforeach
+    @endif
+</script>
 @stack('script')
