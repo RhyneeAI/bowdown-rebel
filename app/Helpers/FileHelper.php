@@ -14,7 +14,7 @@ function UploadFile($file, $folder)
 
 function DeleteFile($folder, $filename)
 {
-    $path = public_path('uploads/' . $folder . '/' . $filename);
+    $path = public_path('storage/' . $folder . '/' . $filename);
     if (file_exists($path)) {
         unlink($path);
     }
