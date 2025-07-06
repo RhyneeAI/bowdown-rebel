@@ -121,3 +121,15 @@ function InitQuill(element) {
 
     return quill;
 }
+
+function ShowLoading(title) {
+    return Swal.fire({
+                title: title,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false
+            });
+}

@@ -18,5 +18,24 @@
         color: red;
         font-weight: 600;
     }
+
+    .btn-preview, .btn-edit, .btn-delete {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-preview:hover, .btn-edit:hover, .btn-delete:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .border-active {
+        border: 1px dashed #198754;
+        padding: 2px;
+    }
+
+    .border-nonactive {
+        border: 1px dashed #dc3545;
+        padding: 2px;
+    }
 </style>
 @stack('css')

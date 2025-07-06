@@ -115,4 +115,19 @@ class ProductService
         $category = Category::select(['id', 'nama_kategori'])->get();
         return $category;
     }
+
+    public function getAll($filters)
+    {
+        $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status']);
+
+        if($filters['id_kategori']) {
+            $product->where('id_kategori', $filters['id_kategori']);
+        }
+
+        if($filters['status']) {
+            $product->where('status', $filters['status']);
+        }
+
+        return $product->get();
+    }
 }

@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
@@ -24,13 +28,19 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'id_kategori', 'id');
     }
 
-    public function variant(): HasMany
+    public function variants(): HasMany
     {
         return $this->hasMany(ProductVariant::class, 'id_produk', 'id');
     }
 
-    public function photo(): HasMany
+    public function photos(): HasMany
     {
         return $this->hasMany(ProductPhoto::class, 'id_produk', 'id');
     }
+
+    public function photo(): HasOne
+    {
+        return $this->hasOne(ProductPhoto::class, 'id_produk', 'id')->oldest();
+    }
+
 }

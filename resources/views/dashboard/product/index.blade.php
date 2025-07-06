@@ -2,14 +2,13 @@
 
 @push('css')
 <style>
-    .btn-purple {
-        background-color: #0b23de;
-        color: white;
+    img {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .btn-purple:hover {
-        background-color: #2f4de7;
-        color: white;
+    img:hover {
+        transform: scale(1.035);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 </style>
 
@@ -20,124 +19,104 @@ Daftar Produk
 @endsection
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-5">
     <div class="card">
         <div class="card-body">
             {{-- <h5 class="card-title fw-semibold mb-4">Daftar Produk</h5> --}}
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex">
                     {{-- <div class="mb-3"> --}}
-                        {{-- <input type="text" id="searchBar" class="form-control" placeholder="Cari Produk..."> --}}
+                        {{-- <input type="text" id="searchBar" class="form-control" placeholder="Cari product..."> --}}
                     {{-- </div> --}}
+                    <div class="col-md-4 mx-3">
+                        <label class="form-label fw-semibold">Kategori</label>
+                        <select class="form-control" name="id_kategori" id="id_kategori">
+                            <option value="">Semua</option>
+                            @foreach ($categories as $item) 
+                                <option value="{{ $item->id }}">{{ $item->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mx-3">
+                        <label class="form-label fw-semibold">Status</label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="">Semua</option>
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 mt-4">
+                        <button class="btn btn-warning" id="btn-filter" onclick="loadCard()">Filter</button>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-6 mt-4">
                     <div class="mb-4">
-                        <a href="{{ route('produk.create') }}" class="btn btn-primary float-end">
+                        <a href="{{ route('product.create') }}" class="btn btn-primary float-end">
                             Tambah Produk
                         </a>
                     </div>
                 </div>
 
-                <div class="col-md-3 mb-4">
-                    <div class="card shadow-sm h-60">
-                        <a href="#" class="text-decoration-none text-dark">
-                            <img src="{{ asset('assets/web/images/pict_bowdown/hoodie.png') }}"
-                                class="card-img-top" alt="Bumi" style="height: 200px; object-fit: cover;">
-                            <div class="card-body text-center">
-                                <h6 class="fw-bold">P&COF Trucker Jacket</h6>
-                                <p class="mb-1 text-primary">Outer</p>
-                            </div>
-                        </a>
-                        <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
-                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger">Hapus</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="card shadow-sm h-60">
-                        <a href="#" class="text-decoration-none text-dark">
-                            <img src="{{ asset('assets/web/images/pict_bowdown/hoodie.png') }}"
-                                class="card-img-top" alt="Bulan" style="height: 200px; object-fit: cover;">
-                            <div class="card-body text-center">
-                                <h6 class="fw-bold">Retro Green Helmet</h6>
-                                <p class="mb-1 text-primary">Accessories</p>
-                            </div>
-                        </a>
-                        <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
-                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger">Hapus</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 mb-4">
-                    <div class="card shadow-sm h-60">
-                        <a href="#" class="text-decoration-none text-dark">
-                            <img src="{{ asset('assets/web/images/pict_bowdown/hoodie.png') }}"
-                                class="card-img-top" alt="Matahari" style="height: 200px; object-fit: cover;">
-                            <div class="card-body text-center">
-                                <h6 class="fw-bold">Blue Plain Workshirt</h6>
-                                <p class="mb-1 text-primary">Workshirt</p>
-                            </div>
-                        </a>
-                        <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
-                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger">Hapus</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="card shadow-sm h-60">
-                        <a href="#" class="text-decoration-none text-dark">
-                            <img src="{{ asset('assets/web/images/pict_bowdown/hoodie.png') }}"
-                                class="card-img-top" alt="Matahari" style="height: 200px; object-fit: cover;">
-                            <div class="card-body text-center">
-                                <h6 class="fw-bold">Blue Plain Workshirt</h6>
-                                <p class="mb-1 text-primary">Workshirt</p>
-                            </div>
-                        </a>
-                        <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
-                            <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                            <button class="btn btn-sm btn-danger">Hapus</button>
-                        </div>
-                    </div>
-                </div>
-
-
-
+                <div class="col-md-12 d-flex mt-5" id="product-cards"></div>
             </div>
-
         </div>
     </div>
-
-    {{-- @push('scripts') --}}
-    {{-- <script>
-        $(document).ready(function() {
-            $('#teacherTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('teachers.data') }}',
-    columns: [
-    { data: 'name', name: 'name' },
-    { data: 'email', name: 'email' },
-    { data: 'phone', name: 'phone' },
-    { data: 'address', name: 'address' }
-    ]
-    });
-    });
-    </script> --}}
 </div>
 @endsection
 
 @section('modal')
-
+    @include('dashboard.product.modal-image')
 @endsection
 
 @push('script')
+<script>
+    async function loadCard() {
+        let url = "{{ route('product.list') }}";
+        let sortData = {
+            id_kategori: $('#id_kategori').val(), 
+            status: $('#status').val()
+        };
+
+        ShowLoading('Memuat Produk...');
+
+        try {
+            const res = await $.get(url, sortData);
+            $('#product-cards').html(res.cards);
+
+            // Tutup loading setelah sukses
+            Swal.close();
+        } catch (error) {
+            console.error("Gagal memuat data produk:", error);
+            Swal.fire('Gagal', 'Gagal memuat produk', 'error');
+        }
+    }
+    loadCard();
+
+    $(document).ready(function() {
+        $(document).on('click', '.btn-preview', function () {
+            const photos = $(this).data('photos'); 
+            const $carouselInner = $('#carousel-inner-preview');
+            $carouselInner.empty();
+
+            if (Array.isArray(photos) && photos.length > 0) {
+                photos.forEach((url, index) => {
+                    const item = `<div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                    <div class="d-flex align-middle" style="height: 500px;">
+                                        <img src="${url}" class="img-fluid rounded" style="max-height: 90%; max-width: 100%; object-fit: contain;">
+                                    </div>
+                                 </div>`;
+
+                    $carouselInner.append(item);
+                });
+
+                const carousel = bootstrap.Carousel.getInstance(document.getElementById('previewCarousel'));
+                if (carousel) {
+                    carousel.to(0);
+                }
+            }
+        });
+    });
+</script>
 @endpush
