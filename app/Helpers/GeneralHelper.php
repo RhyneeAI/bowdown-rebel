@@ -1,6 +1,6 @@
 <?php
 
-function MakeSlug($text, $separator = '-')
+function MakeSlug(String $text, String $separator = '-')
 {
     $slug = strtolower($text);
     $slug = preg_replace('/[\s_]+/', $separator, $slug);
@@ -8,6 +8,22 @@ function MakeSlug($text, $separator = '-')
     $slug = trim($slug, $separator);
     $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
 
-    return $slug;
+    return 'br' . RandomString(2) . '-' . $slug;
+}
+
+function RandomString($length = 6) {
+    $characters = '0123456789';
+    $result = '';
+    for ($i = 0; $i < $length; $i++) {
+        $result .= $characters[random_int(0, strlen($characters) - 1)];
+    }
+    return $result;
+}
+
+function GetStatusProduk(String $statusCode): String {
+    $status = ['Tidak Aktif', 'Aktif'];
+    $index = (int) $statusCode;
+
+    return $status[$index];
 }
 

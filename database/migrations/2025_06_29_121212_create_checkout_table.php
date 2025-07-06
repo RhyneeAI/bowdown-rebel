@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('user')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('id_ekspedisi')->constrained('ekspedisi')->onUpdate('cascade')->onDelete('cascade');
             $table->string('no_faktur', 22)->unique();
-            $table->decimal('total_harga', 9, 2)->default(0.00);
-            $table->decimal('diskon', 9, 2)->default(0.00);
-            $table->decimal('dibayar', 9, 2)->default(0.00);
+            $table->decimal('total_harga', 9, 1)->default(0.0);
+            $table->decimal('diskon', 9, 1)->default(0.0);
+            $table->decimal('dibayar', 9, 1)->default(0.0);
             $table->timestamps();
         });
     }

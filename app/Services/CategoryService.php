@@ -61,7 +61,7 @@ class CategoryService
         $category = Category::where('slug', $slug)->firstOrFail();
         $filename = $category->foto; 
         if ($request->hasFile('foto')) {
-            DeleteFile($category->foto, 'categories');
+            DeleteFile('categories', $category->foto);
 
             $filename = UploadFile($request->file('foto'), 'categories');
         }

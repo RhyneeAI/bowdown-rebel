@@ -5065,14 +5065,14 @@ textarea.form-control-lg {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 auto;
           flex: 1 1 auto;
-  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  padding: 20px 20px;
   color: var(--bs-card-color);
 }
 
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
   color: var(--bs-card-title-color);
-  margin-left: 40px !important;
+  margin-left: 20px !important;
   font-size: 1.5rem !important;
 }
 

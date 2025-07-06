@@ -35,10 +35,10 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid mt-4">
     <div class="card">
         <div class="card-body">
-            <form id="createForm" method="POST" enctype="multipart/form-data" action="{{ route('kategori.store') }}">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('kategori.store') }}">
                 @csrf
                 @method('POST')
                 <div class="row">
