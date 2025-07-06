@@ -10,10 +10,10 @@
                 <div id="previewCarousel" class="carousel slide align-middle" data-bs-ride="carousel">
                     <div class="carousel-inner d-flex align-items-center h-100" id="carousel-inner-preview"></div>
 
-                    <button class="carousel-control-prev" type="button" data-bs-target="#previewCarousel" data-bs-slide="prev">
+                    <button class="carousel-control-prev carousel-arrows" type="button" data-bs-target="#previewCarousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#previewCarousel" data-bs-slide="next">
+                    <button class="carousel-control-next carousel-arrows" type="button" data-bs-target="#previewCarousel" data-bs-slide="next">
                         <span class="carousel-control-next-icon"></span>
                     </button>
                 </div>

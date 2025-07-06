@@ -2,7 +2,7 @@
 
 @push('css')
 <style>
-     .form-switch .form-check-input {
+    .form-switch .form-check-input {
         width: 3rem;
         height: 1.5rem;
     }
@@ -14,6 +14,14 @@
     .form-switch .form-check-input::before {
         transform: scale(1.4);
         top: 2px;
+    }
+
+    .carousel-arrows {
+        color: rgb(255, 255, 255); 
+        font-size: 48px; 
+        font-weight: 800;
+        background-color: rgb(0, 0, 0);
+        opacity: 0.8;
     }
 </style>
 @endpush
@@ -34,14 +42,14 @@ Tambah Produk
                         <div class="col-md-8">
                             <div class="my-3">
                                 <label class="form-label fw-semibold">Nama Produk <sup class="red-asterisk">*</sup></label>
-                                <input type="text" class="form-control" name="nama_produk" id="nama_produk" class="nama_produk">
+                                <input type="text" class="form-control" name="nama_produk" id="nama_produk">
                             </div>
 
                             <div class="my-3">
                                 <label class="form-label fw-bold">Kategori Produk <sup class="red-asterisk">*</sup></label>
                                 <select class="form-select fw-bold" name="id_kategori" id="id_kategori">
                                     <option selected disabled>Pilih</option>
-                                    @foreach ($category as $item)
+                                    @foreach ($categories as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama_kategori }}</option>
                                     @endforeach
                                 </select>
@@ -69,7 +77,18 @@ Tambah Produk
                                 <label for="foto" class="form-label">Tambah Gambar (bisa lebih dari satu) <sup class="red-asterisk">*</sup></label>
                                 <input type="file" class="form-control" id="foto" name="foto[]" multiple>
                             </div>
-                            <div id="preview-images" class="row mt-3 gx-2 gy-2"></div>
+                            
+                            <div class="carousel slide mt-4" id="productCarousel" data-bs-ride="carousel">
+                                <div class="carousel-inner" id="preview-images"></div>
+
+                                <button class="carousel-control-prev carousel-arrows" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
+                                <button class="carousel-control-next carousel-arrows" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            </div>
+                            {{-- <div id="preview-images" class="row mt-3 gx-2 gy-2"></div> --}}
                         </div>
                     </div>
 
@@ -91,7 +110,6 @@ Tambah Produk
 
 @endsection
 @push('script')
-<script type="module" src="{{ asset('assets/dashboard/js/ultility.js') }}"></script>
 <script>
     let images;
     $(document).ready(function() {
@@ -261,5 +279,4 @@ Tambah Produk
         });
     })
 </script>
-
 @endpush

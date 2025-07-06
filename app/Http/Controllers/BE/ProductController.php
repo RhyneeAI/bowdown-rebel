@@ -51,29 +51,56 @@ class ProductController extends Controller
 
                 $activeStatus = ($row->status == 'Aktif') ? 'border-active' : 'border-nonactive';
 
-                $cards[] = '
-                <div class="col-md-4 px-2 mb-4">
-                    <div class="card shadow-sm h-60 '. $activeStatus .'">
-                        <img src="' . $photoUrl . '" class="card-img-top" alt="' . e($row->nama_produk) . '" style="height: 200px; object-fit: cover;">
-                        <div class="card-body text-center">
-                            <h6 class="fw-bold">' . e($row->nama_produk) . '</h6>
-                            <p class="mb-1 text-primary">' . e($row->category->nama_kategori ?? '-') . '</p>
-                        </div>
-                        <div class="card-footer bg-white border-top-0 text-center">
-                            <span class="btn btn-sm btn-info btn-preview" data-bs-toggle="modal" data-bs-target="#previewModal" data-photos="' . $encodedPhotos . '" style="cursor: pointer;">
-                                <iconify-icon icon="mdi:eye" style="font-size: 18px; padding-top: 3px"></iconify-icon>
-                            </span>
+                $cards = [];
+                $counter = 0;
 
-                            <a href="' . route('product.edit', $row->slug) . '" class="btn btn-sm btn-warning btn-edit" style="cursor: pointer;">
-                                <iconify-icon icon="mdi:pencil" style="font-size: 18px; padding-top: 3px"></iconify-icon>
-                            </a>
+                foreach ($products as $row) {
+                    $photoPaths = $row->photos->map(function ($p) {
+                        return asset('storage/products/' . $p->nama_hash);
+                    })->toArray();
 
-                            <span class="btn-delete btn btn-sm btn-danger" data-bs-toggle="modal" data-route="' . route('product.destroy', $row->slug) . '" style="cursor: pointer;">
-                                <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px; padding-top: 3px"></iconify-icon>
-                            </span>
-                        </div>
-                    </div>
-                </div>';
+                    $photoUrl = count($photoPaths) > 0 ? $photoPaths[0] : '-';
+                    $encodedPhotos = htmlspecialchars(json_encode($photoPaths), ENT_QUOTES, 'UTF-8');
+                    $activeStatus = $row->status ? '' : 'border border-danger'; // contoh class status
+
+                    if ($counter % 3 === 0) {
+                        $cards[] = '<div class="col-md-12 row">';
+                    }
+
+                    $cards[] = '
+                        <div class="col-md-4 px-2 mb-4">
+                            <div class="card shadow-sm h-60 ' . $activeStatus . '">
+                                <img src="' . $photoUrl . '" class="card-img-top" alt="' . e($row->nama_produk) . '" style="height: 200px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <h6 class="fw-bold">' . e($row->nama_produk) . '</h6>
+                                    <p class="mb-1 text-primary">' . e($row->category->nama_kategori ?? '-') . '</p>
+                                </div>
+                                <div class="card-footer bg-white border-top-0 text-center">
+                                    <span class="btn btn-sm btn-info btn-preview" data-bs-toggle="modal" data-bs-target="#previewModal" data-photos="' . $encodedPhotos . '" style="cursor: pointer;">
+                                        <iconify-icon icon="mdi:eye" style="font-size: 18px; padding-top: 3px"></iconify-icon>
+                                    </span>
+
+                                    <a href="' . route('product.edit', $row->slug) . '" class="btn btn-sm btn-warning btn-edit" style="cursor: pointer;">
+                                        <iconify-icon icon="mdi:pencil" style="font-size: 18px; padding-top: 3px"></iconify-icon>
+                                    </a>
+
+                                    <span class="btn-delete btn btn-sm btn-danger" data-bs-toggle="modal" data-route="' . route('product.destroy', $row->slug) . '" style="cursor: pointer;">
+                                        <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px; padding-top: 3px"></iconify-icon>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>';
+
+                    $counter++;
+
+                    if ($counter % 3 === 0) {
+                        $cards[] = '</div>';
+                    }
+                }
+
+                if ($counter % 3 !== 0) {
+                    $cards[] = '</div>';
+                }
             }
         }
 
@@ -88,8 +115,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $category = $this->service->getCategories();
-        return view('dashboard.product.create')->with('category', $category);
+        $categories = $this->service->getCategories();
+        return view('dashboard.product.create')->with('categories', $categories);
     }
 
     /**
@@ -129,17 +156,61 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $slug)
     {
-        return view('dashboard.product.edit');
+        $product = $this->service->getOne($slug);
+        $category = $this->service->getCategories();
+
+        $photos = $product->photos->map(function ($p) {
+            return [
+                'path' => asset('storage/products/' . $p->nama_hash),
+                'file_hashname' => $p->nama_hash
+            ];
+        })->toArray();
+        $photos = json_encode($photos);
+
+        $variants = $product->variants->map(function ($p) {
+            return [
+                'ukuran'   => $p->ukuran,
+                'harga'    => $p->harga,
+                'stok'     => $p->stok,
+                'min_stok' => $p->min_stok
+            ];
+        })->toArray();
+        $variants = json_encode($variants);
+
+        return view('dashboard.product.edit')->with([
+            'categories' => $category, 
+            'product' => $product, 
+            'photos' => $photos,
+            'variants' => $variants, 
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, String $slug)
     {
-        //
+        try {
+            $product = $this->service->update($request, $slug);
+
+            if ($product instanceof RedirectResponse) {
+                return $product;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil disimpan',
+                'system_message' => $product,
+                'redirect' => route('product.index') 
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan produk',
+            ], 500);
+        }
     }
 
     /**

@@ -10,6 +10,15 @@
         transform: scale(1.035);
         box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
+
+    .carousel-arrows {
+        color: rgb(255, 255, 255); 
+        font-size: 48px; 
+        font-weight: 800;
+        background-color: rgb(0, 0, 0);
+        opacity: 0.35;
+        max-height: 90%;
+    }
 </style>
 
 @endpush
@@ -59,7 +68,7 @@ Daftar Produk
                     </div>
                 </div>
 
-                <div class="col-md-12 d-flex mt-5" id="product-cards"></div>
+                <div class=" mt-5" id="product-cards"></div>
             </div>
         </div>
     </div>

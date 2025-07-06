@@ -14,7 +14,7 @@ function UploadFile(String $folder, UploadedFile $file): String
     return $filename;
 }
 
-function DeleteFile(String $folder, UploadedFile $filename): bool
+function DeleteFile(String $folder, String $filename): bool
 {
     $path = public_path('storage/' . $folder . '/' . $filename);
 
