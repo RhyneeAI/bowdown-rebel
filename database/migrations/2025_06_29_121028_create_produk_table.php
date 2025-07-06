@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_kategori')->constrained('kategori')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama_produk', 100);
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->text('deskripsi')->nullable();
             $table->boolean('unggulan')->default(false);
             $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');

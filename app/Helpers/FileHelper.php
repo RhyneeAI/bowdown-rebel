@@ -1,6 +1,8 @@
 <?php
 
-function UploadFile($file, $folder)
+use \Illuminate\Http\UploadedFile;
+
+function UploadFile(String $folder, UploadedFile $file): String
 {
     if (!$file || !$file->isValid()) {
         return null;
@@ -12,11 +14,14 @@ function UploadFile($file, $folder)
     return $filename;
 }
 
-function DeleteFile($folder, $filename)
+function DeleteFile(String $folder, UploadedFile $filename): bool
 {
     $path = public_path('storage/' . $folder . '/' . $filename);
+
     if (file_exists($path)) {
-        unlink($path);
+        return unlink($path);
     }
+
+    return false; 
 }
 

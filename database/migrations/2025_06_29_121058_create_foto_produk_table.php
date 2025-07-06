@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nama_asli', 150);
             $table->string('nama_hash', 40);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

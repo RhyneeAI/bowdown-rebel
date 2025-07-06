@@ -1,6 +1,6 @@
 <?php
 
-function MakeSlug($text, $separator = '-')
+function MakeSlug(String $text, String $separator = '-'): String
 {
     $slug = strtolower($text);
     $slug = preg_replace('/[\s_]+/', $separator, $slug);
@@ -9,5 +9,12 @@ function MakeSlug($text, $separator = '-')
     $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
 
     return $slug;
+}
+
+function GetStatusProduk(String $statusCode): String {
+    $status = ['Tidak Aktif', 'Aktif'];
+    $index = (int) $statusCode;
+
+    return $status[$index];
 }
 

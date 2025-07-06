@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
+<div class="container-fluid">
     <div class="card">
         <div class="card-body">
             {{-- <h5 class="card-title fw-semibold mb-4">Daftar Kategori</h5> --}}
@@ -38,7 +38,6 @@
             </table>
         </div>
     </div>
-
 </div>
 @endsection
 

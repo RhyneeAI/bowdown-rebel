@@ -29,7 +29,7 @@
                     <span class="hide-menu">Product Management</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('product.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('produk.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:box-bold-duotone" class="fs-6"></iconify-icon>
                         </span>

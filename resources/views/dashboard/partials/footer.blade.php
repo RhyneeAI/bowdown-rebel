@@ -12,8 +12,10 @@
 <script src="{{ asset('assets') }}/dashboard/js/sidebarmenu.js"></script>
 <script src="{{ asset('assets') }}/dashboard/js/app.min.js"></script>
 <script src="{{ asset('assets') }}/dashboard/js/dashboard.js"></script>
+<script src="{{ asset('assets') }}/js/ultility.js"></script>
 <script src="{{ asset('assets') }}/js/flatpickr.min.js"></script>
 <script src="{{ asset('assets') }}/js/slimselect.min.js"></script>
+<script src="{{ asset('assets') }}/js/quill.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>

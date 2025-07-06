@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_produk')->constrained('produk')->onUpdate('cascade')->onDelete('cascade');
             $table->string('ukuran', 5);
-            $table->decimal('harga', 8, 2);
+            $table->decimal('harga', 8, 1)->default(0.0);
             $table->integer('stok')->default(0);
-            $table->integer('min_stok')->default(0);
+            $table->integer('min_stok')->default(1);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

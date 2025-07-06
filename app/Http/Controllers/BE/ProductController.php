@@ -2,35 +2,36 @@
 
 namespace App\Http\Controllers\BE;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Controllers\Controller;
+use App\Services\ProductService;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
+    private $service;
+    public function __construct() 
+    {
+        $this->service = new ProductService();
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // This method should return a view with a list of products
-        // For example, you might return a view like this:
         return view('dashboard.product.index');
     }
 
-    public function detail()
-    {
-        // This method should return a view with the details of a specific product
-        // For example, you might return a view like this:
-        return view('dashboard.product.edit');
-    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        // This method should return a view with a form to create a new product
-        // For example, you might return a view like this:
-        return view('dashboard.product.create');
+        $category = $this->service->getCategories();
+        return view('dashboard.product.create')->with('category', $category);
     }
 
     /**
@@ -38,7 +39,25 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $product = $this->service->create($request);
+
+            if ($product instanceof RedirectResponse) {
+                return $product;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil disimpan',
+                'system_message' => $product,
+                'redirect' => route('produk.index') 
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan produk',
+            ], 500);
+        }
     }
 
     /**
@@ -54,8 +73,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        // This method should return a view with a form to edit the product
-        // For example, you might return a view like this:
+        return view('dashboard.product.edit');
     }
 
     /**

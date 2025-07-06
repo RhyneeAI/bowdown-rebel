@@ -16,22 +16,23 @@
 @endpush
 
 @section('title')
+Daftar Produk
 @endsection
 
 @section('content')
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Daftar Produk</h5>
+            {{-- <h5 class="card-title fw-semibold mb-4">Daftar Produk</h5> --}}
             <div class="row">
                 <div class="col-md-6">
-                    <div class="mb-3">
-                        <input type="text" id="searchBar" class="form-control" placeholder="Cari Produk...">
-                    </div>
+                    {{-- <div class="mb-3"> --}}
+                        {{-- <input type="text" id="searchBar" class="form-control" placeholder="Cari Produk..."> --}}
+                    {{-- </div> --}}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mb-4">
                     <div class="mb-4">
-                        <a href="{{ route('product.create') }}" class="btn btn-primary float-end">
+                        <a href="{{ route('produk.create') }}" class="btn btn-primary float-end">
                             Tambah Produk
                         </a>
                     </div>
@@ -48,7 +49,7 @@
                             </div>
                         </a>
                         <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('dashboard.product.detail') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
+                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </div>
@@ -66,7 +67,7 @@
                             </div>
                         </a>
                         <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('dashboard.product.detail') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
+                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </div>
@@ -84,7 +85,7 @@
                             </div>
                         </a>
                         <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('dashboard.product.detail') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
+                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </div>
@@ -101,7 +102,7 @@
                             </div>
                         </a>
                         <div class="card-footer bg-white border-top-0 text-center">
-                            <a href="{{ route('dashboard.product.detail') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
+                            <a href="{{ route('produk.create') }}" class="btn btn-sm btn-purple mb-2">Lihat detail</a>
                             <a href="#" class="btn btn-sm btn-warning">Edit</a>
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </div>
