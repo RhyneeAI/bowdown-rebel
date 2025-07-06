@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('kategori.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('category.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:planet-3-bold-duotone" class="fs-6"></iconify-icon>
                         </span>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoryService 
 {
-    public function create($request)
+    public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string|max:30',
@@ -23,7 +23,7 @@ class CategoryService
 
         $filename = null;
         if ($request->hasFile('foto')) {
-            $filename = UploadFile($request->file('foto'), 'categories');
+            $filename = UploadFile('categories', $request->file('foto'));
         }
 
         return Category::create([
@@ -35,17 +35,17 @@ class CategoryService
 
     public function getAll()
     {
-        $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->get();
+        $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->orderBy('id', 'DESC')->get();
         return $category;
     }
 
-    public function getOne(string $slug = '')
+    public function getOne(String $slug = '')
     {
         $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->where('slug', $slug)->first();
         return $category;
     }
 
-    public function update($request, string $slug)
+    public function update(Request $request, String $slug)
     {
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string|max:30',
@@ -63,7 +63,7 @@ class CategoryService
         if ($request->hasFile('foto')) {
             DeleteFile('categories', $category->foto);
 
-            $filename = UploadFile($request->file('foto'), 'categories');
+            $filename = UploadFile('categories', $request->file('foto'));
         }
 
         $category->update([
@@ -75,7 +75,7 @@ class CategoryService
         return $category;
     }
 
-    public function delete(string $slug) 
+    public function delete(String $slug) 
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 

@@ -36,7 +36,7 @@
 <div class="container-fluid mt-4">
     <div class="card">
         <div class="card-body">
-            <form id="createForm" method="POST" enctype="multipart/form-data" action="{{ route('kategori.update', $category->slug) }}">
+            <form id="createForm" method="POST" enctype="multipart/form-data" action="{{ route('category.update', $category->slug) }}">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="col-md-12 mt-4 text-end">
-                    <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('category.index') }}" class="btn btn-secondary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan Data</button>
                 </div>
             </form>

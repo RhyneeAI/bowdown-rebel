@@ -189,7 +189,7 @@ class ProductService
             $product->where('status', $filters['status']);
         }
 
-        return $product->get();
+        return $product->orderBy('id', 'DESC')->get();
     }
 
     public function getOne(String $slug = '')

@@ -38,8 +38,8 @@ Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 // Dashboard
 Route::prefix('dashboard')->group(function () {
     // Kategori
-    Route::get('kategori/datatable', [CategoryController::class, 'datatable'])->name('kategori.datatable');
-    Route::resource('kategori', CategoryController::class);
+    Route::get('category/datatable', [CategoryController::class, 'datatable'])->name('category.datatable');
+    Route::resource('category', CategoryController::class);
 
     // Produk
     Route::get('product/list', [ProductController::class, 'list'])->name('product.list');

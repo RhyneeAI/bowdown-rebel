@@ -38,7 +38,7 @@
 <div class="container-fluid mt-4">
     <div class="card">
         <div class="card-body">
-            <form method="POST" enctype="multipart/form-data" action="{{ route('kategori.store') }}">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('category.store') }}">
                 @csrf
                 @method('POST')
                 <div class="row">
@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="col-md-12 mt-4 text-end">
-                    <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('category.index') }}" class="btn btn-secondary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan Data</button>
                 </div>
             </form>

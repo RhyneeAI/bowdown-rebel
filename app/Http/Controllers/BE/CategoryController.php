@@ -36,11 +36,11 @@ class CategoryController extends Controller
                                     <iconify-icon icon="mdi:eye" style="font-size: 18px;"></iconify-icon>
                                 </span> ';
 
-                $editBtn = '<a href="'. route('kategori.edit', $row->slug) .'" class="btn btn-sm btn-warning" style="cursor: pointer;">
+                $editBtn = '<a href="'. route('category.edit', $row->slug) .'" class="btn btn-sm btn-warning" style="cursor: pointer;">
                                 <iconify-icon icon="mdi:pencil" style="font-size: 18px;"></iconify-icon>
                             </a> ';
 
-                $deleteBtn = '<span class="delete-btn btn btn-sm btn-danger" data-bs-toggle="modal" data-route="'. route('kategori.destroy', $row->slug) .'" style="cursor: pointer;">
+                $deleteBtn = '<span class="delete-btn btn btn-sm btn-danger" data-bs-toggle="modal" data-route="'. route('category.destroy', $row->slug) .'" style="cursor: pointer;">
                                 <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px;"></iconify-icon>
                             </span>';
 
@@ -71,7 +71,7 @@ class CategoryController extends Controller
                 return $category;
             }
 
-            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil disimpan');
+            return redirect()->route('category.index')->with('success', 'Kategori berhasil disimpan');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }
@@ -107,9 +107,9 @@ class CategoryController extends Controller
                 return $category;
             }
 
-            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui');
+            return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui');
         } catch (Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+            return response()->json(['message' => 'Terjadi kesalahan saat memperbarui kategori.'], 500);
         }
     }
 
