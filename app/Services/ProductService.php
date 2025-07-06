@@ -192,9 +192,15 @@ class ProductService
         return $product->get();
     }
 
-    public function getOne(string $slug = '')
+    public function getOne(String $slug = '')
     {
         $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status'])->where('slug', $slug)->first();
         return $product;
+    }
+
+    public function delete(String $slug) 
+    {
+        $product = Product::where('slug', $slug)->firstOrFail();
+        return $product->delete();
     }
 }

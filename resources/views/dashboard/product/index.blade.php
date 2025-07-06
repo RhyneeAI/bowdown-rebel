@@ -94,7 +94,6 @@ Daftar Produk
             const res = await $.get(url, sortData);
             $('#product-cards').html(res.cards);
 
-            // Tutup loading setelah sukses
             Swal.close();
         } catch (error) {
             console.error("Gagal memuat data produk:", error);
@@ -125,6 +124,38 @@ Daftar Produk
                     carousel.to(0);
                 }
             }
+        });
+
+        $(document).on('click', '.btn-delete', function () {
+            const route = $(this).data('route');
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: route, 
+                        type: 'DELETE',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            toastr.success(response.message, 'Berhasil!');
+                            loadCard();
+                        },
+                        error: function (xhr) {
+                            toastr.error(xhr.responseJSON?.message, 'Kesalahan!');
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

@@ -201,7 +201,7 @@ class ProductController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Produk berhasil disimpan',
+                'message' => 'Produk berhasil diperbarui',
                 'system_message' => $product,
                 'redirect' => route('product.index') 
             ]);
@@ -216,8 +216,14 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(String $slug)
     {
-        //
+        try {
+            $product = $this->service->delete($slug);
+
+            return response()->json(['message' => 'Produk berhasil dihapus.'], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat menghapus produk.'], 500);
+        }   
     }
 }
