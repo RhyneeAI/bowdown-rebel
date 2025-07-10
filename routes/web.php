@@ -29,27 +29,20 @@ Route::get('/shop', [PageController::class, 'shop'])->name('shop');
 Route::get('/shop-detail', [PageController::class, 'detail'])->name('shop_detail');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/cart', [PageController::class, 'cart'])->name('cart');
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 //auth
-Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
-Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
 
-// Dashboard
-Route::prefix('dashboard')->group(function () {
-    // Kategori
-    Route::get('category/datatable', [CategoryController::class, 'datatable'])->name('category.datatable');
-    Route::resource('category', CategoryController::class);
-
-    // Produk
-    Route::get('product/list', [ProductController::class, 'list'])->name('product.list');
-    Route::resource('product', ProductController::class);
-
-    // Promosi
-    Route::get('promotion-detail', [PromotionController::class, 'promotionDetail'])->name('promotion.detail');
-    Route::resource('promotion', PromotionController::class);
-
-    // User
-    Route::resource('user', UserController::class);
+    // Login
+    Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'loginProcess'])->name('auth.login.process');
 });
+
+Route::middleware(['web'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+// Route Admin
+include __DIR__ . '/admin.php';
 

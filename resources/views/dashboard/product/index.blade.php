@@ -62,7 +62,7 @@ Daftar Produk
                 </div>
                 <div class="col-md-6 mt-4">
                     <div class="mb-4">
-                        <a href="{{ route('product.create') }}" class="btn btn-primary float-end">
+                        <a href="{{ route($role.'.product.create') }}" class="btn btn-primary float-end">
                             Tambah Produk
                         </a>
                     </div>
@@ -82,7 +82,7 @@ Daftar Produk
 @push('script')
 <script>
     async function loadCard() {
-        let url = "{{ route('product.list') }}";
+        let url = "{{ route($role.'.product.list') }}";
         let sortData = {
             id_kategori: $('#id_kategori').val(), 
             status: $('#status').val()

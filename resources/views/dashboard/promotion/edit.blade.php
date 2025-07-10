@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="text-end">
-                            <a href="{{ route('promotion.index') }}" class="btn btn-secondary">Kembali</a>
+                            <a href="{{ route($role.'.promotion.index') }}" class="btn btn-secondary">Kembali</a>
                             <button type="submit" class="btn btn-success">Simpan Data</button>
                         </div>
                     </div>

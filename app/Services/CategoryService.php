@@ -16,7 +16,7 @@ class CategoryService
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
         }
 
         $validated = $validator->validated();
@@ -53,7 +53,7 @@ class CategoryService
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
         }
 
         $validated = $validator->validated();

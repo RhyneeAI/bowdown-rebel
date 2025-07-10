@@ -22,6 +22,10 @@
             </div>
         </div>
 
+        <form action="{{ route('logout') }}" style="display: none;" method="post" id="logoutForm">
+            @csrf
+        </form>
+        
         @yield('modal')
         @include('dashboard.partials.footer')
     </div>
