@@ -115,7 +115,7 @@ class UserController extends Controller
 
             return redirect()->route($role.'.user.index')->with('success', 'Pengguna berhasil diperbarui');
         } catch (\Throwable $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Terjadi kesalahan saat memperbarui pengguna.'], 500);
         }
     }
 

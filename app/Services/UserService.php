@@ -109,6 +109,7 @@ class UserService
             ->join('role', 'role.id', '=', 'user.id_role')
             ->select(['user.id', 'user.nik', 'user.nama', 'user.tanggal_lahir', 'user.no_hp', 'user.email', 'user.foto', 'role.role', 'user.foto', 'user.username'])
             ->where('user.id', '!=', $user->id)
+            ->where('user.deleted_at', null)
             ->orderBy('user.id', 'DESC')->get();
         
         return $user;
