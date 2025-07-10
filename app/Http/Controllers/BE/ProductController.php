@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
+use App\Traits\GuardTraits;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
+    use GuardTraits;
+
     private $service;
     public function __construct() 
     {
@@ -67,6 +71,9 @@ class ProductController extends Controller
                         $cards[] = '<div class="col-md-12 row">';
                     }
 
+                    $guard = $this->getGuardName();
+                    $role = Auth::guard($guard)->user()->role->role;
+
                     $cards[] = '
                         <div class="col-md-4 px-2 mb-4">
                             <div class="card shadow-sm h-60 ' . $activeStatus . '">
@@ -80,11 +87,11 @@ class ProductController extends Controller
                                         <iconify-icon icon="mdi:eye" style="font-size: 18px; padding-top: 3px"></iconify-icon>
                                     </span>
 
-                                    <a href="' . route('product.edit', $row->slug) . '" class="btn btn-sm btn-warning btn-edit" style="cursor: pointer;">
+                                    <a href="' . route($role.'.product.edit', $row->slug) . '" class="btn btn-sm btn-warning btn-edit" style="cursor: pointer;">
                                         <iconify-icon icon="mdi:pencil" style="font-size: 18px; padding-top: 3px"></iconify-icon>
                                     </a>
 
-                                    <span class="btn-delete btn btn-sm btn-danger" data-bs-toggle="modal" data-route="' . route('product.destroy', $row->slug) . '" style="cursor: pointer;">
+                                    <span class="btn-delete btn btn-sm btn-danger" data-bs-toggle="modal" data-route="' . route($role.'.product.destroy', $row->slug) . '" style="cursor: pointer;">
                                         <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px; padding-top: 3px"></iconify-icon>
                                     </span>
                                 </div>
@@ -131,11 +138,14 @@ class ProductController extends Controller
                 return $product;
             }
 
+            $guard = $this->getGuardName();
+            $role = Auth::guard($guard)->user()->role->role;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Produk berhasil disimpan',
                 'system_message' => $product,
-                'redirect' => route('product.index') 
+                'redirect' => route($role.'product.index') 
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -199,11 +209,14 @@ class ProductController extends Controller
                 return $product;
             }
 
+            $guard = $this->getGuardName();
+            $role = Auth::guard($guard)->user()->role->role;
+
             return response()->json([
                 'success' => true,
                 'message' => 'Produk berhasil diperbarui',
                 'system_message' => $product,
-                'redirect' => route('product.index') 
+                'redirect' => route($role.'.product.index') 
             ]);
         } catch (Exception $e) {
             return response()->json([

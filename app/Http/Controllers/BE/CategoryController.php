@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Services\CategoryService;
 use App\Http\Controllers\Controller;
+use App\Traits\GuardTraits;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
+    use GuardTraits;
+
     private $service;
     public function __construct() 
     {
@@ -29,18 +33,21 @@ class CategoryController extends Controller
     {
         $category = $this->service->getAll(); 
 
+        $guard = $this->getGuardName();
+        $role = Auth::guard($guard)->user()->role->role;
+
         return DataTables::of($category)
             ->addIndexColumn()
-            ->addColumn('action', function($row){
+            ->addColumn('action', function($row) use ($role){
                 $previewBtn =  '<span class="btn btn-sm btn-info preview-btn" data-bs-toggle="modal" data-bs-target="#previewModal" data-image="'. asset('storage/categories/' . $row->foto) .'" style="cursor: pointer;">
                                     <iconify-icon icon="mdi:eye" style="font-size: 18px;"></iconify-icon>
                                 </span> ';
 
-                $editBtn = '<a href="'. route('category.edit', $row->slug) .'" class="btn btn-sm btn-warning" style="cursor: pointer;">
+                $editBtn = '<a href="'. route($role.'.category.edit', $row->slug) .'" class="btn btn-sm btn-warning" style="cursor: pointer;">
                                 <iconify-icon icon="mdi:pencil" style="font-size: 18px;"></iconify-icon>
                             </a> ';
 
-                $deleteBtn = '<span class="delete-btn btn btn-sm btn-danger" data-bs-toggle="modal" data-route="'. route('category.destroy', $row->slug) .'" style="cursor: pointer;">
+                $deleteBtn = '<span class="delete-btn btn btn-sm btn-danger" data-bs-toggle="modal" data-route="'. route($role.'.category.destroy', $row->slug) .'" style="cursor: pointer;">
                                 <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px;"></iconify-icon>
                             </span>';
 
@@ -71,7 +78,10 @@ class CategoryController extends Controller
                 return $category;
             }
 
-            return redirect()->route('category.index')->with('success', 'Kategori berhasil disimpan');
+            $guard = $this->getGuardName();
+            $role = Auth::guard($guard)->user()->role->role;
+
+            return redirect()->route($role.'.category.index')->with('success', 'Kategori berhasil disimpan');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }
@@ -107,7 +117,10 @@ class CategoryController extends Controller
                 return $category;
             }
 
-            return redirect()->route('category.index')->with('success', 'Kategori berhasil diperbarui');
+            $guard = $this->getGuardName();
+            $role = Auth::guard($guard)->user()->role->role;
+
+            return redirect()->route($role.'.category.index')->with('success', 'Kategori berhasil diperbarui');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat memperbarui kategori.'], 500);
         }

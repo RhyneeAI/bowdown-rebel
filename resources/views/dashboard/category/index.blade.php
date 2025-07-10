@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6 mb-4">
                     <div class="mb-3">
-                        <a href="{{ route('category.create') }}" class="btn btn-primary float-end">
+                        <a href="{{ route($role.'.category.create') }}" class="btn btn-primary float-end">
                             Tambah Kategori
                         </a>
                     </div>
@@ -53,7 +53,7 @@
                         serverSide: true,
                         orderable: true,
                         searchable: true,
-                        ajax: "{{ route('category.datatable') }}",
+                        ajax: "{{ route($role.'.category.datatable') }}",
                         columns: [
                             { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
                             { data: 'nama_kategori', name: 'nama_kategori' },

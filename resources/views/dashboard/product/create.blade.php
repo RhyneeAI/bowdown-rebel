@@ -35,7 +35,7 @@ Tambah Produk
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <form method="POST" enctype="multipart/form-data" action="{{ route('product.store') }}" id="form-produk">
+                <form method="POST" enctype="multipart/form-data" action="{{ route($role.'.product.store') }}" id="form-produk">
                     @csrf
                     @method('POST')
                     <div class="row">
@@ -98,7 +98,7 @@ Tambah Produk
                         <button type="button" class="btn btn-primary mt-3" id="add_varian">Tambah Varian Baru</button>
 
                         <div class="col-md-12 mt-5 text-end">
-                            <a href="{{ route('product.index') }}" class="btn btn-secondary">Kembali</a>
+                            <a href="{{ route($role.'.product.index') }}" class="btn btn-secondary">Kembali</a>
                             <button type="submit" class="btn btn-success">Simpan Data</button>
                         </div>
                     </div>

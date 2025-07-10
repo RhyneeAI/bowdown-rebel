@@ -23,6 +23,27 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    document.querySelectorAll('.logout-button').forEach(el => {
+        el.addEventListener('click', event => {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Keluar dari sistem?',
+                text: "Anda akan keluar dari sistem, pastikan Anda telah menyimpan perubahan sebelumnya!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, keluar!',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    document.querySelector('#logoutForm').submit();
+                }
+            })
+        })
+    })
+</script>
+<script>
     toastr.options = {
         "closeButton": true,
         "progressBar": true,

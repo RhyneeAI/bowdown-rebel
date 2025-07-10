@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <a href="{{ route('promotion.create') }}" class="btn btn-primary float-end">
+                        <a href="{{ route($role.'.promotion.create') }}" class="btn btn-primary float-end">
                             Tambah Promosi
                         </a>
                     </div>
@@ -48,7 +48,7 @@
                         <th>
                             <a href="#" class="btn btn-primary btn-sm">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm">Hapus</a>
-                            <a href="{{ route('promotion.detail') }}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="{{ route($role.'.promotion.detail') }}" class="btn btn-info btn-sm">Detail</a>
                         </th>
                         
                     </tr>

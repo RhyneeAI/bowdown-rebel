@@ -17,7 +17,7 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route($role.'.dashboard') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:home-smile-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -29,7 +29,7 @@
                     <span class="hide-menu">Product Management</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('product.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route($role.'.product.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:box-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('category.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route($role.'.category.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:planet-3-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('promotion.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route($role.'.promotion.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:tag-bold-duotone" class="fs-6">
                             </iconify-icon>
@@ -67,7 +67,7 @@
                     <span class="hide-menu">Customers Management</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('user.index') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route($role.'.user.index') }}" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:user-plus-rounded-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
