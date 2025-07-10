@@ -19,6 +19,14 @@ class AuthService
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:100',
             'password' => 'required|string|min:6',
+        ], [
+            'email.required' => 'Email wajib diisi.',
+            'email.string' => 'Email harus berupa teks.',
+            'email.email' => 'Email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 100 karakter.',
+            'password.required' => 'Password wajib diisi.',
+            'password.string' => 'Password harus berupa teks.',
+            'password.min' => 'Password harus setidaknya 6 karakter.',
         ]);
 
         if ($validator->fails()) {
