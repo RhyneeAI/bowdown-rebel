@@ -29,6 +29,7 @@ Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(functi
     Route::resource('promotion', PromotionController::class);
 
     // User
+    Route::get('user/datatable', [UserController::class, 'datatable'])->name('user.datatable');
     Route::resource('user', UserController::class);
 });
 
