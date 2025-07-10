@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductService 
 {
-    public function create(Request $request)
+    public function create($request)
     {
         $validator = Validator::make($request->all(), [
             'nama_produk' => 'required|string|max:30',
@@ -21,7 +21,7 @@ class ProductService
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
         }
 
         $validated = $validator->validated();
@@ -73,7 +73,7 @@ class ProductService
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
         }
 
         $validated = $validator->validated();
