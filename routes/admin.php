@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\BE\DashboardController;
 use App\Http\Controllers\BE\CategoryController;
+use App\Http\Controllers\BE\ExpeditionController;
 use App\Http\Controllers\BE\ProductController;
 use App\Http\Controllers\BE\PromotionController;
 use App\Http\Controllers\BE\UserController;
@@ -14,6 +15,10 @@ Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(functi
     // Kategori
     Route::get('category/datatable', [CategoryController::class, 'datatable'])->name('category.datatable');
     Route::resource('category', CategoryController::class);
+
+    // Ekspedisi
+    Route::get('expedition/datatable', [ExpeditionController::class, 'datatable'])->name('expedition.datatable');
+    Route::resource('expedition', ExpeditionController::class);
 
     // Produk
     Route::get('product/list', [ProductController::class, 'list'])->name('product.list');

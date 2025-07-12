@@ -32,7 +32,7 @@
 		                        </div>
 		                    </li>
 							<li class="login">
-								<a class="btn-login" href="#">Login</a>
+								<a class="btn-login" href="{{ route('auth.login') }}">Login</a>
 							</li>
 		                    <li class="shopping-cart"><a href="{{ route('cart') }}" class="cart"><span><small>0</small><i
 								class="icon-shopping-cart"></i></span></a></li>
