@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('produk_disukai', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_user')->constrained('user')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('produk')->constrained('produk')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('id_produk')->constrained('produk')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

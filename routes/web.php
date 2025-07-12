@@ -29,6 +29,8 @@ use App\Http\Controllers\BE\PromotionController;
 // });
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop-detail', [ShopController::class, 'detail'])->name('shop.detail');
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');

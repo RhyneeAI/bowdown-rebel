@@ -3,25 +3,39 @@
 namespace App\Http\Controllers\FE;
 
 use App\Http\Controllers\Controller;
-use App\Services\CategoryService;
 use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Services\ProductService;
 
 class HomeController extends Controller
 {
     public function __construct(
-        protected CategoryService $service
+        protected CategoryService $categoryService,
+        protected ProductService $productService,
     ) {}
 
     public function index() 
     {
-        $category = $this->service->getAll();
+        $categories = $this->categoryService->getAll();
         return view('web.home')->with([
-            'categories' => $category
+            'categories' => $categories
         ]);
     }
 
-    // 1: 8 + center
-    // 2: 6. 6
-    // 3: 4, 4, 4
-    // 4: 4, 4, 4, 8
+    public function getHotProducts() {
+        $hot_products = $this->productService->getHotProducts()->load('photo');
+        
+        $formatted_products = $hot_products->map(function($product) {
+            return [
+                'id' => $product->id,
+                'nama_produk' => $product->nama_produk,
+                'slug' => $product->slug,
+                'harga_min' => $product->harga_min,
+                'harga_max' => $product->harga_max,
+                'image_url' => $product->photo ? GetFile('products', $product->photo->nama_hash) : null
+            ];
+        });
+        
+        return response()->json($formatted_products);
+    }
 }
