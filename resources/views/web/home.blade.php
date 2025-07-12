@@ -6,9 +6,7 @@
 </head>
 
 <body>
-
     <div class="fh5co-loader"></div>
-
     <div id="page">
         <!-- navbar -->
         @include('web.partials.navbar')
@@ -37,10 +35,8 @@
                                 <div class="slider-text-inner">
                                     <div class="desc">
                                         <h2>Built for Speed, Designed for You</h2>
-                                        <p>From the curves of the highway to the corners of your garage, our apparel
-                                            moves with your passion.</p>
-                                        <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
-                                            </a></p>
+                                        <p>From the curves of the highway to the corners of your garage, our moves with your passion.</p>
+                                        <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More    </a></p>
                                     </div>
                                 </div>
                             </div>
@@ -73,71 +69,31 @@
                 </div>
             </div>
             <div class="container">
-                <div class="row">
-                    <!-- Item 1 -->
-                    <div class="categories col-md-4 col-sm-4 text-center">
-                        <div class="category-card">
-                            <a href="#">
+                @foreach ($categories->chunk(3) as $chunk)
+                    <div class="row mb-4">
+                        @foreach ($chunk as $item)
+                            @php
+                                $colClass = match(count($chunk)) {
+                                    1 => 'col-md-12',
+                                    2 => 'col-md-6',
+                                    default => 'col-md-4'
+                                };
+                            @endphp
 
-                                <div class="image-container">
-                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/shirt1.png" alt="">
-                                    <h3 class="category-title">TEES</h3>
+                            <div class="{{ $colClass }} col-sm-6 mb-4">
+                                <div class="category-card text-center h-100">
+                                    <a href="#">
+                                        <div class="image-container">
+                                            <img src="{{ GetFile('categories', $item->foto) }}" alt="{{ $item->nama_kategori }}" class="img-fluid rounded" loading="lazy">
+                                            <h3 class="category-title mt-3">{{ $item->nama_kategori }}</h3>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <!-- Item 2 -->
-                    <div class="categories col-md-4 col-sm-4 text-center">
-                        <div class="category-card">
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/longsleeve.png" alt="">
-                                    <h3 class="category-title">LONG SLEEVES & JERSEY</h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="categories col-md-4 col-sm-4 text-center">
-                        <div class="category-card">
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/topi.png" alt="">
-                                    <h3 class="category-title">ACCESSORIES</h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <br><br>
-                <div class="row center-block">
-                    <!-- Item 1 -->
-                    <div class="categories col-md-6 col-sm-4 text-center">
-                        <div class="category-card">
-                            <a href="#">
-
-                                <div class="image-container">
-                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/workshirt.png" alt="">
-                                    <h3 class="category-title">SHIRT</h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="categories col-md-6 col-sm-4 text-center">
-                        <div class="category-card">
-                            <a href="#">
-                                <div class="image-container">
-                                    <img src="{{ asset('assets') }}/web/images/pict_bowdown/outer.png" alt="">
-                                    <h3 class="category-title">OUTERWEAR</h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                    <br><br>
+                @endforeach
             </div>
         </div>
 
@@ -158,7 +114,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
@@ -177,7 +133,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
@@ -195,7 +151,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
@@ -215,7 +171,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
@@ -233,7 +189,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
@@ -251,7 +207,7 @@
                                 <div class="inner">
                                     <p>
                                         <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ route('shop_detail') }}" class="icon"><i class="icon-eye"></i></a>
+                                        <a href="{{ route('shop.detail') }}" class="icon"><i class="icon-eye"></i></a>
 
                                     </p>
                                 </div>
