@@ -27,7 +27,7 @@ function toRupiahFormat(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-function toRupiahFormatWithDecimal(number) {
+function toRupiahFormatWithDecimal(number, showingDecimal = false) {
     // Bersihkan input jika berupa string
     if (typeof number === 'string') {
         number = parseFloat(number.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
@@ -38,5 +38,7 @@ function toRupiahFormatWithDecimal(number) {
     const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     const decimalPart = parts[1];
 
-    return `${integerPart},${decimalPart}`;
+    return showingDecimal 
+        ? `${integerPart},${decimalPart}`
+        : integerPart;
 }

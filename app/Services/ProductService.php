@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductPhoto;
 use App\Models\ProductVariant;
+use App\Models\ProductLiked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -196,6 +197,66 @@ class ProductService
     {
         $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status'])->where('slug', $slug)->first();
         return $product;
+    }
+
+    public function getHotProducts()
+    {
+        $hotProducts = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan'])
+            ->with(['variants' => fn($q) => $q->select('id_produk', 'harga')->orderBy('harga')])
+            ->where('unggulan', 1)
+            ->where('status', 'Aktif')
+            ->limit(6)
+            ->get()
+            ->map(function($product) {
+                if ($product->variants->isEmpty()) {
+                    $product->harga_min = 0;
+                    $product->harga_max = 0;
+                } else {
+                    $prices = $product->variants->pluck('harga');
+                    $product->harga_min = $prices->min();
+                    $product->harga_max = $prices->max();
+                }
+                $product->from = 'Hot Product';
+                unset($product->variants);
+                return $product;
+            });
+
+        if ($hotProducts->count() < 6) {
+            $remaining = 6 - $hotProducts->count();
+            
+            $existingProductIds = $hotProducts->pluck('id')->toArray();
+            
+            $popularProducts = ProductLiked::selectRaw('id_produk, COUNT(id) as like_count')
+                ->with(['product' => function($q) {
+                    $q->select('id', 'nama_produk', 'slug', 'status', 'unggulan')
+                    ->with(['variants' => fn($q) => $q->select('id_produk', 'harga')->orderBy('harga')]);
+                }])
+                ->whereHas('product', function($q) {
+                    $q->where('status', 'Aktif');
+                })
+                ->whereNotIn('id_produk', $existingProductIds)
+                ->groupBy('id_produk')
+                ->orderByDesc('like_count')
+                ->limit($remaining)
+                ->get()
+                ->map(function($item) {
+                    $product = $item->product;
+                    if ($product->variants->isEmpty()) {
+                        $product->harga_min = 0;
+                        $product->harga_max = 0;
+                    } else {
+                        $product->harga_min = $product->variants->min('harga');
+                        $product->harga_max = $product->variants->max('harga');
+                    }
+                    $product->from = 'Popular Product';
+                    unset($product->variants);
+                    return $product;
+                });
+                
+            $hotProducts = $hotProducts->merge($popularProducts);
+        }
+
+        return $hotProducts;
     }
 
     public function delete(String $slug) 

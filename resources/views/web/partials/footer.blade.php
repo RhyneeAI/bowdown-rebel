@@ -84,4 +84,6 @@
 <script src="{{ asset('assets') }}/web/js/jquery.flexslider-min.js"></script>
 <!-- Main -->
 <script src="{{ asset('assets') }}/web/js/main.js"></script>
+<script src="{{ asset('assets') }}/js/format-rupiah.js"></script>
+
 @stack('scripts')
