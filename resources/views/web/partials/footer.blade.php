@@ -84,6 +84,4 @@
 <script src="{{ asset('assets') }}/web/js/jquery.flexslider-min.js"></script>
 <!-- Main -->
 <script src="{{ asset('assets') }}/web/js/main.js"></script>
-<script src="{{ asset('assets') }}/js/ultility.js"></script>
-
 @stack('scripts')

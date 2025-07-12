@@ -140,9 +140,7 @@ function ValidateInputs(data) {
 }
 
 function FormatRupiah(angka) {
-    let bagianBulat = angka.toString().split('.')[0];
-    bagianBulat = bagianBulat.replace(/\D/g, '');
-    return bagianBulat.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return angka.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 function InitQuill(element, innerValue = '') {

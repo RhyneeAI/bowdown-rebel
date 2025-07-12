@@ -39,12 +39,6 @@ class CategoryService
         return $category;
     }
 
-    public function getAllWithPaginate(Int $paginate)
-    {
-        $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->orderBy('id', 'DESC')->paginate($paginate);
-        return $category;
-    }
-
     public function getOne(String $slug = '')
     {
         $category = Category::select(['id', 'slug', 'nama_kategori', 'foto'])->where('slug', $slug)->first();
