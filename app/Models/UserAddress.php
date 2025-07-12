@@ -20,6 +20,7 @@ class UserAddress extends Model
     protected $fillable = [
         'id_user',
         'alamat',
+        'is_main'
     ];
 
     public function user(): BelongsTo

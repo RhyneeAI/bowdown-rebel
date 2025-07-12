@@ -90,6 +90,7 @@ class UserService
             UserAddress::create([
                 'id_user' => $user->id,
                 'alamat' => $validated['alamat'],
+                'is_main' => 1
             ]);
 
             DB::commit();
@@ -204,8 +205,13 @@ class UserService
             $user->update($payload);
 
             $user->address()->updateOrCreate(
-                ['id_user' => $user->id],
-                ['alamat' => $validated['alamat']]
+                [
+                    'id_user' => $user->id
+                ],
+                [
+                    'alamat' => $validated['alamat'],
+                    'is_main' => 1
+                ]
             );
 
             DB::commit();
