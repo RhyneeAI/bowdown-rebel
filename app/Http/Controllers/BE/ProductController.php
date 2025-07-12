@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Services\ProductService;
 use App\Traits\GuardTraits;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
 {
@@ -65,7 +64,7 @@ class ProductController extends Controller
 
                     $photoUrl = count($photoPaths) > 0 ? $photoPaths[0] : '-';
                     $encodedPhotos = htmlspecialchars(json_encode($photoPaths), ENT_QUOTES, 'UTF-8');
-                    $activeStatus = $row->status ? '' : 'border border-danger'; // contoh class status
+                    $activeStatus = $row->status == 'Aktif' ? '' : 'border border-danger'; // contoh class status
 
                     if ($counter % 3 === 0) {
                         $cards[] = '<div class="col-md-12 row">';
@@ -145,7 +144,7 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Produk berhasil disimpan',
                 'system_message' => $product,
-                'redirect' => route($role.'product.index') 
+                'redirect' => route($role . '.product.index') 
             ]);
         } catch (Exception $e) {
             return response()->json([

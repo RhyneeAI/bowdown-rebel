@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\ProductPhoto;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+// use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 
 class ProductService 
@@ -39,7 +40,7 @@ class ProductService
 
             // 2. Simpan foto (jika ada)
             if ($request->hasFile('foto')) {
-                $result = $this->upsertProductPhotos($request->file('foto'), $product, 'insert');
+                $result = $this->upsertProductPhotos($request, $product, 'insert');
                 if(is_string($result)) {
                     return $result;
                 }

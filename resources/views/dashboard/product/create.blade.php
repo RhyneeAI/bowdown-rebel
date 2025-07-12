@@ -17,11 +17,12 @@
     }
 
     .carousel-arrows {
-        color: rgb(255, 255, 255); 
+        color: rgb(255, 246, 246) !important; 
         font-size: 48px; 
         font-weight: 800;
         background-color: rgb(0, 0, 0);
-        opacity: 0.8;
+        opacity: 0.8;, 
+        height: 100%
     }
 </style>
 @endpush
@@ -241,11 +242,11 @@ Tambah Produk
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Stok <sup class="red-asterisk">*</sup></label>
-                        <input type="text" class="form-control" name="stok[]" value="1">
+                        <input type="number" class="form-control" name="stok[]" value="1">
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Min Stok <sup class="red-asterisk">*</sup></label>
-                        <input type="text" class="form-control" name="min_stok[]" value="1">
+                        <input type="number" class="form-control" name="min_stok[]" value="1">
                     </div>
                     <div class="col-md-1 mt-4" style="margin-top: 1.9rem !important;">
                         <button type="button" class="btn btn-danger btn-hapus btn-sm brn-rounded">
