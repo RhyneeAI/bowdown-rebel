@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,12 +26,12 @@ class User extends Authenticatable
     protected $guarded = [];
     protected $fillable = [
         'nik',
-        'name',
-        'birth_date',
-        'phone',
+        'nama',
+        'tanggal_lahir',
+        'id_role',
         'email',
-        'address',
-        'role',
+        'no_hp',
+        'foto',
         'username',
         'password',
     ];
@@ -44,6 +46,9 @@ class User extends Authenticatable
         'email_verified_at', 'remember_token'
     ];
 
+    
+    protected $dates = ['deleted_at'];
+    
     /**
      * The attributes that should be cast.
      *
@@ -53,5 +58,15 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'id_role', 'id');
+    }
+
+    public function address(): HasOne
+    {
+        return $this->hasOne(UserAddress::class, 'id_user', 'id')->where('is_main', 1);
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class, 'id_user', 'id');
     }
 }

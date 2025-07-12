@@ -78,7 +78,7 @@ class ExpeditionController extends Controller
             $guard = $this->getGuardName();
             $role = Auth::guard($guard)->user()->role->role;
 
-            return redirect()->route($role.'.expedition.index')->with('success', 'Kategori berhasil disimpan');
+            return redirect()->route($role.'.expedition.index')->with('success', 'Ekspedisi berhasil disimpan');
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }
@@ -117,7 +117,7 @@ class ExpeditionController extends Controller
             $guard = $this->getGuardName();
             $role = Auth::guard($guard)->user()->role->role;
 
-            return redirect()->route($role.'.expedition.index')->with('success', 'Kategori berhasil diperbarui');
+            return redirect()->route($role.'.expedition.index')->with('success', 'Ekspedisi berhasil diperbarui');
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat memperbarui kategori.'], 500);
         }
@@ -131,7 +131,7 @@ class ExpeditionController extends Controller
         try {
             $expedition = $this->service->delete($id);
 
-            return response()->json(['message' => 'Kategori berhasil dihapus.'], 200);
+            return response()->json(['message' => 'Ekspedisi berhasil dihapus.'], 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }   

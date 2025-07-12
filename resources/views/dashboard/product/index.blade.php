@@ -111,7 +111,7 @@ Daftar Produk
             if (Array.isArray(photos) && photos.length > 0) {
                 photos.forEach((url, index) => {
                     const item = `<div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                    <div class="d-flex align-middle" style="height: 500px;">
+                                    <div class="d-flex align-middle" style="height: 500px; justify-content: center;">
                                         <img src="${url}" class="img-fluid rounded" style="max-height: 90%; max-width: 100%; object-fit: contain;">
                                     </div>
                                  </div>`;

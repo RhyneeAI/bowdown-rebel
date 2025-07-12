@@ -2,8 +2,10 @@
 
 use \Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use \Illuminate\Support\Str;
 
-function UploadFile(String $folder, UploadedFile $file): String
+
+function UploadFile(String $folder, UploadedFile $file)
 {
     if (!$file || !$file->isValid()) {
         return null;
