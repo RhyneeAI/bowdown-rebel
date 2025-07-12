@@ -38,8 +38,8 @@ function MultiImagePreviews(inputSelector, containerSelector, maxFile = 5, maxSi
             // Untuk gambar dari path:
             const $previewItem = $(`
                 <div class="carousel-item${isActive ? ' active' : ''}" data-id="${item.file_hashname}">
-                    <div class="d-flex align-middle" style="height: 200px; position: relative;">
-                        <img src="${item.path}" class="img-fluid rounded" style="max-height: 90%; max-width: 100%; object-fit: contain;">
+                    <div class="d-flex align-middle" style="height: 250px; position: relative; justify-content: center;">
+                        <img src="${item.path}" class="img-fluid rounded" style="max-width: 100%; object-fit: contain;">
                     </div>
                 </div>
             `);
@@ -86,8 +86,8 @@ function MultiImagePreviews(inputSelector, containerSelector, maxFile = 5, maxSi
                 const isActive = $container.find('.carousel-item.active').length === 0;
                 const $previewItem = $(`
                     <div class="carousel-item${isActive ? ' active' : ''}" data-id="${uniqueId}">
-                        <div class="d-flex align-middle" style="height: 200px; position: relative;">
-                            <img src="${e.target.result}" class="img-fluid rounded" style="max-height: 90%; max-width: 100%; object-fit: contain;">
+                        <div class="d-flex align-middle" style="height: 200px; position: relative; justify-content: center;">
+                            <img src="${e.target.result}" class="img-fluid rounded" style="max-width: 100%; object-fit: contain;">
                         </div>
                     </div>
                 `);
