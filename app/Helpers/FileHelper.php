@@ -1,7 +1,9 @@
 <?php
 
 use \Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use \Illuminate\Support\Str;
+
 
 function UploadFile(String $folder, UploadedFile $file)
 {
@@ -24,5 +26,20 @@ function DeleteFile(String $folder, String $filename): bool
     }
 
     return false; 
+}
+
+function GetFile(?String $folder, ?String $filename): ?String
+{
+    if (empty($folder) || empty($filename)) {
+        return null; 
+    }
+
+    $path = $folder ? "$folder/$filename" : $filename;
+
+    if (!Storage::disk('public')->exists($path)) {
+        return null;
+    }
+
+    return asset("storage/$path"); 
 }
 
