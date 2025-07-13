@@ -1035,6 +1035,9 @@ h1, h2, h3, h4, h5, h6, figure {
 .fh5co-tabs .fh5co-tab-content-wrap .feed > div .rate {
   color: #ffba00;
 }
+.rate {
+  color: #ffba00;
+}
 .fh5co-tabs .icon-xlg {
   font-size: 400px;
   margin-bottom: 30px;

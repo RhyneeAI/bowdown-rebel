@@ -60,4 +60,12 @@ class ShopController extends Controller
             'last_page' => $products->lastPage(),
         ]);
     }
+
+    public function detailProducts(String $slug) 
+    {
+        $product = $this->productService->getOne($slug)->load(['photos', 'variants', 'category']);
+        return view('web.shop_detail')->with([
+            'product' => $product
+        ]);
+    }
 }

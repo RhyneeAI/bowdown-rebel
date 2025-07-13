@@ -185,7 +185,7 @@ class ProductService
 
     public function getAll($filters)
     {
-        $product = Product::with('photo')->select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status']);
+        $product = Product::with('photo')->select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'rating', 'status']);
 
         if(isset($filters['id_kategori'])) {
             $product->where('id_kategori', $filters['id_kategori']);
@@ -200,13 +200,13 @@ class ProductService
 
     public function getOne(String $slug = '')
     {
-        $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status'])->where('slug', $slug)->first();
+        $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'rating', 'status'])->where('slug', $slug)->first();
         return $product;
     }
 
     public function getHotProducts()
     {
-        $hotProducts = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan'])
+        $hotProducts = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan', 'rating'])
             ->with(['variants' => fn($q) => $q->select('id_produk', 'harga')->orderBy('harga')])
             ->where('unggulan', 1)
             ->where('status', StatusEnum::AKTIF)

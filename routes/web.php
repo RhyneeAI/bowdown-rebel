@@ -26,7 +26,7 @@ Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('ho
 
 Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');
-Route::get('/product-detail', [ShopController::class, 'detail'])->name('shop_detail');
+Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])->name('shop.detail');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/cart', [PageController::class, 'cart'])->name('cart');

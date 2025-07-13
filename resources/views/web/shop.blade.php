@@ -407,24 +407,24 @@
                         const price = (harga_min === harga_max) ? harga_min : `${harga_min} - ${harga_max}`;
     
                         html += `
-                        <div class="col-md-4 col-sm-6 col-xs-12 text-center animate-box fade-in mb-2">
-                            <div class="product">
-                                <div class="product-grid" style="background-image:url('${item.image_url || '/assets/web/images/default.jpeg'}');">
-                                    <div class="inner">
-                                        <p>
-                                            <span class="rating"> ⭐ 4.5 / 5 </span><br>
-                                            <br>
-                                            <a href="#" class="icon"><i class="icon-shopping-cart"></i></a>
-                                            <a href="#" class="icon"><i class="icon-eye"></i></a>
-                                        </p>
+                            <div class="col-md-4 col-sm-6 col-xs-12 text-center animate-box fade-in mb-2">
+                                <div class="product">
+                                    <div class="product-grid" style="background-image:url('${item.image_url || '/assets/web/images/default.jpeg'}');">
+                                        <div class="inner">
+                                            <p>
+                                                <span class="rating"> ⭐ 4.5 / 5 </span><br>
+                                                <br>
+                                                <a href="#" class="icon"><i class="icon-shopping-cart"></i></a>
+                                                <a href="{{ url('product/detail') }}/${item.slug}" class="icon"><i class="icon-eye"></i></a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="desc">
+                                        <h4><a href="{{ url('product/detail') }}/${item.slug}">${item.nama_produk}</a></h4>
+                                        <span class="price">Rp. ${price}</span>
                                     </div>
                                 </div>
-                                <div class="desc">
-                                    <h4><a href="#">${item.nama_produk}</a></h4>
-                                    <span class="price">Rp. ${price}</span>
-                                </div>
-                            </div>
-                        </div>`;
+                            </div>`;
                     });
     
                     $('#list-products-container').html(`<div class="row">${html}</div>`);

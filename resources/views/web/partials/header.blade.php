@@ -33,6 +33,7 @@ Facebook: 		https://www.facebook.com/fh5co
 <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet"> -->
 <!-- <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i" rel="stylesheet"> -->
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <!-- Animate.css -->
 <link rel="stylesheet" href="{{ asset('assets') }}/web/css/animate.css">
 <!-- Icomoon Icon Fonts-->
@@ -85,6 +86,25 @@ Facebook: 		https://www.facebook.com/fh5co
 		height: 20px;
 		width: 80%;
 		margin: 10px auto;
+	}
+
+	textarea {
+		width: 100%;
+		height: 150px;
+		padding: 12px 20px;
+		box-sizing: border-box;
+		border: 2px solid #ccc;
+		border-radius: 4px;
+		background-color: #f8f8f8;
+		font-size: 16px;
+		color: #302d2d;
+		resize: none;
+	}
+
+	input[type="radio"] {
+		width: 20px;
+		height: 20px;
+		padding-top: 20px;
 	}
 </style>
 
