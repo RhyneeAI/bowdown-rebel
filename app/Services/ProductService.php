@@ -7,9 +7,13 @@ use App\Models\Category;
 use App\Models\ProductPhoto;
 use App\Models\ProductVariant;
 use App\Models\ProductLiked;
+use App\Enums\StatusEnum;
 use Illuminate\Http\Request;
 // use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class ProductService 
 {
@@ -181,13 +185,13 @@ class ProductService
 
     public function getAll($filters)
     {
-        $product = Product::select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status']);
+        $product = Product::with('photo')->select(['id', 'nama_produk', 'id_kategori', 'slug', 'deskripsi', 'unggulan', 'status']);
 
-        if($filters['id_kategori']) {
+        if(isset($filters['id_kategori'])) {
             $product->where('id_kategori', $filters['id_kategori']);
         }
 
-        if($filters['status']) {
+        if(isset($filters['status'])) {
             $product->where('status', $filters['status']);
         }
 
@@ -205,7 +209,7 @@ class ProductService
         $hotProducts = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan'])
             ->with(['variants' => fn($q) => $q->select('id_produk', 'harga')->orderBy('harga')])
             ->where('unggulan', 1)
-            ->where('status', 'Aktif')
+            ->where('status', StatusEnum::AKTIF)
             ->limit(6)
             ->get()
             ->map(function($product) {
@@ -233,7 +237,7 @@ class ProductService
                     ->with(['variants' => fn($q) => $q->select('id_produk', 'harga')->orderBy('harga')]);
                 }])
                 ->whereHas('product', function($q) {
-                    $q->where('status', 'Aktif');
+                    $q->where('status', StatusEnum::AKTIF);
                 })
                 ->whereNotIn('id_produk', $existingProductIds)
                 ->groupBy('id_produk')
@@ -259,6 +263,78 @@ class ProductService
 
         return $hotProducts;
     }
+
+    public function getShopProducts(Object $filters)
+    {
+        $filters->min_price = (int) str_replace(['Rp.', '.', ','], '', $filters->min_price);
+        $filters->max_price = (int) str_replace(['Rp.', '.', ','], '', $filters->max_price);
+        
+        $products = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan', 'id_kategori'])
+            ->with([
+                'photo',
+                'variants' => function ($q) {
+                    $q->select('id', 'id_produk', 'harga', 'ukuran')->orderBy('harga');
+                }
+            ])
+            ->where('status', StatusEnum::AKTIF);
+
+
+        // Sortir
+        $sort_map = [
+            'Newest'     => ['id', 'DESC'],
+            'Oldest'     => ['id', 'ASC'],
+            'Popular'    => ['like_count', 'DESC'],
+        ];
+
+        if ($filters->sort_by === 'Popular') {
+            $products = Product::select([
+                'produk.id',
+                'produk.nama_produk',
+                'produk.slug',
+                'produk.status',
+                'produk.unggulan',
+                'produk.id_kategori',
+                DB::raw('COUNT(produk_disukai.id) as like_count')
+            ])
+            ->leftJoin('produk_disukai', 'produk.id', '=', 'produk_disukai.id_produk')
+            ->with([
+                'photo',
+                'variants' => fn($q) => $q->select('id', 'id_produk', 'harga', 'ukuran')->orderBy('harga')
+            ])
+            ->where('produk.status', StatusEnum::AKTIF)
+            ->groupBy('produk.id', 'produk.nama_produk', 'produk.slug', 'produk.status', 'produk.unggulan', 'produk.id_kategori')
+            ->orderByDesc('like_count');
+        } else {
+            [$sort_column, $sort_direction] = $sort_map[$filters->sort_by] ?? ['id', 'DESC'];
+            $products->orderBy($sort_column, $sort_direction);
+        }
+
+        // Filter harga
+        if ($filters->min_price && $filters->max_price) {
+            $products->whereHas('variants', function ($q) use ($filters) {
+                $q->whereBetween('harga', [$filters->min_price, $filters->max_price]);
+            });
+        }
+
+        // Filter ukuran
+        if (!empty($filters->size)                                                                                                          ) {
+            $products->whereHas('variants', function ($q) use ($filters) {
+                $q->whereIn('ukuran', $filters->size);
+            });
+        }
+
+        // Filter kategori
+        if (!empty($filters->category) && $filters->category !== 'All') {
+            $products->where('id_kategori', $filters->category);
+        }
+
+        if (!empty($filters->search)) {
+            $products->where('nama_produk', 'LIKE', '%'.$filters->search.'%');
+        }
+
+        return $products->paginate(6);
+    }
+
 
     public function delete(String $slug) 
     {

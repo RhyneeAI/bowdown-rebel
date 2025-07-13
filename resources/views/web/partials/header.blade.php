@@ -49,8 +49,43 @@ Facebook: 		https://www.facebook.com/fh5co
 
 <!-- Theme style  -->
 <link rel="stylesheet" href="{{ asset('assets') }}/web/css/style.css">
+<style>
+	.loading-skeleton {
+		background: #f0f0f0;
+		border-radius: 4px;
+		margin-bottom: 10px;
+		position: relative;
+		overflow: hidden;
+	}
 
-<!-- Modernizr JS -->
-<script src="{{ asset('assets') }}/web/js/modernizr-2.6.2.min.js"></script>
+	.loading-skeleton::after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+		animation: shimmer 1.5s infinite;
+	}
+
+	@keyframes shimmer {
+		0% { transform: translateX(-100%); }
+		100% { transform: translateX(100%); }
+	}
+
+	.skeleton-image {
+		width: 100%;
+		height: 200px;
+		background: #e0e0e0;
+	}
+
+	.skeleton-text {
+		height: 20px;
+		width: 80%;
+		margin: 10px auto;
+	}
+</style>
 
 @stack('css')

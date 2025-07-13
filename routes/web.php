@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\FE\HomeController;
+use App\Http\Controllers\FE\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +21,13 @@ use App\Http\Controllers\FE\HomeController;
 //     return view('welcome');
 // });
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
 
-Route::get('/shop', [PageController::class, 'shop'])->name('shop');
-Route::get('/shop-detail', [PageController::class, 'detail'])->name('shop_detail');
+Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');
+Route::get('/product-detail', [ShopController::class, 'detail'])->name('shop_detail');
+
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 

@@ -68,6 +68,8 @@
     <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 </div>
 
+<!-- Modernizr JS -->
+<script src="{{ asset('assets') }}/web/js/modernizr-2.6.2.min.js"></script>
 <!-- jQuery -->
 <script src="{{ asset('assets') }}/web/js/jquery.min.js"></script>
 <!-- jQuery Easing -->
@@ -85,5 +87,6 @@
 <!-- Main -->
 <script src="{{ asset('assets') }}/web/js/main.js"></script>
 <script src="{{ asset('assets') }}/js/format-rupiah.js"></script>
+<script src="{{ asset('assets') }}/js/ultility.js"></script>
 
 @stack('scripts')
