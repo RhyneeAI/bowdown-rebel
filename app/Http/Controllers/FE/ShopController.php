@@ -55,7 +55,9 @@ class ShopController extends Controller
             'start' => $start,
             'end' => $end,
             'total' => $products->total(),
-            'data' => $products->items()
+            'data' => $products->items(),
+            'current_page' => $products->currentPage(),
+            'last_page' => $products->lastPage(),
         ]);
     }
 }

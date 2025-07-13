@@ -141,6 +141,13 @@
             font-size: 2.2rem;
             font-weight: bold;
         }
+
+        li a.active {
+            background-color: #222; border-color: #222; color: #fff;
+        }
+        li a.unactive {
+            background-color: #ffffff; border-color: #222; color: #222;
+        }
     </style>
 @endpush
 
@@ -254,18 +261,11 @@
                         </div>
     
                         <div id="list-products-container"></div>
-                       
     
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <ul class="pagination" style="--bs-pagination-active-bg: #222; --bs-pagination-active-border-color: #222;">
-                                    <li class="disabled"><span style="color: #222;">«</span></li>
-                                    <li class="active"><span style="background-color: #222; border-color: #222; color: #fff;">1</span></li>
-                                    <li><a href="#" style="color: #222;">2</a></li>
-                                    <li><a href="#" style="color: #222;">3</a></li>
-                                    <li><span style="color: #222;">...</span></li>
-                                    <li><a href="#" style="color: #222;">25</a></li>
-                                    <li><a href="#" style="color: #222;">Next »</a></li>
+                                   
                                 </ul>
                             </div>
                         </div>
@@ -350,7 +350,7 @@
         $(document).ready(function () {
             let products;
 
-            function loadProducts() {
+            function loadProducts(page = 1) {
                 LoadSkeletonProducts(6);
 
                 let selectedSizes = $("input[name='size[]']:checked").map(function() {
@@ -364,6 +364,7 @@
                     size: selectedSizes,
                     category: $('select[name="category"]').val(),
                     sort_by: $('select[name="sort_by"]').val(),
+                    page: page
                 }
 
                 $.ajax({
@@ -376,7 +377,7 @@
                     },
                     error: function(xhr) {
                         console.error('Error loading products');
-                        $('#list-products-container').html('<p class="text-danger">Error loading products. Retrying...</p>');
+                        $('#list-products-container').html('<p class="text-danger text-center">Error loading products. Retrying...</p>');
                         
                         setTimeout(loadProducts, 10000);
                     }
@@ -399,40 +400,80 @@
                 $('#total').text(response.total);
 
                 let html = '';
-                products.forEach(item => {
-                    const harga_min = toRupiahFormatWithDecimal(item.harga_min);
-                    const harga_max = toRupiahFormatWithDecimal(item.harga_max);
-                    const price = (harga_min === harga_max) ? harga_min : `${harga_min} - ${harga_max}`;
-
-                    html += `
-                    <div class="col-md-4 col-sm-6 col-xs-12 text-center animate-box fade-in mb-2">
-                        <div class="product">
-                            <div class="product-grid" style="background-image:url('${item.image_url || '/assets/web/images/default.jpeg'}');">
-                                <div class="inner">
-                                    <p>
-                                        <span class="rating"> ⭐ 4.5 / 5 </span><br>
-                                        <br>
-                                        <a href="#" class="icon"><i class="icon-shopping-cart"></i></a>
-                                        <a href="#" class="icon"><i class="icon-eye"></i></a>
-                                    </p>
+                if(products.length > 0) {
+                    products.forEach(item => {
+                        const harga_min = toRupiahFormatWithDecimal(item.harga_min);
+                        const harga_max = toRupiahFormatWithDecimal(item.harga_max);
+                        const price = (harga_min === harga_max) ? harga_min : `${harga_min} - ${harga_max}`;
+    
+                        html += `
+                        <div class="col-md-4 col-sm-6 col-xs-12 text-center animate-box fade-in mb-2">
+                            <div class="product">
+                                <div class="product-grid" style="background-image:url('${item.image_url || '/assets/web/images/default.jpeg'}');">
+                                    <div class="inner">
+                                        <p>
+                                            <span class="rating"> ⭐ 4.5 / 5 </span><br>
+                                            <br>
+                                            <a href="#" class="icon"><i class="icon-shopping-cart"></i></a>
+                                            <a href="#" class="icon"><i class="icon-eye"></i></a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="desc">
+                                    <h4><a href="#">${item.nama_produk}</a></h4>
+                                    <span class="price">Rp. ${price}</span>
                                 </div>
                             </div>
-                            <div class="desc">
-                                <h4><a href="#">${item.nama_produk}</a></h4>
-                                <span class="price">Rp. ${price}</span>
-                            </div>
-                        </div>
-                    </div>`;
-                });
-
-                $('#list-products-container').html(`<div class="row">${html}</div>`);
+                        </div>`;
+                    });
+    
+                    $('#list-products-container').html(`<div class="row">${html}</div>`);
+                } else {
+                    $('#list-products-container').html('<p class="text-danger text-center">Tidak ada Produk untuk hasil Filter ini...</p>');
+                    $('#start').text(0);
+                }
 
                 $('.animate-box').each(function(i) {
                     $(this).delay(i * 200).queue(function() {
                         $(this).addClass('fadeInUp animated').dequeue();
                     });
                 });
+
+                renderPagination(response);
             }
+
+            function renderPagination(response) {
+                let html = '';
+                const current = response.current_page;
+                const last = response.last_page;
+
+                // Previous
+                html += `<li ${current === 1 ? 'class="disabled"' : ''}>
+                            <a href="#" class="unactive" data-page="${current - 1}">«</a></li>`;
+
+                // First few pages
+                for (let i = 1; i <= Math.min(3, last); i++) {
+                    html += `<li><a href="#" class="${i === current ? 'active' : 'unactive'}" data-page="${i}">${i}</a></li>`;
+                }
+
+                // Ellipsis
+                if (last > 5) {
+                    html += `<li><a href="#" class="unactive">...</a></li>
+                            <li><a href="#" data-page="${last}" class="${current === last ? 'active' : 'unactive'}">${last}</a></li>`;
+                }
+
+                // Next
+                html += `<li ${current === last ? 'class="disabled"' : ''}>
+                            <a href="#" class="unactive" data-page="${current + 1}">Next »</a></li>`;
+
+                $('.pagination').html(html);
+            }
+
+            $(document).on('click', '.pagination a[data-page]', function(e) {
+                e.preventDefault();
+                const page = $(this).data('page');
+                loadProducts(page);
+            });
 
             loadProducts()
 

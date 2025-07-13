@@ -278,7 +278,6 @@ class ProductService
             ])
             ->where('status', StatusEnum::AKTIF);
 
-
         // Sortir
         $sort_map = [
             'Newest'     => ['id', 'DESC'],
@@ -329,12 +328,11 @@ class ProductService
         }
 
         if (!empty($filters->search)) {
-            $products->where('nama_produk', 'LIKE', '%'.$filters->search.'%');
+            $products->where('nama_produk', 'LIKE', '%'. $filters->search .'%');
         }
 
         return $products->paginate(6);
     }
-
 
     public function delete(String $slug) 
     {
