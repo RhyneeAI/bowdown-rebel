@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('tanggal_mulai')->default(now());
             $table->date('tanggal_berakhir')->default(now()->addDays(7));
             $table->string('foto', 40)->nullable();
+            $table->string('slug');
             $table->timestamps();
             $table->softDeletes();
         });
