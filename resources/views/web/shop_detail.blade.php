@@ -49,12 +49,12 @@
                             <h2>{{ $product->nama_produk }}</h2>
                             <h4 class="rating">⭐ {{ $product->rating }} / 5 </h4>
                             <p>
-                                <a href="#" class="btn btn-primary btn-outline btn-md">
+                                <button class="btn btn-primary btn-outline btn-md">
                                     <i class="fa fa-shopping-cart"></i> Keranjang
-                                </a>
-                                <a href="#" class="btn btn-primary btn-outline btn-md active">
+                                </button>
+                                <button class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
                                     <i class="fa fa-heart"></i> Wishlist
-                                </a>
+                                </button>
                             </p>
                         </div>
                     </div>
@@ -198,4 +198,46 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            function addToWishlist(slug) {
+                if (!slug) {
+                    toastr.error('Terjadi kesalahan');
+                    return;
+                }
+
+                const url = '{{ route('shop.add-to-wishlist') }}';
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.post(url, { slug })
+                    .done(response => {
+                        if (response.success) {
+                            toastr.success(response.success);
+                        } else if (response.warning) {
+                            toastr.warning(response.warning);
+                        } else if (response.error) {
+                            toastr.error(response.error);
+                        } else {
+                            toastr.error('!!!', 'Terjadi kesalahan tak terduga.');
+                        }
+                    })
+                    .fail(error => {
+                        toastr.error('Gagal terhubung ke server');
+                        console.error(error);
+                    });
+            }
+
+            $('#wishlist').click(function(e) {
+                e.preventDefault()
+
+                let slug = $(this).data('slug');
+                addToWishlist(slug);
+            })
+        })
+    </script>
 @endpush

@@ -63,9 +63,29 @@ class ShopController extends Controller
 
     public function detailProducts(String $slug) 
     {
-        $product = $this->productService->getOne($slug)->load(['photos', 'variants', 'category']);
+        $product = $this->productService->getOne($slug)->load(['photos', 'variants', 'category', 'likedProduct']);
         return view('web.shop_detail')->with([
             'product' => $product
         ]);
+    }
+
+    public function addToWishlist(Request $request) 
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json(['warning' => 'Silahkan login terlebih dahulu!'], 203);
+            }
+
+            $result = $this->productService->addToWishlist($request->slug);
+
+            if (is_string($result)) {
+                return response()->json(['warning' => $result], 200);
+            }
+
+            return response()->json(['success' => 'Berhasil dimasukkan ke dalam wishlist'], 200);
+
+        } catch (Throwable $t) {
+            return response()->json(['error' => $t->getMessage()], 500);
+        }
     }
 }

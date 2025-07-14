@@ -334,6 +334,26 @@ class ProductService
         return $products->paginate(6);
     }
 
+    public function addToWishlist(string $slug)
+    {
+        $product = $this->getOne($slug);
+
+        $alreadyLiked = ProductLiked::where([
+            'id_user' => auth()->id(),
+            'id_produk' => $product->id
+        ])->exists();
+
+        if ($alreadyLiked) {
+            return 'Produk sudah ada dalam wishlist Anda!';
+        }
+
+        return ProductLiked::create([
+            'id_user' => auth()->id(),
+            'id_produk' => $product->id
+        ]);
+    }
+
+
     public function delete(String $slug) 
     {
         $product = Product::where('slug', $slug)->firstOrFail();

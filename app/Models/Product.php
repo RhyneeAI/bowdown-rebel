@@ -54,4 +54,11 @@ class Product extends Model
         return $this->hasMany(ProductLiked::class, 'id_produk', 'id')
             ->select(['id', 'id_produk', 'id_user']);
     }
+
+    public function likedProduct(): HasOne
+    {
+        return $this->hasOne(ProductLiked::class, 'id_produk', 'id')
+            ->where('id_user', auth()->id()) 
+            ->select(['id', 'id_produk', 'id_user']);
+    }
 }
