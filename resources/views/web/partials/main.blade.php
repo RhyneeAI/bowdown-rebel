@@ -5,7 +5,7 @@
 </head>
 <body>
     {{-- @include('web.partials.loader') --}}
-    
+    <div class="fh5co-loader"></div>
     <div class="page">
         @include('web.partials.navbar')
 

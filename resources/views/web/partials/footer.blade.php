@@ -68,6 +68,8 @@
     <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 </div>
 
+<!-- Modernizr JS -->
+<script src="{{ asset('assets') }}/web/js/modernizr-2.6.2.min.js"></script>
 <!-- jQuery -->
 <script src="{{ asset('assets') }}/web/js/jquery.min.js"></script>
 <!-- jQuery Easing -->
@@ -85,5 +87,46 @@
 <!-- Main -->
 <script src="{{ asset('assets') }}/web/js/main.js"></script>
 <script src="{{ asset('assets') }}/js/format-rupiah.js"></script>
+<script src="{{ asset('assets') }}/js/ultility.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+        "className": "custom-larger-toast"
+    };
+
+    toastr.options.onShown = function() {
+        $('.toast').css({
+            'width': '360px',
+            'font-size': '18px',
+            'min-height': '60px'
+        });
+        $('.toast .toast-title').css('font-size', '21px');
+        $('.toast .toast-message').css('font-size', '17px');
+    };
+
+    function showResponse(response) {
+        if (response.success) {
+            toastr.success(response.success);
+        } else if (response.warning) {
+            toastr.warning(response.warning);
+        } else if (response.error) {
+            toastr.error(response.error);
+        } else {
+            toastr.error('Terjadi kesalahan tak terduga.', '!!!');
+        }
+    }
+</script>
 
 @stack('scripts')

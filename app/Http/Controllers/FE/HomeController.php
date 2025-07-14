@@ -23,7 +23,7 @@ class HomeController extends Controller
     }
 
     public function getHotProducts() {
-        $hot_products = $this->productService->getHotProducts()->load('photo');
+        $hot_products = $this->productService->getHotProducts();
         
         $formatted_products = $hot_products->map(function($product) {
             return [
