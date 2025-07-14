@@ -25,6 +25,10 @@
             margin-left: -1.5rem !important;
             font-weight: bold;
         }
+
+        .review-form {
+            margin-bottom: -12rem;
+        }
     </style>
 @endpush
 
@@ -46,8 +50,8 @@
                     </div>
                     <div class="row animate-box w-100 mt-5">
                         <div class="col-12 text-center fh5co-heading">
-                            <h2>{{ $product->nama_produk }}</h2>
-                            <h4 class="rating">⭐ {{ $product->rating }} / 5 </h4>
+                            {{-- <h2>{{ $product->nama_produk }}</h2> --}}
+                            <h3 class="rating">⭐ {{ $product->rating }} / 5 </h3>
                             <p>
                                 <button class="btn btn-primary btn-outline btn-md">
                                     <i class="fa fa-shopping-cart"></i> Keranjang
@@ -67,7 +71,7 @@
                                     <span class="icon visible-xs">
                                         <i class="icon-file"></i>
                                     </span>
-                                    <span class="hidden-xs">Product Details</span>
+                                    <span class="hidden-xs">Detail Produk</span>
                                 </a>
                             </li>
                             <li>
@@ -75,22 +79,37 @@
                                     <span class="icon visible-xs">
                                         <i class="icon-star"></i>
                                     </span>
-                                    <span class="hidden-xs">Ratings</span>
+                                    <span class="hidden-xs">Ulasan</span>
                                 </a>
                             </li>
                         </ul>
 
                         <!-- Tabs -->
                         <div class="fh5co-tab-content-wrap">
-                            <div class="fh5co-tab-content tab-content" data-tab-content="1">
+                            <div class="fh5co-tab-content tab-content active" data-tab-content="1">
                                 <div class="col-md-12" style="margin-top: -8rem;">
-                                    <span class="price">Rp389.000</span>
-                                    <h2>{{ $product->nama_produk }}</h2>
+                                    <h1 id="nama-produk">{{ $product->nama_produk }}</h1>
+                                    <h3 class="price">
+                                        <span id="harga-produk">Rp {{ number_format($product->variants->first()->harga, 0, ',', '.') }}</span> 
+                                        (<span id="stok-produk" class="{{ $product->variants->first()->stok == 0 ? 'text-danger' : '' }}">Stok : {{ $product->variants->first()->stok }}</span>)
+                                    </h3>
+
+                                    <div class="row mx-1">
+                                        @foreach ($product->variants as $key => $value)
+                                        <span class="size {{ $key === 0 ? 'active' : '' }} {{ $value->stok == 0 ? 'out-of-stock' : '' }}" 
+                                                data-harga="{{ $value->harga }}" 
+                                                data-stok="{{ $value->stok }}">
+                                            {{ $value->ukuran }}
+                                        </span>
+                                        @endforeach
+                                    </div>
+
+                                    <h2 class="mt-5">Deskripsi Produk</h2> 
                                     {!! $product->deskripsi !!} 
                                 </div>
                             </div>
 
-                            <div class="fh5co-tab-content tab-content active" data-tab-content="2">
+                            <div class="fh5co-tab-content tab-content" data-tab-content="2">
                                 <div class="row">
                                     <div class="col-md-12" style="margin-top: -8rem;">
                                         <h3>Happy Buyers</h3>
@@ -129,7 +148,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 review-form text-center" style="margin-top: -9rem;">
+                                    <div class="col-md-12 review-form text-center" >
                                         <h4 class="review-title">Berikan Ulasan Anda</h4>
                                         <form id="submit-review" class="review-form-container">
                                             <div class="form-group review-text-group">
@@ -239,5 +258,41 @@
                 addToWishlist(slug);
             })
         })
+
+        $(document).ready(function() {
+            $('.size:first').addClass('active');
+
+            $('.size').click(function() {
+                if($(this).hasClass('out-of-stock')); 
+                
+                // Animasi tombol active
+                $('.size').removeClass('active');
+                $(this).addClass('active').css({
+                    'transform': 'scale(1.05)',
+                    'transition': 'all 0.3s ease'
+                }).delay(300).queue(function() {
+                    $(this).css('transform', 'scale(1)').dequeue();
+                });
+                
+                const harga = $(this).data('harga');
+                const stok = $(this).data('stok');
+                const $hargaElement = $('#harga-produk');
+                const $stokElement = $('#stok-produk');
+                
+                $hargaElement.fadeOut(200, function() {
+                    $(this).text('Rp ' + toRupiahFormat(harga)).fadeIn(200);
+                });
+                
+                $stokElement.fadeOut(200, function() {
+                    $(this).text(`Stok : ${stok}`);
+                    if(stok == 0) {
+                        $(this).addClass('text-danger');
+                    } else {
+                        $(this).removeClass('text-danger');
+                    }
+                    $(this).fadeIn(200);
+                });
+            });
+        });
     </script>
 @endpush
