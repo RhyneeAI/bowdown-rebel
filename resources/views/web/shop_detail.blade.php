@@ -29,6 +29,12 @@
         .review-form {
             margin-bottom: -12rem;
         }
+
+        .no-reviews, .error-loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
     </style>
 @endpush
 
@@ -94,11 +100,14 @@
                                         (<span id="stok-produk" class="{{ $product->variants->first()->stok == 0 ? 'text-danger' : '' }}">Stok : {{ $product->variants->first()->stok }}</span>)
                                     </h3>
 
+                                    <input type="hidden" name="id_varian">
+
                                     <div class="row mx-1">
                                         @foreach ($product->variants as $key => $value)
                                         <span class="size {{ $key === 0 ? 'active' : '' }} {{ $value->stok == 0 ? 'out-of-stock' : '' }}" 
                                                 data-harga="{{ $value->harga }}" 
-                                                data-stok="{{ $value->stok }}">
+                                                data-stok="{{ $value->stok }}"
+                                                data-id="{{ $value->id }}">
                                             {{ $value->ukuran }}
                                         </span>
                                         @endforeach
@@ -112,48 +121,16 @@
                             <div class="fh5co-tab-content tab-content" data-tab-content="2">
                                 <div class="row">
                                     <div class="col-md-12" style="margin-top: -8rem;">
-                                        <h3>Happy Buyers</h3>
-                                        <div class="feed">
-                                            <div>
-                                                <blockquote>
-                                                    <p>Paragraph placeat quis fugiat provident veritatis quia iure a
-                                                        debitis adipisci dignissimos consectetur magni quas eius nobis
-                                                        reprehenderit soluta eligendi quo reiciendis fugit? Veritatis
-                                                        tenetur odio delectus quibusdam officiis est.</p>
-                                                </blockquote>
-                                                <h3>&mdash; Louie Knight</h3>
-                                                <span class="rate">
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <blockquote>
-                                                    <p>Paragraph placeat quis fugiat provident veritatis quia iure a
-                                                        debitis adipisci dignissimos consectetur magni quas eius nobis
-                                                        reprehenderit soluta eligendi quo reiciendis fugit? Veritatis
-                                                        tenetur odio delectus quibusdam officiis est.</p>
-                                                </blockquote>
-                                                <h3>&mdash; Joefrey Gwapo</h3>
-                                                <span class="rate">
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                    <i class="icon-star2"></i>
-                                                </span>
-                                            </div>
+                                        <h3>Semua Ulasan</h3>
+                                        <div class="feed" id="feed">
                                         </div>
                                     </div>
-                                    <div class="col-md-12 review-form text-center" >
+                                    <div class="col-md-12 review-form text-center">
                                         <h4 class="review-title">Berikan Ulasan Anda</h4>
                                         <form id="submit-review" class="review-form-container">
                                             <div class="form-group review-text-group">
                                                 <blockquote>
-                                                    <textarea name="review_text" class="review-textarea" placeholder="Tulis ulasan..." rows="4" required></textarea>
+                                                    <textarea name="komentar" class="review-textarea" placeholder="Tulis ulasan..." rows="4" required></textarea>
                                                 </blockquote>
                                             </div>
                                             
@@ -203,7 +180,7 @@
                                                 </div>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary submit-review-btn">Kirim</button>
+                                            <button type="button" class="btn btn-primary submit-review-btn" id="ulasan" data-slug="{{ $product->slug }}">Kirim</button>
                                         </form>
                                     </div>
                                 </div>
@@ -225,7 +202,7 @@
                     return;
                 }
 
-                const url = '{{ route('shop.add-to-wishlist') }}';
+                const url = "{{ route('shop.add-to-wishlist') }}";
 
                 $.ajaxSetup({
                     headers: {
@@ -276,8 +253,12 @@
                 
                 const harga = $(this).data('harga');
                 const stok = $(this).data('stok');
+                const id = $(this).data('id');
                 const $hargaElement = $('#harga-produk');
                 const $stokElement = $('#stok-produk');
+                const $idElement = $('input[name="id_varian"]');
+
+                $idElement.val(id);
                 
                 $hargaElement.fadeOut(200, function() {
                     $(this).text('Rp ' + toRupiahFormat(harga)).fadeIn(200);
@@ -294,5 +275,102 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+            function addReview(data) {
+                if (!data) {
+                    toastr.error('Terjadi kesalahan');
+                    return;
+                }
+
+                const url = "{{ route('shop.add-review') }}";
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.post(url, { slug: data.slug, komentar: data.komentar, rating: data.rating })
+                    .done(response => {
+                        showResponse(response);
+                        loadReview();
+                    })
+                    .fail(error => {
+                        toastr.error('Gagal terhubung ke server');
+                        console.error(error);
+                    });
+            }
+
+            $('#ulasan').click(function(e) {
+                e.preventDefault()
+
+                let slug = $(this).data('slug');
+                let komentar = $('textarea[name="komentar"]').val();
+                let rating = $('input[name="rating"]:checked').val();
+
+                let data = { slug, komentar, rating }
+
+                addReview(data);
+            })
+
+            function loadReview() {
+                let url = "{{ route('shop.show-review') }}";
+                let slug = "{{ $product->slug }}";
+
+                $.get(url, { slug: slug }) 
+                    .done(response => {
+                        if(response.status === 'success' && response.data) {
+                            $('#feed').empty();
+                            
+                            $('#feed').hide().fadeIn(300);
+                            
+                            response.data.forEach((item, index) => {
+                                setTimeout(() => {
+                                    let stars = Array(parseInt(item.rating)).fill('<i class="icon-star2"></i>').join('');
+                                    let userName = item.user?.nama || 'Pengguna';
+                                    
+                                    let html = `
+                                        <div class="feed-item" style="display:none;">
+                                            <h3>&mdash; ${userName}</h3>
+                                            <span>${new Date(item.created_at).toLocaleDateString()}</span>
+                                            <div class="rate">
+                                                ${stars}
+                                            </div>
+                                            <blockquote>
+                                                <p>${item.komentar || 'No review text'}</p>
+                                            </blockquote>
+                                        </div>
+                                    `;
+
+                                    $(html).appendTo('#feed').fadeIn(400);
+                                    
+                                    $('.feed-item:last-child .icon-star2').each(function(i) {
+                                        $(this).delay(i * 100).css({opacity:0}).animate({opacity:1}, 200);
+                                    });
+                                    
+                                }, index * 200);
+                            });
+                            
+                            if(response.data.length === 0) {
+                                $('#feed').html('<p class="no-reviews">Tidak ada review</p>').fadeIn(300);
+                            }
+                        } else {
+                            $('#feed').html('<p class="no-reviews">Tidak ada review</p>').fadeIn(300);
+                        }
+                    })
+                    .fail(error => {
+                        toastr.error('Failed to load reviews');
+                        console.error('Review load error:', error);
+                        $('#feed').html('<p class="error-loading">Error loading reviews</p>').fadeIn(300);
+                    });
+            }
+
+            loadReview();
+            
+            setInterval(() => {
+                loadReview();
+            }, 20000);
+        })
     </script>
 @endpush

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Review;
 use App\Models\ProductPhoto;
 use App\Models\ProductVariant;
 use App\Models\ProductLiked;
@@ -334,7 +335,7 @@ class ProductService
         return $products->paginate(6);
     }
 
-    public function addToWishlist(string $slug)
+    public function addToWishlist(String $slug)
     {
         $product = $this->getOne($slug);
 
@@ -352,7 +353,6 @@ class ProductService
             'id_produk' => $product->id
         ]);
     }
-
 
     public function delete(String $slug) 
     {

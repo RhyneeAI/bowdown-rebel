@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FE;
 use App\Enums\StatusEnum;
 use App\Services\ProductService;
 use App\Services\CategoryService;
+use App\Services\ReviewService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ class ShopController extends Controller
     public function __construct(
         protected CategoryService $categoryService,
         protected ProductService $productService,
+        protected ReviewService $reviewService,
     ) {}
 
     public function index() 
@@ -87,5 +89,31 @@ class ShopController extends Controller
         } catch (Throwable $t) {
             return response()->json(['error' => $t->getMessage()], 500);
         }
+    }
+
+    public function addReviewProduct(Request $request) 
+    {
+        try {
+            if (!auth()->check()) {
+                return response()->json(['warning' => 'Silahkan login terlebih dahulu!'], 203);
+            }
+
+            $result = $this->reviewService->create($request);
+
+            return response()->json(['success' => 'Ulasan anda berhasil ditambahkan!'], 200);
+
+        } catch (Throwable $t) {
+            return response()->json(['error' => $t->getMessage()], 500);
+        }
+    }
+
+    public function showReviewProduct(Request $request) 
+    {
+        $result = $this->reviewService->getAll($request->slug);
+
+        return response()->json([
+            'data' => $result,
+            'status' => 'success'
+        ]);
     }
 }

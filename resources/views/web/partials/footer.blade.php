@@ -115,6 +115,18 @@
         $('.toast .toast-title').css('font-size', '21px');
         $('.toast .toast-message').css('font-size', '17px');
     };
+
+    function showResponse(response) {
+        if (response.success) {
+            toastr.success(response.success);
+        } else if (response.warning) {
+            toastr.warning(response.warning);
+        } else if (response.error) {
+            toastr.error(response.error);
+        } else {
+            toastr.error('Terjadi kesalahan tak terduga.', '!!!');
+        }
+    }
 </script>
 
 @stack('scripts')
