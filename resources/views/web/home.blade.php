@@ -1,7 +1,13 @@
 @extends('web.partials.main')
 
 @push('css')
-    
+    <style>
+        .rating {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -195,7 +201,8 @@
                                 <div class="product-grid" style="background-image:url(${item.image_url || '{{ asset('assets') }}/web/images/default.jpeg'});">
                                     <div class="inner">
                                         <p>
-                                            <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                            <span class="rating"> ⭐ 4.5 / 5 </span><br>
+                                            <br>
                                             <a href="" class="icon"><i class="icon-eye"></i></a>
                                         </p>
                                     </div>
