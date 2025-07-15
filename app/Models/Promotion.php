@@ -20,6 +20,8 @@ class Promotion extends Model
 
     protected $table = 'promosi';
     protected $primaryKey = 'id';
+    protected $guarded = ['id'];
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'nama_promosi',
@@ -29,6 +31,9 @@ class Promotion extends Model
         'tanggal_mulai',
         'tanggal_berakhir',
         'foto',
+        'slug',
+        'created_at',
+        'updated_at'
     ];
 
     public function usedBy(): HasMany

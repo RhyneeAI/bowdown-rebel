@@ -2,41 +2,10 @@
 
 @push('css')
     <style>
-        .loading-skeleton {
-            background: #f0f0f0;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-skeleton::after {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .skeleton-image {
-            width: 100%;
-            height: 200px;
-            background: #e0e0e0;
-        }
-
-        .skeleton-text {
-            height: 20px;
-            width: 80%;
-            margin: 10px auto;
+        .rating {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: bold;
         }
     </style>
 @endpush
@@ -185,23 +154,7 @@
     <script>
         $(document).ready(function() {
             function loadHotProducts() {
-                $('#hot-products-container').html(`
-                    <div class="row mb-4">
-                        ${Array(3).fill().map(() => `
-                        <div class="col-md-4 text-center">
-                            <div class="product">
-                                <div class="product-grid loading-skeleton">
-                                    <div class="skeleton-image"></div>
-                                </div>
-                                <div class="desc">
-                                    <div class="skeleton-text"></div>
-                                    <div class="skeleton-text" style="width: 50%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        `).join('')}
-                    </div>
-                `);
+                LoadSkeletonProducts(3);
 
                 $.ajax({
                     url: "{{ route('home.hot-products') }}",
@@ -245,10 +198,11 @@
                         html += `
                         <div class="${colClass} text-center animate-box">
                             <div class="product">
-                                <div class="product-grid" style="background-image:url(${item.image_url || '{{ asset('assets') }}/web/images/default.png'});">
+                                <div class="product-grid" style="background-image:url(${item.image_url || '{{ asset('assets') }}/web/images/default.jpeg'});">
                                     <div class="inner">
                                         <p>
-                                            <a href="single.html" class="icon"><i class="icon-shopping-cart"></i></a>
+                                            <span class="rating"> ⭐ 4.5 / 5 </span><br>
+                                            <br>
                                             <a href="" class="icon"><i class="icon-eye"></i></a>
                                         </p>
                                     </div>

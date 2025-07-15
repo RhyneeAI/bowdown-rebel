@@ -166,3 +166,23 @@ function ShowLoading(title) {
                 showConfirmButton: false
             });
 }
+
+function LoadSkeletonProducts(amount) {
+    $('#list-products-container').html(`
+        <div class="row mb-4">
+            ${Array(amount).fill().map(() => `
+            <div class="col-md-4 text-center">
+                <div class="product">
+                    <div class="product-grid loading-skeleton">
+                        <div class="skeleton-image"></div>
+                    </div>
+                    <div class="desc">
+                        <div class="skeleton-text"></div>
+                        <div class="skeleton-text" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+            `).join('')}
+        </div>
+    `);
+}
