@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
-    <form action="{{ route('transaction.checkout') }}" method="post">
+    <form action="{{ route('User.transaction.checkout') }}" method="post">
         @csrf
         <input type="hidden" name="variant_product_ids[]" value="3">
         <input type="hidden" name="variant_product_ids[]" value="5">

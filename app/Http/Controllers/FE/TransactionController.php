@@ -15,7 +15,7 @@ class TransactionController extends Controller
 
     public function checkout(Request $request) {
         try {
-            return $transaction = $this->transactionService->checkout($request);
+            $transaction = $this->transactionService->checkout($request);
 
             if ($transaction instanceof RedirectResponse) {
                 return $transaction;
