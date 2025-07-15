@@ -66,7 +66,7 @@ Buat Promosi Baru
 
                         <div class="mb-3">
                             <label for="diskon_harga" class="form-label">Diskon Harga</label>
-                            <input type="text" class="form-control" id="diskon_harga" name="diskon_harga" value="{{ $promotion->diskon_harga }}" autocomplete="off">
+                            <input type="text" class="form-control" id="diskon_harga" name="diskon_harga" value="{{ FormatRupiah((int) $promotion->diskon_harga) }}" autocomplete="off">
 
                         </div>
 

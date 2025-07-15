@@ -50,6 +50,9 @@ class PromotionController extends Controller
 
                 return $previewBtn . $editBtn . $deleteBtn;
             })
+            ->editColumn('diskon_harga', function ($row) {
+                return number_format($row->diskon_harga, 2, ',', '.');
+            })
             ->rawColumns(['action'])
             ->make(true);
     }

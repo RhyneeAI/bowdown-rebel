@@ -21,6 +21,7 @@ class CheckoutDetail extends Model
 
     protected $fillable = [
         'id_produk',
+        'id_variant_produk',
         'id_checkout',
         'qty',
         'harga_satuan',
@@ -35,5 +36,10 @@ class CheckoutDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'id_produk');
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'id_variant_produk');
     }
 }

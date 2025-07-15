@@ -4,10 +4,12 @@ namespace App\Services;
 
 use App\Enums\StatusEnum;
 use App\Helpers\MidtransHelper;
+use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\CheckoutDetail;
 use App\Models\Expedition;
+use App\Models\ProductVariant;
 use App\Models\Promotion;
 use App\Traits\GuardTraits;
 use Illuminate\Http\Request;
@@ -29,7 +31,7 @@ class TransactionService
         try {
             $validator = Validator::make($request->all(), [
                 'variant_product_ids' => 'nullable|array',
-                'variant_product_ids.*' => 'nullable|exists:produk,id',
+                'variant_product_ids.*' => 'nullable|exists:varian_produk,id',
                 'qty' => 'nullable|array',
                 'qty.*' => 'nullable|integer',
                 'promotion_ids' => 'nullable|array',
@@ -98,6 +100,7 @@ class TransactionService
             $item_detail_payload = [];
             $checkout_detail_payload = [];
             $now = date('Y-m-d H:i:s');
+            $product_ids = [];
 
             foreach ($variant_product_ids as $key => $variant_product_id) {
                 $product = $products->where('id_variant_produk', $variant_product_id)->first();
@@ -107,12 +110,15 @@ class TransactionService
                     return redirect()->back()->with('error', 'Product Not Found')->withInput($request->all());
                 }
 
+                $product_ids[] = $product->id_produk;
+
                 if($product->status != StatusEnum::AKTIF->value){
                     DB::rollBack();
                     return redirect()->back()->with('error', 'Product Not Active')->withInput($request->all());
                 }
 
-                if((int) $product->stok < $qty[$key]){
+                $productStok = (int) $product->stok;
+                if($productStok < $qty[$key]){
                     DB::rollBack();
                     return redirect()->back()->with('error', 'Product Stock Not Enough')->withInput($request->all());
                 }
@@ -138,12 +144,17 @@ class TransactionService
                     "created_at" => $now,
                     "updated_at" => $now,
                 ];
+
+                // Kurangi stok produk
+                ProductVariant::where('id', $variant_product_id)->update(['stok' => $productStok - $qty[$key]]);
+
+                $total_payment += $productHarga * $qty[$key];
             }
 
             $now = date('Y-m-d');
             $promotions = Promotion::whereIn('id', $validated['promotion_ids'])
-                    ->whereDate('tgl_mulai', '<=', $now)
-                    ->whereDate('tgl_akhir', '>=', $now)
+                    ->whereDate('tanggal_mulai', '<=', $now)
+                    ->whereDate('tanggal_berakhir', '>=', $now)
                     ->get();
 
             $total_discount = 0;
@@ -171,7 +182,10 @@ class TransactionService
 
             CheckoutDetail::insert($checkout_detail_payload);
 
-            
+            // Delete productfrom cart
+            CartItem::whereIn('id_produk', $product_ids)
+                // ->whereIn('id_varian_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
+                ->delete();     
 
             $payload = [
                 'transaction_details' => [
