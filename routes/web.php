@@ -27,7 +27,7 @@ Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('ho
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
 //auth
-Route::middleware('guest')->group(function () {
+Route::middleware('guest:Admin,User')->group(function () {
     Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
 
     // Login
