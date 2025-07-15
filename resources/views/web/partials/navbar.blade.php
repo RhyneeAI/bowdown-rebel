@@ -7,15 +7,15 @@
 		            <div class="col-md-5 col-xs-6 text-center menu-1">
 		                <ul>
 							<li><a href="{{ route('home.index') }}">Home</a></li>
-		                    <li><a href="{{ route('shop.index') }}">Shop</a></li>
+		                    <li><a href="{{ route($role.'.shop.index') }}">Shop</a></li>
 
 		                    <li class="has-dropdown">
 								<a href="services.html">Categories</a>
 		                        <ul class="dropdown">
-									<li><a href="{{ route('shop.index') }}">Jaket</a></li>
-		                            <li><a href="{{ route('shop.index') }}">T-Shirt</a></li>
-		                            <li><a href="{{ route('shop.index') }}">Shoes</a></li>
-		                            <li><a href="{{ route('shop.index') }}">Accessories</a></li>
+									<li><a href="{{ route($role.'.shop.index') }}">Jaket</a></li>
+		                            <li><a href="{{ route($role.'.shop.index') }}">T-Shirt</a></li>
+		                            <li><a href="{{ route($role.'.shop.index') }}">Shoes</a></li>
+		                            <li><a href="{{ route($role.'.shop.index') }}">Accessories</a></li>
 		                        </ul>
 		                    </li>
 							<li><a href="{{ route('about') }}">About</a></li>

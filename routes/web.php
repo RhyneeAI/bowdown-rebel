@@ -24,13 +24,6 @@ use App\Http\Controllers\FE\ShopController;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
 
-Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');
-Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])->name('shop.detail');
-Route::post('/product/add-to-wishlist', [ShopController::class, 'addToWishlist'])->name('shop.add-to-wishlist');
-Route::post('/product/add-review', [ShopController::class, 'addReviewProduct'])->name('shop.add-review');
-Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
-
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
 //auth
