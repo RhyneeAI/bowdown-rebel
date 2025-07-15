@@ -32,7 +32,6 @@ Route::post('/product/add-review', [ShopController::class, 'addReviewProduct'])-
 Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 
 //auth
 Route::middleware('guest')->group(function () {
@@ -49,4 +48,5 @@ Route::middleware(['web'])->group(function () {
 
 // Route Admin
 include __DIR__ . '/admin.php';
+include __DIR__ . '/user.php';
 
