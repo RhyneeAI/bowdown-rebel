@@ -45,7 +45,14 @@ class AuthService
                     Auth::guard($role)->login($validationUser, $remember);
                     $request->session()->regenerate();
 
-                    return redirect()->intended($role . '/dashboard')->with('success', "Login Berhasil");
+                    if ($role === 'Admin') {
+                        return redirect()->intended('dashboard')->with('success', "Login Berhasil");
+                    } elseif ($role === 'User') {
+                        return redirect()->intended('/')->with([
+                            'success' => "Login Berhasil",
+                            'user' => $validationUser
+                        ]);
+                    }
                 } else {
                     return back()->with('error', 'Email atau password salah')->withInput($request->all());
                 }

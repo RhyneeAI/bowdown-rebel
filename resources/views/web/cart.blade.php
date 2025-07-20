@@ -1,91 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    @include('web.partials.header')
-</head>
-
-<body>
-    <div class="fh5co-loader"></div>
-    <div id="page">
-        @include('web.partials.navbar')
-        <!-- Shopping Cart Page -->
-        <div class="container" style="padding: 60px 0;">
-            <div class="row">
-                <!-- Cart Items -->
-                <div class="col-md-8 col-sm-12">
-                    <a href="#" style="display: inline-block; margin-bottom: 20px;"><i class="icon-arrow-left"></i>
-                        Continue Shopping</a>
-                    <div class="table-responsive">
-                        <table class="table cart-table">
-                            <tbody>
-                                <tr>
-                                    <td style="width: 120px;">
-                                        <img src="{{ asset('assets') }}/web/images/pict_bowdown/shirt1.png"
-                                            class="img-responsive" alt="">
-                                    </td>
-                                    <td>
-                                        <strong>World Wide BK</strong><br>
-                                        <span>Rp169.000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;">
-                                        <div class="quantity-control">
-                                            <button class="qty-btn minus">−</button>
-                                            <input type="text" class="qty-input" value="2">
-                                            <button class="qty-btn plus">+</button>
-                                        </div>
-                                    </td>
-                                    <td style="vertical-align: middle;">Rp169.000</td>
-                                    <td style="vertical-align: middle; text-align: right;">
-                                        <a href="#" class="text-danger"><i class="icon-cross"></i></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <form class="form-inline" style="margin-top: 20px;">
-                        <input type="text" class="form-control" placeholder="Coupon code">
-                        <button type="submit" class="btn btn-primary"
-                            style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
-                    </form>
-                </div>
-
-                <!-- Cart Totals -->
-                <div class="col-md-4 col-sm-12">
-                    <div style="border: 1px solid #ccc; padding: 30px;">
-                        <h3>Cart totals</h3>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>SUBTOTAL</td>
-                                    <td class="text-right">Rp169.000</td>
-                                </tr>
-                                <tr>
-                                    <td>KODE UNIK</td>
-                                    <td class="text-right">Rp44</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>TOTAL</strong></td>
-                                    <td class="text-right"><strong>Rp169.044</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a href="#" class="btn btn-block btn-primary"
-                            style="background: #111; border-color: #111; color: #fff;">Proceed to checkout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @include('web.partials.footer')
-        <div class="gototop js-top">
-            <a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
-        </div>
-
-
-    </div>
-</body>
-<style>
+@extends('web.partials.main')
+@push('css')
+    <style>
 .quantity-control {
     display: flex;
     align-items: center;
@@ -129,20 +44,324 @@
         justify-content: flex-end;
     }
 }
+
+.table td {
+    padding: 1rem;
+}
+
+.table td span {
+    font-size: 1.5rem;
+}
+
+.table td div p {
+    font-size: 1.5rem;
+    display: inline;
+}
+
+.table td div input[type="hidden"] {
+    margin-top: -0.5rem;
+}
 </style>
+@endpush
+@section('content')
+    <div class="fh5co-loader"></div>
+    <div id="page">
+        <!-- Shopping Cart Page -->
+        <div class="container" style="padding: 60px 0;">
+        <div class="row">
+            <!-- Cart Items -->
+            @if (optional($cart->cartItems)->count() > 0)
+                <div class="col-md-8 col-sm-12">
+                    <a href="{{ route('shop.index') }}" style="display: inline-block; margin-bottom: 20px;">
+                        <i class="icon-arrow-left"></i> Continue Shopping
+                    </a>
 
+                    <div class="table-responsive">
+                        <table class="table cart-table">
+                            <tbody>
+                                @foreach($cart->cartItems as $item)
+                                    <tr id="row-{{ $item->id }}">
+                                        <td style="width: 120px;">
+                                            <img src="{{ GetFile('products', $item->product->photos->first()->nama_hash ?? '') }}" class="img-responsive" alt="">
+                                        </td>
+                                        <td>
+                                            <strong style="font-size: 2.2rem;">{{ $item->product->nama_produk }}</strong><br>
+                                            <span style="font-size: 2rem;">Rp{{ number_format($item->variantProduct->harga ?? 0, 0, ',', '.') }}</span>
+                                            <p style="font-size: 1.8rem;">Size : {{ $item->variantProduct->ukuran ?? '' }}</p>
+                                        </td>
+                                        <td style="vertical-align: middle;">
+                                            <div class="quantity-control" data-item-id="{{ $item->id }}" data-variant-id="{{ $item->variantProduct->id ?? '' }}" data-initial-qty="{{ $item->qty }}">
+                                                <button class="qty-btn btn-minus" type="button">-</button>
+                                                <input type="text" name="qty[{{ $item->id }}][value]" class="qty-input" value="{{ $item->qty }}" style="font-size: 2.1rem;" readonly>
+                                                <input type="hidden" name="qty[{{ $item->id }}][id_item]" value="{{ $item->id }}">
+                                                <input type="hidden" name="qty[{{ $item->id }}][id_varian_produk]" value="{{ $item->variantProduct->id ?? '' }}">
+                                                <button class="qty-btn btn-plus" type="button">+</button>
+                                            </div>
+                                        </td>
+                                        <td style="vertical-align: middle;">
+                                            <p style="font-size: 2.1rem; margin-top: 20px;">Rp{{ number_format(($item->variantProduct->harga ?? 0) * $item->qty, 0, ',', '.') }}</p>
+                                        </td>
+                                        <td style="vertical-align: middle; text-align: right;">
+                                            <button class="text-danger remove-cart-item" data-id="{{ $item->id }}" style="border: none; background: none;">
+                                                <i class="icon-cross"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="save-changes-container" style="display: none; margin-top: 2rem; float: right;">
+                        <button type="button" id="save-changes" class="btn btn-primary" style="background: #111; border-color: #111; color: #fff;">Save Changes</button>
+                    </div>
+
+                    <div class="form-inline" style="margin-top: 20px;">
+                        <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
+                        <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
+                    </div>
+                </div>
+            @else
+                <div class="col-md-12">
+                    <div class="text-center" style="padding: 60px 0;">
+                        <p class="lead">Tidak ada produk di keranjang.</p>
+                        <a href="{{ route('shop.index') }}" class="btn btn-dark">Belanja Sekarang</a>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Cart Totals -->
+            @if ($cart->cartItems->count() > 0)
+                <div class="col-md-4 col-sm-12">
+                    <div style="border: 1px solid #ccc; padding: 30px;">
+                        <h3>Cart totals</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span>SUBTOTAL</span>
+                                        <div>
+                                            Rp <p id="subtotal" class="mb-0">0</p>
+                                            <input type="hidden" name="subtotal">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span>DISCOUNT</span>
+                                        <div>
+                                            <p id="discount" class="mb-0">0</p>
+                                            <input type="hidden" name="discount">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span><strong>TOTAL</strong></span>
+                                        <div>
+                                            <strong>Rp</strong> <strong id="total" class="mb-0">0</strong>
+                                            <input type="hidden" name="total">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a href="#" class="btn btn-block btn-primary" style="background: #111; border-color: #111; color: #fff;">Proceed to checkout</a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
 <script>
-document.querySelectorAll('.qty-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const input = this.parentElement.querySelector('.qty-input');
-        let value = parseInt(input.value);
-        if (this.classList.contains('minus') && value > 1) {
-            input.value = value - 1;
-        } else if (this.classList.contains('plus')) {
-            input.value = value + 1;
-        }
-    });
-});
-</script>
+    $(document).ready(function () {
+        let hasChanges = false;
 
-</html>
+        // Event untuk tombol minus
+        $('.btn-minus').on('click', function () {
+            const $qtyInput = $(this).siblings('.qty-input');
+            let val = parseInt($qtyInput.val()) || 1;
+            if (val > 1) {
+                $qtyInput.val(val - 1);
+                checkChanges($(this).closest('.quantity-control'));
+                updateTotal($(this).closest('.quantity-control'));
+                updateOverallTotal();
+            }
+        });
+
+        // Event untuk tombol plus
+        $('.btn-plus').on('click', function () {
+            const $qtyInput = $(this).siblings('.qty-input');
+            let val = parseInt($qtyInput.val()) || 1;
+            $qtyInput.val(val + 1);
+            checkChanges($(this).closest('.quantity-control'));
+            updateTotal($(this).closest('.quantity-control'));
+            updateOverallTotal();
+        });
+
+        // Fungsi untuk memeriksa perubahan qty
+        function checkChanges($quantityControl) {
+            const initialQty = parseInt($quantityControl.data('initial-qty'));
+            const currentQty = parseInt($quantityControl.find('.qty-input').val());
+            hasChanges = hasChanges || (initialQty !== currentQty);
+            $('#save-changes-container').toggle(hasChanges);
+        }
+
+        // Fungsi untuk memperbarui total harga per baris
+        function updateTotal($quantityControl) {
+            const $row = $quantityControl.closest('tr');
+            const price = parseInt($row.find('td:nth-child(2) span').text().replace('Rp', '').replace(/\./g, '')) || 0;
+            const qty = parseInt($quantityControl.find('.qty-input').val()) || 1;
+            const total = price * qty;
+            $row.find('td:nth-child(4) p').text('Rp' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            updateOverallTotal(); // Panggil update total keseluruhan
+        }
+
+        $('#apply-coupon').click(function() {
+            let coupon_code = $('#coupon_code').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            const url = "{{ $role == 'User' ? route($role . '.cart.apply-coupon') : null }}";
+            if (!url) {
+                toastr.error('Silahkan login terlebih dahulu');
+                return;
+            }
+
+            $.get(url, { coupon_code })
+                .done(response => {
+                    if (response.status === 'success') {
+                        toastr.success(response.message);
+
+                        const diskonHarga = parseInt(response.data.diskon_harga);
+                        $('#discount').text(diskonHarga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+                        $('input[name="discount"]').val(response.data.diskon_harga);
+                        updateOverallTotal();
+                    } else if (response.status === 'error') {
+                        toastr.error(response.message);
+
+                        $('#discount').text('- Rp 0')
+                        updateOverallTotal();
+                    } else {
+                        toastr.error('!!!', 'Terjadi kesalahan tak terduga.');
+                    }
+                })
+                .fail(error => {
+                    toastr.error('Gagal terhubung ke server');
+                    console.error(error);
+                });
+        });
+
+        // Fungsi updateOverallTotal (pastikan sudah ada dari kode sebelumnya)
+        function updateOverallTotal() {
+            let subtotal = 0;
+            $('.quantity-control').each(function () {
+                const $row = $(this).closest('tr');
+                const rowTotal = parseInt($row.find('td:nth-child(4) p').text().replace('Rp', '').replace(/\./g, '')) || 0;
+                subtotal += rowTotal;
+            });
+
+            const discount = parseInt($('#discount').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
+            const total = subtotal - discount;
+
+            $('#subtotal').text(subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#discount').text('- Rp ' + discount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#total').text(total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+
+            $('input[name="subtotal"]').val(subtotal);
+            $('input[name="discount"]').val(discount);
+            $('input[name="total"]').val(total);
+        }
+
+        updateOverallTotal()
+       
+        // Event untuk tombol Save Changes
+        $('#save-changes').on('click', function () {
+            const payload = {};
+            $('.quantity-control').each(function () {
+                const $qtyInput = $(this).find('.qty-input');
+                const itemId = $(this).data('item-id');
+                const variantId = $(this).data('variant-id');
+                const initialQty = parseInt($(this).data('initial-qty'));
+                const currentQty = parseInt($qtyInput.val());
+                if (initialQty !== currentQty) {
+                    payload[itemId] = {
+                        id_keranjang_item: itemId,
+                        id_varian_produk: variantId,
+                        qty: currentQty
+                    };
+                }
+            });
+            // console.log('Changes to save:', payload);
+
+            const url = "{{ $role == 'User' ? route($role . '.cart.update-cart-item') : null }}";
+            if (!url) {
+                toastr.error('Silahkan login terlebih dahulu');
+                return;
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: payload,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'json',
+                success: function (res) {
+                    if (res.status === 'success') {
+                        toastr.success(res.message);
+                        // Update initial qty setelah sukses simpan
+                        $('.quantity-control').each(function () {
+                            const $qtyInput = $(this).find('.qty-input');
+                            $(this).data('initial-qty', parseInt($qtyInput.val()));
+                        });
+                        updateOverallTotal(); // Perbarui total setelah simpan
+                    } else {
+                        toastr.error(res.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Terjadi kesalahan: ' + error);
+                },
+                complete: function () {
+                    hasChanges = false;
+                    $('#save-changes-container').hide();
+                }
+            });
+        });
+
+        $('.remove-cart-item').on('click', function (e) {
+            e.preventDefault();
+
+            const itemId = $(this).data('id');
+
+            $.ajax({
+                url: `/User/cart/${itemId}/remove`,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Accept': 'application/json'
+                },
+                success: function (data) {
+                    $(`#row-${itemId}`).remove();
+
+                    toastr.success(data.success || 'Item berhasil dihapus dari keranjang.');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    toastr.error('Terjadi kesalahan saat menghapus item dari keranjang.');
+                }
+            });
+        });
+    });
+</script>
+@endpush
+
+

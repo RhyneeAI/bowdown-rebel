@@ -41,6 +41,7 @@
 @section('content')
     <div id="fh5co-product">
         <div class="container">
+            <div id="cart-message" style="margin-top:10px;"></div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-5 animate-box d-flex flex-column align-items-center">
                     <div class="owl-carousel owl-carousel-fullwidth product-carousel owl-theme">
@@ -58,14 +59,26 @@
                         <div class="col-12 text-center fh5co-heading">
                             {{-- <h2>{{ $product->nama_produk }}</h2> --}}
                             <h3 class="rating">⭐ {{ $product->rating }} / 5 </h3>
-                            <p>
-                                <button class="btn btn-primary btn-outline btn-md">
-                                    <i class="fa fa-shopping-cart"></i> Keranjang
-                                </button>
-                                <button class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
-                                    <i class="fa fa-heart"></i> Wishlist
-                                </button>
-                            </p>
+                            <div class="d-flex justify-content-center align-items-center flex-column gap-2 mt-3">
+                                <form id="add-to-cart-form" class="d-flex flex-column align-items-center w-100">
+                                    @csrf
+                                    <input type="hidden" name="slug" value="{{ $product->slug }}">
+                                    <input type="hidden" name="id_varian">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button id="submitCart" type="submit" class="btn btn-primary btn-outline btn-md">
+                                            <i class="fa fa-shopping-cart"></i> Keranjang
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
+                                            <i class="fa fa-heart"></i> Wishlist
+                                        </button>
+                                    </div>
+                                    <div class="quantity-control mt-2 d-flex justify-content-center align-items-center">
+                                        <button type="button" class="qty-btn" id="btn-minus">-</button>
+                                        <input type="text" name="qty" id="qty-input" class="mx-1" value="1" min="1" style="width: 60px; text-align: center;">
+                                        <button type="button" class="qty-btn" id="btn-plus">+</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,11 +109,9 @@
                                 <div class="col-md-12" style="margin-top: -8rem;">
                                     <h1 id="nama-produk">{{ $product->nama_produk }}</h1>
                                     <h3 class="price">
-                                        <span id="harga-produk">Rp {{ number_format($product->variants->first()->harga, 0, ',', '.') }}</span> 
-                                        (<span id="stok-produk" class="{{ $product->variants->first()->stok == 0 ? 'text-danger' : '' }}">Stok : {{ $product->variants->first()->stok }}</span>)
+                                        <span id="harga-produk">Rp {{ number_format(optional($product->variants->first())->harga ?? 0, 0, ',', '.') }}</span> 
+                                        (<span id="stok-produk" class="{{ optional($product->variants->first())->stok == 0 ? 'text-danger' : '' }}">Stok : {{ optional($product->variants->first())->stok ?? 0 }}</span>)
                                     </h3>
-
-                                    <input type="hidden" name="id_varian">
 
                                     <div class="row mx-1">
                                         @foreach ($product->variants as $key => $value)
@@ -122,10 +133,10 @@
                                 <div class="row">
                                     <div class="col-md-12" style="margin-top: -8rem;">
                                         <h3>Semua Ulasan</h3>
-                                        <div class="feed" id="feed">
+                                        <div class="feed" id="feed" style="height: 500px; overflow-y: auto;">
                                         </div>
                                     </div>
-                                    <div class="col-md-12 review-form text-center">
+                                    <div class="col-md-12 review-form text-center" style="margin-top: -5rem;">
                                         <h4 class="review-title">Berikan Ulasan Anda</h4>
                                         <form id="submit-review" class="review-form-container">
                                             <div class="form-group review-text-group">
@@ -194,7 +205,64 @@
 @endsection
 
 @push('scripts')
+    <!-- JS -->
     <script>
+        $(document).ready(function () {
+            const $form = $("#add-to-cart-form");
+            const $submitBtn = $("#submitCart");
+            const $minusBtn = $('#btn-minus')
+            const $plusBtn = $('#btn-plus')
+            const $qtyInput = $('#qty-input')
+
+            $minusBtn.on("click", function (e) {
+                e.preventDefault();
+                let val = parseInt($qtyInput.val()) || 1;
+                if (val > 1) {
+                    $qtyInput.val(val - 1);
+                }
+            });
+
+            $plusBtn.on("click", function (e) {
+                e.preventDefault();
+                let val = parseInt($qtyInput.val()) || 1;
+                $qtyInput.val(val + 1);
+            });
+
+            // console.log("Qty:", $qtyInput.val());
+
+            $form.on("submit", function (e) {
+                e.preventDefault();
+
+                let formData = new FormData($form[0]);
+
+                const url = "{{ $role == 'User' ? route($role.'.cart.add') : '' }}";
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan produk Keranjang!');
+                    return;
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': formData.get('_token')
+                    },
+                    processData: false, // Penting untuk FormData
+                    contentType: false, // Penting untuk FormData
+                    dataType: 'json',
+                    success: function (data) {
+                        toastr.success(data.success || 'Berhasil menambahkan ke keranjang!');
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error('Terjadi kesalahan saat menambahkan ke keranjang.');
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    
+        // Toggle wishlist
         $(document).ready(function() {
             function addToWishlist(slug) {
                 if (!slug) {
@@ -202,7 +270,12 @@
                     return;
                 }
 
-                const url = "{{ route('shop.add-to-wishlist') }}";
+                const url = "{{ $role == 'User' ? route($role.'.shop.add-to-wishlist') : null }}";
+
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan ke Wishlist!');
+                    return;
+                }
 
                 $.ajaxSetup({
                     headers: {
@@ -236,6 +309,7 @@
             })
         })
 
+        // Toggle Size
         $(document).ready(function() {
             $('.size:first').addClass('active');
 
@@ -256,9 +330,8 @@
                 const id = $(this).data('id');
                 const $hargaElement = $('#harga-produk');
                 const $stokElement = $('#stok-produk');
-                const $idElement = $('input[name="id_varian"]');
 
-                $idElement.val(id);
+                $('input[name="id_varian"]').val(id);
                 
                 $hargaElement.fadeOut(200, function() {
                     $(this).text('Rp ' + toRupiahFormat(harga)).fadeIn(200);
@@ -274,8 +347,12 @@
                     $(this).fadeIn(200);
                 });
             });
+
+            $('.size').first().trigger('click');
+
         });
 
+        // Toggle Review
         $(document).ready(function() {
             function addReview(data) {
                 if (!data) {
@@ -283,7 +360,12 @@
                     return;
                 }
 
-                const url = "{{ route('shop.add-review') }}";
+                const url = "{{ $role == 'User' ? route($role.'.shop.add-review') : null }}";
+
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan Review produk!');
+                    return;
+                }
 
                 $.ajaxSetup({
                     headers: {
@@ -291,7 +373,13 @@
                     }
                 });
 
-                $.post(url, { slug: data.slug, komentar: data.komentar, rating: data.rating })
+                let payload = {
+                    slug: data.slug, 
+                    komentar: data.komentar, 
+                    rating: data.rating
+                }
+
+                $.post(url, payload)
                     .done(response => {
                         showResponse(response);
                         loadReview();

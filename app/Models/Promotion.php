@@ -10,8 +10,6 @@ use App\Models\ProductLiked;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Promotion extends Model
@@ -22,7 +20,6 @@ class Promotion extends Model
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
-
     protected $fillable = [
         'nama_promosi',
         'kode_promosi',
@@ -35,6 +32,11 @@ class Promotion extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function promotionUsed(): HasMany
+    {
+        return $this->hasMany(PromotionUsed::class, 'id_promosi', 'id');
+    }
 
     public function usedBy(): HasMany
     {

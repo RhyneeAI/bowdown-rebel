@@ -4,6 +4,8 @@ namespace App\Http\Controllers\FE;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -23,8 +25,5 @@ class PageController extends Controller
     {
         return view('web.about');
     }
-    public function cart()
-    {
-        return view('web.cart');
-    }
+
 }

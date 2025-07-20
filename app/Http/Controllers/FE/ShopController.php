@@ -6,15 +6,24 @@ use App\Enums\StatusEnum;
 use App\Services\ProductService;
 use App\Services\CategoryService;
 use App\Services\ReviewService;
+use App\Services\CartService;
+use App\Models\Cart;
+use App\Models\CartItems;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\GuardTraits;
+use Throwable;
 
 class ShopController extends Controller
 {
+    use GuardTraits;
+ 
     public function __construct(
         protected CategoryService $categoryService,
         protected ProductService $productService,
         protected ReviewService $reviewService,
+        protected CartService $cartService
     ) {}
 
     public function index() 
@@ -117,3 +126,4 @@ class ShopController extends Controller
         ]);
     }
 }
+

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Cart;
+
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -69,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserAddress::class, 'id_user', 'id');
     }
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'id_user', 'id');
+    }
+
 }

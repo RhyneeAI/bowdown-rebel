@@ -2,32 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PromotionUsed extends Model
 {
-    use SoftDeletes;
+    use HasFactory;
 
-    protected $table = 'promosi_dipakai';
+    protected $table = "promosi_dipakai";
+    protected $fillable = ['id_promosi', 'id_user','created_at', 'updated_at'];
     protected $primaryKey = 'id';
+    protected $guarded = ['id'];
+    protected $dates = ['deleted_at'];
 
-    protected $fillable = [
-        'id_promosi',
-        'id_user',
-    ];
 
-    public function promotion()
+    public function promotion(): BelongsTo
     {
-        return $this->belongsTo(Promotion::class, 'id_promosi');
+        return $this->belongsTo(Promotion::class, 'id_promosi', 'id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 }
