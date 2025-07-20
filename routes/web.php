@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\FE\HomeController;
 use App\Http\Controllers\FE\ShopController;
 

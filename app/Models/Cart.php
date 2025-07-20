@@ -17,21 +17,11 @@ class Cart extends Model
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
 
-
-    /**
-     * Get the user that owns the cart.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
-    /**
-     * Get the cart items for the cart.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+  
     public function cartItems()
     {
         return $this->hasMany(CartItems::class, 'id_keranjang', 'id');

@@ -59,24 +59,25 @@
                         <div class="col-12 text-center fh5co-heading">
                             {{-- <h2>{{ $product->nama_produk }}</h2> --}}
                             <h3 class="rating">⭐ {{ $product->rating }} / 5 </h3>
-                            <div class="d-flex justify-content-center align-items-center flex-row gap-2 mt-3">
-                                <form id="add-to-cart-form" class="d-flex align-items-center">
+                            <div class="d-flex justify-content-center align-items-center flex-column gap-2 mt-3">
+                                <form id="add-to-cart-form" class="d-flex flex-column align-items-center w-100">
                                     @csrf
                                     <input type="hidden" name="slug" value="{{ $product->slug }}">
-                                    <input type="hidden" name="variant_index" value="0">
                                     <input type="hidden" name="id_varian">
-                                    <div class="quantity-control mb-0 me-2 d-flex align-items-center">
-                                        <button type="button" class="qty-btn minus">−</button>
-                                        <input type="text" name="qty" class="qty-input mx-1" value="0" min="1" style="width: 60px; text-align: center;">
-                                        <button type="button" class="qty-btn plus">+</button>
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button id="submitCart" type="submit" class="btn btn-primary btn-outline btn-md">
+                                            <i class="fa fa-shopping-cart"></i> Keranjang
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
+                                            <i class="fa fa-heart"></i> Wishlist
+                                        </button>
                                     </div>
-                                    <button id="submitCart" type="submit" class="btn btn-primary btn-outline btn-md ms-2">
-                                        <i class="fa fa-shopping-cart"></i> Keranjang
-                                    </button>
+                                    <div class="quantity-control mt-2 d-flex justify-content-center align-items-center">
+                                        <button type="button" class="qty-btn" id="btn-minus">-</button>
+                                        <input type="text" name="qty" id="qty-input" class="mx-1" value="1" min="1" style="width: 60px; text-align: center;">
+                                        <button type="button" class="qty-btn" id="btn-plus">+</button>
+                                    </div>
                                 </form>
-                                <button class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }} ms-2" id="wishlist" data-slug="{{ $product->slug }}">
-                                    <i class="fa fa-heart"></i> Wishlist
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -108,10 +109,9 @@
                                 <div class="col-md-12" style="margin-top: -8rem;">
                                     <h1 id="nama-produk">{{ $product->nama_produk }}</h1>
                                     <h3 class="price">
-                                        <span id="harga-produk">Rp {{ number_format($product->variants->first()->harga, 0, ',', '.') }}</span> 
-                                        (<span id="stok-produk" class="{{ $product->variants->first()->stok == 0 ? 'text-danger' : '' }}">Stok : {{ $product->variants->first()->stok }}</span>)
+                                        <span id="harga-produk">Rp {{ number_format(optional($product->variants->first())->harga ?? 0, 0, ',', '.') }}</span> 
+                                        (<span id="stok-produk" class="{{ optional($product->variants->first())->stok == 0 ? 'text-danger' : '' }}">Stok : {{ optional($product->variants->first())->stok ?? 0 }}</span>)
                                     </h3>
-
 
                                     <div class="row mx-1">
                                         @foreach ($product->variants as $key => $value)
@@ -207,59 +207,62 @@
 @push('scripts')
     <!-- JS -->
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("add-to-cart-form");
-        const submitBtn = document.getElementById("submitCart");
+        $(document).ready(function () {
+            const $form = $("#add-to-cart-form");
+            const $submitBtn = $("#submitCart");
+            const $minusBtn = $('#btn-minus')
+            const $plusBtn = $('#btn-plus')
+            const $qtyInput = $('#qty-input')
 
-        const minusBtn = form.querySelector(".qty-btn.minus");
-        const plusBtn = form.querySelector(".qty-btn.plus");
-        const qtyInput = form.querySelector(".qty-input");
+            $minusBtn.on("click", function (e) {
+                e.preventDefault();
+                let val = parseInt($qtyInput.val()) || 1;
+                if (val > 1) {
+                    $qtyInput.val(val - 1);
+                }
+            });
 
-        // Tambah dan kurang qty
-        minusBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            let val = parseInt(qtyInput.value) || 1;
-            if (val > 1) qtyInput.value = val - 1;
-        });
+            $plusBtn.on("click", function (e) {
+                e.preventDefault();
+                let val = parseInt($qtyInput.val()) || 1;
+                $qtyInput.val(val + 1);
+            });
 
-        plusBtn.addEventListener("click", function (e) {
-            e.preventDefault();
-            let val = parseInt(qtyInput.value) || 1;
-            qtyInput.value = val + 1;
-        });
-        console.log("Qty:", qtyInput.value);
+            // console.log("Qty:", $qtyInput.val());
 
+            $form.on("submit", function (e) {
+                e.preventDefault();
 
-        // Submit form
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+                let formData = new FormData($form[0]);
 
-            let formData = new FormData(form);
-            console.log("Form Data:", Object.fromEntries(formData.entries()));
+                const url = "{{ $role == 'User' ? route($role.'.cart.add') : '' }}";
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan produk Keranjang!');
+                    return;
+                }
 
-            fetch("{{ route($role .'.cart.add') }}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': formData.get('_token'),
-                    'Accept': 'application/json',
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                toastr.success(data.success || 'Berhasil menambahkan ke keranjang!');
-            })
-            .catch(error => {
-                toastr.error('Terjadi kesalahan saat menambahkan ke keranjang.');
-                console.error('Error:', error);
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': formData.get('_token')
+                    },
+                    processData: false, // Penting untuk FormData
+                    contentType: false, // Penting untuk FormData
+                    dataType: 'json',
+                    success: function (data) {
+                        toastr.success(data.success || 'Berhasil menambahkan ke keranjang!');
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error('Terjadi kesalahan saat menambahkan ke keranjang.');
+                        console.error('Error:', error);
+                    }
+                });
             });
         });
-    });
-    </script>
-
-
-
-    <script>
+    
+        // Toggle wishlist
         $(document).ready(function() {
             function addToWishlist(slug) {
                 if (!slug) {
@@ -267,7 +270,12 @@
                     return;
                 }
 
-                const url = "{{ route($role.'.shop.add-to-wishlist') }}";
+                const url = "{{ $role == 'User' ? route($role.'.shop.add-to-wishlist') : null }}";
+
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan ke Wishlist!');
+                    return;
+                }
 
                 $.ajaxSetup({
                     headers: {
@@ -301,6 +309,7 @@
             })
         })
 
+        // Toggle Size
         $(document).ready(function() {
             $('.size:first').addClass('active');
 
@@ -321,9 +330,8 @@
                 const id = $(this).data('id');
                 const $hargaElement = $('#harga-produk');
                 const $stokElement = $('#stok-produk');
-                const $idElement = $('input[name="id_varian"]');
 
-                $idElement.val(id);
+                $('input[name="id_varian"]').val(id);
                 
                 $hargaElement.fadeOut(200, function() {
                     $(this).text('Rp ' + toRupiahFormat(harga)).fadeIn(200);
@@ -339,8 +347,12 @@
                     $(this).fadeIn(200);
                 });
             });
+
+            $('.size').first().trigger('click');
+
         });
 
+        // Toggle Review
         $(document).ready(function() {
             function addReview(data) {
                 if (!data) {
@@ -348,7 +360,12 @@
                     return;
                 }
 
-                const url = "{{ route($role.'.shop.add-review') }}";
+                const url = "{{ $role == 'User' ? route($role.'.shop.add-review') : null }}";
+
+                if (!url) {
+                    toastr.error('Perlu login terlebih dahulu untuk menambahkan Review produk!');
+                    return;
+                }
 
                 $.ajaxSetup({
                     headers: {
@@ -356,7 +373,13 @@
                     }
                 });
 
-                $.post(url, { slug: data.slug, komentar: data.komentar, rating: data.rating })
+                let payload = {
+                    slug: data.slug, 
+                    komentar: data.komentar, 
+                    rating: data.rating
+                }
+
+                $.post(url, payload)
                     .done(response => {
                         showResponse(response);
                         loadReview();

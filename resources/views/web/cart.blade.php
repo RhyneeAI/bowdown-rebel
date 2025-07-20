@@ -58,7 +58,7 @@
                     <i class="icon-arrow-left"></i> Continue Shopping
                 </a>
 
-                @if ($cart->cartItems->count() > 0)
+                @if (optional($cart->cartItems)->count() > 0)
                     <div class="table-responsive">
                         <table class="table cart-table">
                             <tbody>

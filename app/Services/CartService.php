@@ -2,57 +2,65 @@
 namespace App\Services;
 
 use App\Models\Cart;
-use App\Models\CartItems;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
+use App\Models\CartItems;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class CartService
 {
-    public function addToCart(string $slug, ?int $variantIndex, int $qty)
+   public function create(Request $request)
     {
         try {
             $user = Auth::guard('User')->user();
 
-            $product = Product::with('variants')->where('slug', $slug)->firstOrFail();
+            $request->validate([
+                'slug' => 'required|exists:produk,slug',
+                'id_varian' => 'nullable|integer',
+                'qty' => 'required|integer|min:1',
+            ]);
 
-            $variantId = null;
-            if ($variantIndex !== null && isset($product->variants[$variantIndex])) {
-                $variantId = $product->variants[$variantIndex]->id;
-            }
-
-            // Cek cart milik user
+            $product = Product::select('id')->where('slug', $request->slug)->firstOrFail();
             $cart = Cart::firstOrCreate(['id_user' => $user->id]);
-            Log::info($qty);
+            Log::info($request->qty);
 
-            // Tambahkan item ke keranjang (update jika sudah ada)
             $cartItem = CartItems::where('id_keranjang', $cart->id)
-                ->where('id_produk', $product->id)
-                ->where('id_varian_produk', $variantId)
-                ->first();
+                                ->where('id_produk', $product->id)
+                                ->where('id_varian_produk', $request->id_varian)
+                                ->first();
 
             if ($cartItem) {
-                $cartItem->qty += $qty;
+                $cartItem->qty += $request->qty;
                 $cartItem->save();
             } else {
-                // Jika item belum ada, buat item baru
                 CartItems::create([
                     'id_keranjang' => $cart->id,
                     'id_produk' => $product->id,
-                    'id_varian_produk' => $variantId,
-                    'qty' => $qty
+                    'id_varian_produk' => $request->id_varian,
+                    'qty' => $request->qty
                 ]);
             }
 
             return true;
-        } catch (\Exception $e) {
-            // Untuk debug jika perlu
+        } catch (\Throwable $e) {
             logger()->error('AddToCart Error: ' . $e->getMessage());
             return false;
         }
     }
-    public function removeItemFromCart($userId, $itemId)
+
+    public function getOne(String $userId)
+    {
+        $cart = Cart::where('id_user', $userId)->first();
+        if (!$cart) {
+            $cart = Cart::create(['id_user' => $userId]);
+        }
+        return $cart;
+    }
+
+    public function remove($userId, $itemId)
     {
         $cart = Cart::where('id_user', $userId)->first();
 

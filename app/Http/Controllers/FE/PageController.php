@@ -25,15 +25,5 @@ class PageController extends Controller
     {
         return view('web.about');
     }
-    public function cart()
-    {
-        $user = Auth::user();
-
-        $cart = Cart::with(['user', 'cartItems.product', 'cartItems.variantProduct'])
-            ->where('id_user', $user->id)
-            ->first();
-            
-        return view('web.cart', compact('cart'));
-    }
 
 }

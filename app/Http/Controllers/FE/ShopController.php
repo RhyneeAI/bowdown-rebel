@@ -12,10 +12,13 @@ use App\Models\CartItems;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\GuardTraits;
 use Throwable;
 
 class ShopController extends Controller
 {
+    use GuardTraits;
+ 
     public function __construct(
         protected CategoryService $categoryService,
         protected ProductService $productService,
@@ -122,50 +125,5 @@ class ShopController extends Controller
             'status' => 'success'
         ]);
     }
-    public function addToCart(Request $request)
-    {
-        try {
-            if (!Auth::guard('User')->check()) {
-                return response()->json(['error' => 'Silakan login terlebih dahulu.'], 401);
-            }
-
-            $request->validate([
-                'slug' => 'required|exists:produk,slug',
-                'variant_index' => 'nullable|integer|min:0',
-                'qty' => 'required|integer|min:1',
-            ]);
-
-            $result = $this->cartService->addToCart($request->slug, $request->variant_index, $request->qty);
-
-            if (!$result) {
-                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 500);
-            }
-
-            return response()->json(['success' => 'Berhasil dimasukkan ke dalam keranjang'], 200);
-        } catch (Throwable $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-    public function removeFromCart($itemId)
-    {
-        try {
-            $user = Auth::guard('User')->user();
-
-            if (!$user) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-
-            $this->cartService->removeItemFromCart($user->id, $itemId);
-
-            return response()->json(['success' => 'Item berhasil dihapus dari keranjang.']);
-        } catch (\Exception $e) {
-            \Log::error('RemoveFromCart Error: ' . $e->getMessage());
-            return response()->json(['error' => 'Gagal menghapus item.'], 500);
-        }
-    }
-
-
-
-
 }
 
