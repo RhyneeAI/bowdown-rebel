@@ -10,8 +10,8 @@
 <body>
     <form action="{{ route('User.transaction.checkout') }}" method="post">
         @csrf
-        <input type="hidden" name="variant_product_ids[]" value="3">
-        <input type="hidden" name="variant_product_ids[]" value="5">
+        <input type="hidden" name="variant_product_ids[]" value="20">
+        <input type="hidden" name="variant_product_ids[]" value="22">
         <input type="hidden" name="qty[]" value="1">
         <input type="hidden" name="qty[]" value="2">
         <input type="hidden" name="promotion_ids[]" value="2">

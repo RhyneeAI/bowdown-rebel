@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\StatusCheckout;
 use App\Enums\StatusEnum;
 use App\Helpers\MidtransHelper;
 use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Checkout;
 use App\Models\CheckoutDetail;
+use App\Models\CheckoutManagement;
 use App\Models\Expedition;
 use App\Models\ProductVariant;
 use App\Models\Promotion;
@@ -184,7 +186,7 @@ class TransactionService
 
             // Delete productfrom cart
             CartItem::whereIn('id_produk', $product_ids)
-                // ->whereIn('id_varian_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
+                // ->whereIn('id_variant_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
                 ->delete();     
 
             $payload = [
@@ -211,6 +213,11 @@ class TransactionService
                     "unit" => "hours"
                 ],
             ];
+
+            CheckoutManagement::create([
+                'id_checkout' => $transaction->id,
+                'status' => StatusCheckout::MENUNGGU->value,
+            ]);
 
             $response = $this->midtransHelper->send($payload, '/snap/v1/transactions');
 
