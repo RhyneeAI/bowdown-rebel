@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\HomeController;
+use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\FE\ShopController;
 
 /*
@@ -52,5 +53,3 @@ include __DIR__ . '/user.php';
 // Route Admin
 include __DIR__ . '/admin.php';
 include __DIR__ . '/user.php';
-include __DIR__ . '/callback.php';
-
