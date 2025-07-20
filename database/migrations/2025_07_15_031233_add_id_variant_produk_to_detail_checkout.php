@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('promosi_dipakai', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('id_promosi')->constrained('promosi');
-            $table->foreignId('id_user')->constrained('user');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('detail_checkout', function (Blueprint $table) {
+            $table->foreignId('id_variant_produk')->nullable()->after('id_produk')->constrained('varian_produk');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('promosi_dipakai');
+        Schema::table('detail_checkout', function (Blueprint $table) {
+            $table->dropColumn('id_variant_produk');
+        });
     }
 };

@@ -8,6 +8,7 @@ use App\Http\Controllers\BE\CategoryController;
 use App\Http\Controllers\BE\ExpeditionController;
 use App\Http\Controllers\BE\ProductController;
 use App\Http\Controllers\BE\PromotionController;
+use App\Http\Controllers\BE\TransactionController;
 use App\Http\Controllers\BE\UserController;
 
 Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(function () {
@@ -27,6 +28,10 @@ Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(functi
     // Promosi
     Route::get('promotion/datatable', [PromotionController::class, 'datatable'])->name('promotion.datatable');
     Route::resource('promotion', PromotionController::class);
+
+    // Transaction
+    Route::get('transaction/datatable', [TransactionController::class, 'datatable'])->name('transaction.datatable');
+    Route::resource('transaction', TransactionController::class)->only(['index', 'show']);
 
     // User
     Route::get('user/datatable', [UserController::class, 'datatable'])->name('user.datatable');

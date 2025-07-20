@@ -48,7 +48,10 @@ class PromotionController extends Controller
                                 <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px;"></iconify-icon>
                             </span>';
 
-                return $previewBtn . $editBtn . $deleteBtn;
+                return "<div class='btn-group'>$previewBtn . $editBtn . $deleteBtn</div>";
+            })
+            ->editColumn('diskon_harga', function ($row) {
+                return number_format($row->diskon_harga, 2, ',', '.');
             })
             ->rawColumns(['action'])
             ->make(true);

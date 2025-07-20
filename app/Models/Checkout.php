@@ -14,30 +14,32 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Promotion extends Model
+class Checkout extends Model
 {
-    use SoftDeletes;
-
-    protected $table = 'promosi';
+    protected $table = 'checkout';
     protected $primaryKey = 'id';
-    protected $guarded = ['id'];
-    protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'nama_promosi',
-        'kode_promosi',
-        'stok',
-        'diskon_harga',
-        'tanggal_mulai',
-        'tanggal_berakhir',
-        'foto',
-        'slug',
-        'created_at',
-        'updated_at'
+        'id_user',
+        'id_ekspedisi',
+        'no_faktur',
+        'total_harga',
+        'diskon',
+        'dibayar',
     ];
 
-    public function usedBy(): HasMany
+    public function user()
     {
-        return $this->hasMany(PromotionUsed::class, 'id_promosi');
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function expedition()
+    {
+        return $this->belongsTo(Expedition::class, 'id_ekspedisi');
+    }
+
+    public function checkoutDetail()
+    {
+        return $this->hasMany(CheckoutDetail::class, 'id_checkout');
     }
 }

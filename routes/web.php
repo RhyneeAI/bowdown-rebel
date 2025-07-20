@@ -24,18 +24,10 @@ use App\Http\Controllers\FE\ShopController;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
 
-Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');
-Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])->name('shop.detail');
-Route::post('/product/add-to-wishlist', [ShopController::class, 'addToWishlist'])->name('shop.add-to-wishlist');
-Route::post('/product/add-review', [ShopController::class, 'addReviewProduct'])->name('shop.add-review');
-Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
-
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 
 //auth
-Route::middleware('guest')->group(function () {
+Route::middleware('guest:Admin,User')->group(function () {
     Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
 
     // Login
@@ -49,4 +41,5 @@ Route::middleware(['web'])->group(function () {
 
 // Route Admin
 include __DIR__ . '/admin.php';
+include __DIR__ . '/user.php';
 

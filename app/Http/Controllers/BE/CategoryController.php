@@ -51,7 +51,7 @@ class CategoryController extends Controller
                                 <iconify-icon icon="mdi:trash-can-outline" style="font-size: 18px;"></iconify-icon>
                             </span>';
 
-                return $previewBtn . $editBtn . $deleteBtn;
+                return "<div class='btn-group'>$previewBtn . $editBtn . $deleteBtn</div>";
             })
             ->rawColumns(['action'])
             ->make(true);
