@@ -4,6 +4,8 @@ namespace App\Http\Controllers\FE;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -25,6 +27,13 @@ class PageController extends Controller
     }
     public function cart()
     {
-        return view('web.cart');
+        $user = Auth::user();
+
+        $cart = Cart::with(['user', 'cartItems.product', 'cartItems.variantProduct'])
+            ->where('id_user', $user->id)
+            ->first();
+            
+        return view('web.cart', compact('cart'));
     }
+
 }

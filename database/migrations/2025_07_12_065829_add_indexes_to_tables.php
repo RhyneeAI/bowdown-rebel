@@ -19,7 +19,7 @@ return new class extends Migration
             $table->index(['unggulan', 'status'], 'idx_unggulan_status');
             $table->index('slug', 'idx_slug');
             $table->index('id_kategori', 'idx_kategori');
-            $table->index(['id', 'id_kategor,i', 'nama_produk', 'slug', 'unggulan', 'status'], 'idx_shop');
+            $table->index(['id', 'id_kategori', 'nama_produk', 'slug', 'unggulan', 'status'], 'idx_shop');
         });
 
         Schema::table('varian_produk', function (Blueprint $table) {

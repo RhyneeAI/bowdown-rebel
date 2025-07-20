@@ -31,11 +31,22 @@
 		                            </span>
 		                        </div>
 		                    </li>
-							<li class="login">
-								<a class="btn-login" href="{{ route('auth.login') }}">Login</a>
-							</li>
-		                    <li class="shopping-cart"><a href="{{ route('cart') }}" class="cart"><span><small>0</small><i
-								class="icon-shopping-cart"></i></span></a></li>
+					@auth('User')
+						<li class="user">
+							<a href="{{ route($role.'.cart') }}" class="btn-user">
+								Profile
+							</a>
+						</li>		
+						<li class="shopping-cart"><a href="{{ route($role.'.cart') }}" class="cart"><span><small>0</small><i
+							class="icon-shopping-cart"></i></span></a>
+						</li>
+					@endauth
+					@guest('User')
+						<li class="user">
+							<a href="{{ route('auth.login') }}" class="btn-user">Login</a>
+						</li>
+					@endguest
+
 		                </ul>
 		            </div>
 		        </div>

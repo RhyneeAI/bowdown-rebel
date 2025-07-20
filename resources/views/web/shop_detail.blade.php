@@ -41,6 +41,7 @@
 @section('content')
     <div id="fh5co-product">
         <div class="container">
+            <div id="cart-message" style="margin-top:10px;"></div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-5 animate-box d-flex flex-column align-items-center">
                     <div class="owl-carousel owl-carousel-fullwidth product-carousel owl-theme">
@@ -58,14 +59,25 @@
                         <div class="col-12 text-center fh5co-heading">
                             {{-- <h2>{{ $product->nama_produk }}</h2> --}}
                             <h3 class="rating">⭐ {{ $product->rating }} / 5 </h3>
-                            <p>
-                                <button class="btn btn-primary btn-outline btn-md">
-                                    <i class="fa fa-shopping-cart"></i> Keranjang
-                                </button>
-                                <button class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
+                            <div class="d-flex justify-content-center align-items-center flex-row gap-2 mt-3">
+                                <form id="add-to-cart-form" class="d-flex align-items-center">
+                                    @csrf
+                                    <input type="hidden" name="slug" value="{{ $product->slug }}">
+                                    <input type="hidden" name="variant_index" value="0">
+                                    <input type="hidden" name="id_varian">
+                                    <div class="quantity-control mb-0 me-2 d-flex align-items-center">
+                                        <button type="button" class="qty-btn minus">−</button>
+                                        <input type="text" name="qty" class="qty-input mx-1" value="0" min="1" style="width: 60px; text-align: center;">
+                                        <button type="button" class="qty-btn plus">+</button>
+                                    </div>
+                                    <button id="submitCart" type="submit" class="btn btn-primary btn-outline btn-md ms-2">
+                                        <i class="fa fa-shopping-cart"></i> Keranjang
+                                    </button>
+                                </form>
+                                <button class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }} ms-2" id="wishlist" data-slug="{{ $product->slug }}">
                                     <i class="fa fa-heart"></i> Wishlist
                                 </button>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,7 +112,6 @@
                                         (<span id="stok-produk" class="{{ $product->variants->first()->stok == 0 ? 'text-danger' : '' }}">Stok : {{ $product->variants->first()->stok }}</span>)
                                     </h3>
 
-                                    <input type="hidden" name="id_varian">
 
                                     <div class="row mx-1">
                                         @foreach ($product->variants as $key => $value)
@@ -194,6 +205,60 @@
 @endsection
 
 @push('scripts')
+    <!-- JS -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("add-to-cart-form");
+        const submitBtn = document.getElementById("submitCart");
+
+        const minusBtn = form.querySelector(".qty-btn.minus");
+        const plusBtn = form.querySelector(".qty-btn.plus");
+        const qtyInput = form.querySelector(".qty-input");
+
+        // Tambah dan kurang qty
+        minusBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            let val = parseInt(qtyInput.value) || 1;
+            if (val > 1) qtyInput.value = val - 1;
+        });
+
+        plusBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            let val = parseInt(qtyInput.value) || 1;
+            qtyInput.value = val + 1;
+        });
+        console.log("Qty:", qtyInput.value);
+
+
+        // Submit form
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let formData = new FormData(form);
+            console.log("Form Data:", Object.fromEntries(formData.entries()));
+
+            fetch("{{ route($role .'.cart.add') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': formData.get('_token'),
+                    'Accept': 'application/json',
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                toastr.success(data.success || 'Berhasil menambahkan ke keranjang!');
+            })
+            .catch(error => {
+                toastr.error('Terjadi kesalahan saat menambahkan ke keranjang.');
+                console.error('Error:', error);
+            });
+        });
+    });
+    </script>
+
+
+
     <script>
         $(document).ready(function() {
             function addToWishlist(slug) {
@@ -202,7 +267,7 @@
                     return;
                 }
 
-                const url = "{{ route('shop.add-to-wishlist') }}";
+                const url = "{{ route($role.'.shop.add-to-wishlist') }}";
 
                 $.ajaxSetup({
                     headers: {
@@ -283,7 +348,7 @@
                     return;
                 }
 
-                const url = "{{ route('shop.add-review') }}";
+                const url = "{{ route($role.'.shop.add-review') }}";
 
                 $.ajaxSetup({
                     headers: {

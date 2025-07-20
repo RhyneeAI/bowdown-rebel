@@ -27,12 +27,9 @@ Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('ho
 Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');
 Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])->name('shop.detail');
-Route::post('/product/add-to-wishlist', [ShopController::class, 'addToWishlist'])->name('shop.add-to-wishlist');
-Route::post('/product/add-review', [ShopController::class, 'addReviewProduct'])->name('shop.add-review');
 Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/cart', [PageController::class, 'cart'])->name('cart');
 
 //auth
 Route::middleware('guest')->group(function () {
@@ -46,6 +43,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['web'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+// Route User
+include __DIR__ . '/user.php';
 
 // Route Admin
 include __DIR__ . '/admin.php';
