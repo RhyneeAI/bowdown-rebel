@@ -31,26 +31,22 @@ class DatabaseSeeder extends Seeder
         // Seed Users
         DB::table('user')->insert([
             [
-                'nik' => '1234567890',
                 'nama' => 'Bowdown Admin',
                 'tanggal_lahir' => '1990-01-01',
                 'no_hp' => '081234567890',
                 'email' => 'bowdownadmin@gmail.com',
-                'id_role' => 1, 
-                'username' => 'admin',
                 'password' => Hash::make('password'),
+                'id_role' => 1, 
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nik' => '1234567891',
                 'nama' => 'Bowdown User',
                 'tanggal_lahir' => '2002-02-02',
                 'no_hp' => '081234567890',
                 'email' => 'bowdownuser@gmail.com',
-                'id_role' => 2,
-                'username' => 'user',
                 'password' => Hash::make('password'),
+                'id_role' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
