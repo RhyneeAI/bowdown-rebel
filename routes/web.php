@@ -33,6 +33,7 @@ Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])-
 Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 //auth
 Route::middleware('guest:Admin,User')->group(function () {

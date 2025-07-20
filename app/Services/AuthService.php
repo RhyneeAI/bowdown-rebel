@@ -46,7 +46,7 @@ class AuthService
                     $request->session()->regenerate();
 
                     if ($role === 'Admin') {
-                        return redirect()->intended('dashboard')->with('success', "Login Berhasil");
+                        return redirect()->intended('Admin.dashboard')->with('success', "Login Berhasil");
                     } elseif ($role === 'User') {
                         return redirect()->intended('/')->with([
                             'success' => "Login Berhasil",
