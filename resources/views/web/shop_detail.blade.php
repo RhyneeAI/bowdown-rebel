@@ -133,10 +133,10 @@
                                 <div class="row">
                                     <div class="col-md-12" style="margin-top: -8rem;">
                                         <h3>Semua Ulasan</h3>
-                                        <div class="feed" id="feed">
+                                        <div class="feed" id="feed" style="height: 500px; overflow-y: auto;">
                                         </div>
                                     </div>
-                                    <div class="col-md-12 review-form text-center">
+                                    <div class="col-md-12 review-form text-center" style="margin-top: -5rem;">
                                         <h4 class="review-title">Berikan Ulasan Anda</h4>
                                         <form id="submit-review" class="review-form-container">
                                             <div class="form-group review-text-group">
