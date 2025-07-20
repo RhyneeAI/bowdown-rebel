@@ -61,4 +61,9 @@ class Product extends Model
             ->where('id_user', auth()->id()) 
             ->select(['id', 'id_produk', 'id_user']);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'id_produk', 'id')->select(['id', 'id_produk', 'rating']);
+    }
 }

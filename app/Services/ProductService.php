@@ -354,6 +354,26 @@ class ProductService
         ]);
     }
 
+    public function updateRating(int $productId)
+    {
+        try {
+            $result = Review::where('id_produk', $productId)
+                        ->selectRaw('AVG(rating) as rating, COUNT(*) as reviewers')
+                        ->first();
+
+            if ($result && $result->rating > 0) {
+                $formattedRating = number_format($result->rating, 2, '.', '');
+                Product::where('id', $productId)->update(['rating' => $formattedRating]);
+            } else {
+                $result = ['rating' => 0, 'reviewers' => 0]; 
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function delete(String $slug) 
     {
         $product = Product::where('slug', $slug)->firstOrFail();
