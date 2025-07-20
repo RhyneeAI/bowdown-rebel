@@ -12,7 +12,7 @@ use Throwable;
 
 class CartService
 {
-   public function create(Request $request)
+    public function create(Request $request)
     {
         try {
             $user = Auth::guard('User')->user();
@@ -58,6 +58,16 @@ class CartService
             $cart = Cart::create(['id_user' => $userId]);
         }
         return $cart;
+    }
+
+    public function update(Request $request)
+    {
+        $updates = [];
+        foreach ($request->all() as $itemId => $data) {
+            CartItems::where('id', $data['id_keranjang_item'])->update(['qty' => $data['qty']]);
+        }
+
+        return true;
     }
 
     public function remove($userId, $itemId)

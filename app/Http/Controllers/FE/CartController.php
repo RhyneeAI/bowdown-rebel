@@ -46,6 +46,25 @@ class CartController extends Controller
         }
     }
 
+    public function updateCartItem(Request $request)
+    {
+        try {
+            if (!Auth::guard('User')->check()) {
+                return response()->json(['error' => 'Silakan login terlebih dahulu.'], 401);
+            }
+
+            $result = $this->cartService->update($request); 
+
+            if (!$result) {
+                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 500);
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Berhasil dimasukkan ke dalam keranjang'], 200);
+        } catch (Throwable $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
     public function removeFromCart($itemId)
     {
         try {
