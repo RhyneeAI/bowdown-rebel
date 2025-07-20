@@ -20,6 +20,9 @@ use App\Http\Controllers\FE\ShopController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
@@ -42,4 +45,5 @@ Route::middleware(['web'])->group(function () {
 // Route Admin
 include __DIR__ . '/admin.php';
 include __DIR__ . '/user.php';
+include __DIR__ . '/callback.php';
 
