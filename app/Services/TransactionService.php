@@ -13,6 +13,7 @@ use App\Models\CheckoutManagement;
 use App\Models\Expedition;
 use App\Models\ProductVariant;
 use App\Models\Promotion;
+use App\Models\PromotionUsed;
 use App\Traits\GuardTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -160,14 +161,43 @@ class TransactionService
                     ->get();
 
             $total_discount = 0;
+            $promotion_used = [];
+            $guard = $this->getGuardName();
+            $user = Auth::guard($guard)->user();
             foreach ($promotions as $key2 => $promotion) {
+                $checkPromotionUsed = PromotionUsed::where('id_promosi', $promotion->id)->where('id_user', $user->id)->exists();
+                if($promotion->stok <= 0 || $checkPromotionUsed){
+                    continue;
+                }
+
                 $total_discount += (int) $promotion->diskon_harga;
+
+                if($promotion->stok > 0){
+                    $promotion->stok -= 1;
+                }
+
+                $promotion_used[] = [
+                    'id_promosi' => $promotion->id,
+                    'id_user' => $user->id,
+                    "created_at" => $now,
+                    "updated_at" => $now,
+                ];
+
+                $item_detail_payload[] = [
+                    "id" => 'voucher' . $promotion->id,
+                    "price" => (int) $promotion->diskon_harga * -1,
+                    "quantity" => 1,
+                    "name" => $promotion->nama_promosi,
+                    "brand" => "Bowndown Rebel",
+                    "category" => 'Diskon',
+                    "merchant_name" => "Bowndown Rebel",
+                ];
+
+                $promotion->save();
             }
 
             $total_payment -= $total_discount;
 
-            $guard = $this->getGuardName();
-            $user = Auth::guard($guard)->user();
             $transaction = Checkout::create([
                 'id_user' => $user->id,
                 'id_ekspedisi' => $expedition->id,
@@ -183,10 +213,11 @@ class TransactionService
             unset($item); // untuk mencegah referensi berlanjut
 
             CheckoutDetail::insert($checkout_detail_payload);
+            PromotionUsed::insert($promotion_used);
 
             // Delete productfrom cart
             CartItem::whereIn('id_produk', $product_ids)
-                // ->whereIn('id_variant_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
+                ->whereIn('id_varian_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
                 ->delete();     
 
             $payload = [
