@@ -19,6 +19,9 @@ use App\Http\Controllers\FE\ShopController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/test', function () {
+    return view('test');
+});
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/hot-products', [HomeController::class, 'getHotProducts'])->name('home.hot-products');
@@ -31,7 +34,7 @@ Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])
 Route::get('/about', [PageController::class, 'about'])->name('about');
 
 //auth
-Route::middleware('guest')->group(function () {
+Route::middleware('guest:Admin,User')->group(function () {
     Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
 
     // Login
@@ -48,4 +51,6 @@ include __DIR__ . '/user.php';
 
 // Route Admin
 include __DIR__ . '/admin.php';
+include __DIR__ . '/user.php';
+include __DIR__ . '/callback.php';
 
