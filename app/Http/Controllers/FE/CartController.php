@@ -37,7 +37,7 @@ class CartController extends Controller
             $result = $this->cartService->create($request);
 
             if (!$result) {
-                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 500);
+                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 201);
             }
 
             return response()->json(['success' => 'Berhasil dimasukkan ke dalam keranjang'], 200);
@@ -56,16 +56,35 @@ class CartController extends Controller
             $result = $this->cartService->update($request); 
 
             if (!$result) {
-                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 500);
+                return response()->json(['error' => 'Gagal menambahkan ke keranjang'], 201);
             }
 
-            return response()->json(['status' => 'success', 'message' => 'Berhasil dimasukkan ke dalam keranjang'], 200);
+            return response()->json(['status' => 'success', 'message' => 'Keranjang berhasil diperbarui'], 200);
         } catch (Throwable $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
-    public function removeFromCart($itemId)
+    public function applyCoupon(Request $request)
+    {
+        try {
+            if (!Auth::guard('User')->check()) {
+                return response()->json(['status' => 'error', 'message' => 'Silakan login terlebih dahulu.'], 401);
+            }
+
+            $result = $this->cartService->applyCoupon($request);
+
+            if (!$result) {
+                return response()->json(['status' => 'error', 'message' => 'Kupon tidak tersedia atau sudah digunakan'], 201);
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Kupon tersedia', 'data' => ['diskon_harga' => $result->diskon_harga]], 200);
+        } catch (Throwable $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function removeCartItem($itemId)
     {
         try {
             $user = Auth::guard('User')->user();

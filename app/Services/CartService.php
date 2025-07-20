@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Promotion;
+use App\Models\ProductUsed;
 use App\Models\CartItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,6 +70,27 @@ class CartService
         }
 
         return true;
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $user = Auth::guard('User')->user();
+        $promotion = Promotion::select(['id', 'diskon_harga', 'stok'])
+                              ->where('kode_promosi', $request->coupon_code)
+                              ->where('stok', '>=', 1)
+                              ->whereDate('tanggal_mulai', '<=', now()->toDateString())
+                              ->whereDate('tanggal_berakhir', '>=', now()->toDateString())
+                              ->first();
+        if (!$promotion) {
+            return false; 
+        }
+
+        $usedPromotion = $promotion->promotionUsed()->where('id_user', $user->id)->exists();
+        if ($usedPromotion) {
+            return false;
+        }
+
+        return $promotion; 
     }
 
     public function remove($userId, $itemId)

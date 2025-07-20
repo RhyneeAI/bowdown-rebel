@@ -44,6 +44,23 @@
         justify-content: flex-end;
     }
 }
+
+.table td {
+    padding: 1rem;
+}
+
+.table td span {
+    font-size: 1.5rem;
+}
+
+.table td div p {
+    font-size: 1.5rem;
+    display: inline;
+}
+
+.table td div input[type="hidden"] {
+    margin-top: -0.5rem;
+}
 </style>
 @endpush
 @section('content')
@@ -63,7 +80,7 @@
                         <table class="table cart-table">
                             <tbody>
                                 @foreach($cart->cartItems as $item)
-                                    <tr>
+                                    <tr id="row-{{ $item->id }}">
                                         <td style="width: 120px;">
                                             <img src="{{ GetFile('products', $item->product->photos->first()->nama_hash ?? '') }}" class="img-responsive" alt="">
                                         </td>
@@ -99,10 +116,10 @@
                         <button type="button" id="save-changes" class="btn btn-primary" style="background: #111; border-color: #111; color: #fff;">Save Changes</button>
                     </div>
 
-                    <form class="form-inline" style="margin-top: 20px;">
-                        <input type="text" class="form-control" placeholder="Coupon code">
-                        <button type="submit" class="btn btn-primary" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
-                    </form>
+                    <div class="form-inline" style="margin-top: 20px;">
+                        <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
+                        <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
+                    </div>
                 </div>
             @else
                 <div class="col-md-12">
@@ -121,16 +138,31 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td>SUBTOTAL</td>
-                                    <td class="text-right">Rp169.000</td>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span>SUBTOTAL</span>
+                                        <div>
+                                            Rp <p id="subtotal" class="mb-0">0</p>
+                                            <input type="hidden" name="subtotal">
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>KODE UNIK</td>
-                                    <td class="text-right">Rp44</td>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span>DISCOUNT</span>
+                                        <div>
+                                            <p id="discount" class="mb-0">0</p>
+                                            <input type="hidden" name="discount">
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>TOTAL</strong></td>
-                                    <td class="text-right"><strong>Rp169.044</strong></td>
+                                    <td class="d-flex justify-content-between align-items-center">
+                                        <span><strong>TOTAL</strong></span>
+                                        <div>
+                                            <strong>Rp</strong> <strong id="total" class="mb-0">0</strong>
+                                            <input type="hidden" name="total">
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -139,11 +171,6 @@
                 </div>
             @endif
         </div>
-    </div>
-
-
-
-
     </div>
 @endsection
 
@@ -160,6 +187,7 @@
                 $qtyInput.val(val - 1);
                 checkChanges($(this).closest('.quantity-control'));
                 updateTotal($(this).closest('.quantity-control'));
+                updateOverallTotal();
             }
         });
 
@@ -170,6 +198,7 @@
             $qtyInput.val(val + 1);
             checkChanges($(this).closest('.quantity-control'));
             updateTotal($(this).closest('.quantity-control'));
+            updateOverallTotal();
         });
 
         // Fungsi untuk memeriksa perubahan qty
@@ -180,15 +209,78 @@
             $('#save-changes-container').toggle(hasChanges);
         }
 
-        // Fungsi untuk memperbarui total harga
+        // Fungsi untuk memperbarui total harga per baris
         function updateTotal($quantityControl) {
             const $row = $quantityControl.closest('tr');
             const price = parseInt($row.find('td:nth-child(2) span').text().replace('Rp', '').replace(/\./g, '')) || 0;
             const qty = parseInt($quantityControl.find('.qty-input').val()) || 1;
             const total = price * qty;
             $row.find('td:nth-child(4) p').text('Rp' + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            updateOverallTotal(); // Panggil update total keseluruhan
         }
 
+        $('#apply-coupon').click(function() {
+            let coupon_code = $('#coupon_code').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            const url = "{{ $role == 'User' ? route($role . '.cart.apply-coupon') : null }}";
+            if (!url) {
+                toastr.error('Silahkan login terlebih dahulu');
+                return;
+            }
+
+            $.get(url, { coupon_code })
+                .done(response => {
+                    if (response.status === 'success') {
+                        toastr.success(response.message);
+
+                        const diskonHarga = parseInt(response.data.diskon_harga);
+                        $('#discount').text(diskonHarga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+                        $('input[name="discount"]').val(response.data.diskon_harga);
+                        updateOverallTotal();
+                    } else if (response.status === 'error') {
+                        toastr.error(response.message);
+
+                        $('#discount').text('- Rp 0')
+                        updateOverallTotal();
+                    } else {
+                        toastr.error('!!!', 'Terjadi kesalahan tak terduga.');
+                    }
+                })
+                .fail(error => {
+                    toastr.error('Gagal terhubung ke server');
+                    console.error(error);
+                });
+        });
+
+        // Fungsi updateOverallTotal (pastikan sudah ada dari kode sebelumnya)
+        function updateOverallTotal() {
+            let subtotal = 0;
+            $('.quantity-control').each(function () {
+                const $row = $(this).closest('tr');
+                const rowTotal = parseInt($row.find('td:nth-child(4) p').text().replace('Rp', '').replace(/\./g, '')) || 0;
+                subtotal += rowTotal;
+            });
+
+            const discount = parseInt($('#discount').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
+            const total = subtotal - discount;
+
+            $('#subtotal').text(subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#discount').text('- Rp ' + discount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#total').text(total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+
+            $('input[name="subtotal"]').val(subtotal);
+            $('input[name="discount"]').val(discount);
+            $('input[name="total"]').val(total);
+        }
+
+        updateOverallTotal()
+       
         // Event untuk tombol Save Changes
         $('#save-changes').on('click', function () {
             const payload = {};
@@ -209,8 +301,8 @@
             // console.log('Changes to save:', payload);
 
             const url = "{{ $role == 'User' ? route($role . '.cart.update-cart-item') : null }}";
-            if(!url) {
-                toastr.error('Silahkan login terlebih dahulu')
+            if (!url) {
+                toastr.error('Silahkan login terlebih dahulu');
                 return;
             }
 
@@ -225,6 +317,12 @@
                 success: function (res) {
                     if (res.status === 'success') {
                         toastr.success(res.message);
+                        // Update initial qty setelah sukses simpan
+                        $('.quantity-control').each(function () {
+                            const $qtyInput = $(this).find('.qty-input');
+                            $(this).data('initial-qty', parseInt($qtyInput.val()));
+                        });
+                        updateOverallTotal(); // Perbarui total setelah simpan
                     } else {
                         toastr.error(res.message);
                     }
@@ -235,6 +333,30 @@
                 complete: function () {
                     hasChanges = false;
                     $('#save-changes-container').hide();
+                }
+            });
+        });
+
+        $('.remove-cart-item').on('click', function (e) {
+            e.preventDefault();
+
+            const itemId = $(this).data('id');
+
+            $.ajax({
+                url: `/User/cart/${itemId}/remove`,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Accept': 'application/json'
+                },
+                success: function (data) {
+                    $(`#row-${itemId}`).remove();
+
+                    toastr.success(data.success || 'Item berhasil dihapus dari keranjang.');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    toastr.error('Terjadi kesalahan saat menghapus item dari keranjang.');
                 }
             });
         });

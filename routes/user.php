@@ -12,6 +12,6 @@ Route::middleware(['auth:User'])->prefix('User')->name('User.')->group(function 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::post('/cart/update', [CartController::class, 'updateCartItem'])->name('cart.update-cart-item');
-    Route::post('/cart/{item}/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
-
+    Route::get('/cart/apply-coupon', [CartController::class, 'applyCoupon'])->name('cart.apply-coupon');
+    Route::post('/cart/{item}/remove', [CartController::class, 'removeCartItem'])->name('cart.remove');
 });
