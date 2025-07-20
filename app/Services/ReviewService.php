@@ -16,13 +16,15 @@ class ReviewService
     public function create(Request $request)
     {
         $product = $this->productService->getOne($request->slug);
-
-        return Review::create([
+        Review::create([
             'id_user' => auth()->id(),
             'id_produk' => $product->id,
             'rating' => $request->rating,
             'komentar' => $request->komentar
         ]);
+
+        $result = $this->productService->updateRating($product->id);
+        return $result;
     }
 
     public function getAll($slug) 
