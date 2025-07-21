@@ -21,21 +21,14 @@ class UserService
         DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
-                'nik' => 'required|string|digits:16|unique:user,nik',
                 'nama' => 'required|string|max:150',
                 'tanggal_lahir' => 'required|date',
                 'no_hp' => 'nullable|string|max:15',
                 'email' => 'required|string|email|max:100',
-                'id_role' => 'required|integer|exists:role,id',
                 'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-                'username' => 'required|string|max:255',
                 'password' => 'required|string|min:6',
                 'alamat' => 'required|string',
             ], [
-                'nik.required' => 'NIK wajib diisi',
-                'nik.string' => 'NIK harus berupa string',
-                'nik.digits' => 'NIK harus berupa 16 digit',
-                'nik.unique' => 'NIK sudah terdaftar',
                 'nama.required' => 'Nama wajib diisi',
                 'nama.string' => 'Nama harus berupa string',
                 'nama.max' => 'Nama maksimal 150 karakter',
@@ -47,15 +40,9 @@ class UserService
                 'email.string' => 'Email harus berupa string',
                 'email.email' => 'Email tidak valid',
                 'email.max' => 'Email maksimal 100 karakter',
-                'id_role.required' => 'Role wajib diisi',
-                'id_role.integer' => 'Role harus berupa integer',
-                'id_role.exists' => 'Role tidak ditemukan',
                 'foto.image' => 'Foto harus berupa gambar',
                 'foto.mimes' => 'Foto harus berupa file dengan tipe jpg, jpeg, atau png',
                 'foto.max' => 'Foto maksimal 5120 KB',
-                'username.required' => 'Username wajib diisi',
-                'username.string' => 'Username harus berupa string',
-                'username.max' => 'Username maksimal 255 karakter',
                 'password.required' => 'Password wajib diisi',
                 'password.string' => 'Password harus berupa string',
                 'password.min' => 'Password minimal 6 karakter',
@@ -76,14 +63,12 @@ class UserService
             }
 
             $user = User::create([
-                'nik' => $validated['nik'],
                 'nama' => $validated['nama'],
                 'tanggal_lahir' => $validated['tanggal_lahir'],
                 'no_hp' => $validated['no_hp'],
                 'email' => $validated['email'],
-                'id_role' => $validated['id_role'],
+                'id_role' => 2, // Assuming 2 is the role ID for User
                 'foto' => $filename,
-                'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
             ]);
 
@@ -104,24 +89,42 @@ class UserService
     public function getAll()
     {
         $guard = $this->getGuardName();
-        $user = Auth::guard($guard)->user();
+        $authUser = Auth::guard($guard)->user();
 
         $user = DB::table('user')
             ->join('role', 'role.id', '=', 'user.id_role')
-            ->select(['user.id', 'user.nik', 'user.nama', 'user.tanggal_lahir', 'user.no_hp', 'user.email', 'user.foto', 'role.role', 'user.foto', 'user.username'])
-            ->where('user.id', '!=', $user->id)
-            ->where('user.deleted_at', null)
-            ->orderBy('user.id', 'DESC')->get();
-        
+            ->leftJoin('user_alamat', function ($join) {
+                $join->on('user.id', '=', 'user_alamat.id_user')
+                    ->where('user_alamat.is_main', '=', 1);
+            })
+            ->select([
+                'user.id',
+                'user.nama',
+                'user.tanggal_lahir',
+                'user.no_hp',
+                'user.email',
+                'user.foto',
+                'role.role',
+                'user_alamat.alamat as alamat'
+            ])
+            ->where('user.id', '!=', $authUser->id)
+            ->whereNull('user.deleted_at')
+            ->orderBy('user.id', 'DESC')
+            ->get();
+
         return $user;
     }
 
+
     public function getOne(String $id = '')
     {
-        $user = User::where('id', $id)->first();
-        
+        $user = User::with(['address']) // hanya ambil alamat utama (is_main = 1)
+                    ->where('id', $id)
+                    ->first();
+
         return $user;
     }
+
 
     public function update(Request $request, String $id)
     {
@@ -130,21 +133,15 @@ class UserService
             $user = User::where('id', $id)->firstOrFail();
 
             $validator = Validator::make($request->all(), [
-                'nik' => 'required|string|digits:16|unique:user,nik,'.$user->id,
                 'nama' => 'required|string|max:150',
                 'tanggal_lahir' => 'required|date',
                 'no_hp' => 'nullable|string|max:15',
                 'email' => 'required|string|email|max:100',
                 'id_role' => 'required|integer|exists:role,id',
                 'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-                'username' => 'required|string|max:255',
                 'password' => 'nullable|string|min:6',
                 'alamat' => 'required|string',
             ], [
-                'nik.required' => 'NIK wajib diisi',
-                'nik.string' => 'NIK harus berupa string',
-                'nik.digits' => 'NIK harus berupa 16 digit',
-                'nik.unique' => 'NIK sudah terdaftar',
                 'nama.required' => 'Nama wajib diisi',
                 'nama.string' => 'Nama harus berupa string',
                 'nama.max' => 'Nama maksimal 150 karakter',
@@ -162,9 +159,6 @@ class UserService
                 'foto.image' => 'Foto harus berupa gambar',
                 'foto.mimes' => 'Foto harus berupa file dengan tipe jpg, jpeg, atau png',
                 'foto.max' => 'Foto maksimal 5120 KB',
-                'username.required' => 'Username wajib diisi',
-                'username.string' => 'Username harus berupa string',
-                'username.max' => 'Username maksimal 255 karakter',
                 'password.required' => 'Password wajib diisi',
                 'password.string' => 'Password harus berupa string',
                 'password.min' => 'Password minimal 6 karakter',
@@ -180,12 +174,10 @@ class UserService
             $validated = $validator->validated();
 
             $payload = [
-                'nik' => $validated['nik'],
                 'nama' => $validated['nama'],
                 'tanggal_lahir' => $validated['tanggal_lahir'],
                 'email' => $validated['email'],
                 'id_role' => $validated['id_role'],
-                'username' => $validated['username'],
             ];
 
             if ($request->hasFile('foto')) {

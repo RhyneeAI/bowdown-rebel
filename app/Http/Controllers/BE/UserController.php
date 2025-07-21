@@ -35,16 +35,9 @@ class UserController extends Controller
 
         return DataTables::of($user)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) use ($role) {
-                return view('dashboard.user.datatables.options', [
-                    'row' => $row,
-                    'role' => $role,
-                ])->render();
-            })
             ->editColumn('tanggal_lahir', function ($model) {
                 return Carbon::parse($model->tanggal_lahir)->format('d-m-Y');
             })
-            ->rawColumns(['action'])
             ->make(true);
     }
 
