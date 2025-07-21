@@ -34,9 +34,6 @@ class TransactionController extends Controller
         $data = $this->service->getAll($request); 
 
         return DataTables::of($data)
-            ->editColumn('status', function ($model) {
-                
-            })
             ->addColumn('total_harga', function ($model) {
                 return 'Rp. '. number_format((float) $model->total_harga, 0, ',', '.');
             })
