@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_ekspedisi', 30);
             $table->decimal('biaya', 8, 0)->default(0.0);
-            $table->enum('status', ['Aktif', 'Non Aktif']);
+            $table->string('link_ekspedisi')->nullable();
+            // $table->enum('status', ['Aktif', 'Non Aktif']);
             $table->timestamps();
             $table->softDeletes();
         });

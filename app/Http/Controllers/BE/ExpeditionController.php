@@ -42,15 +42,17 @@ class ExpeditionController extends Controller
                     'role' => $role,
                 ])->render();
             })
-            ->editColumn('status', function ($model) {
-                $bgColor = $model->status == StatusEnum::AKTIF->value ? 'success' : 'danger';
-
-                return '<span class="badge bg-' . $bgColor . '">' . StatusEnum::AKTIF->value . '</span>';
+            ->editColumn('link_ekspedisi', function ($model) {
+                $url = $model->link_ekspedisi;
+                if (!$url) {
+                    return '-';
+                }
+                return '<a href="' . e($url) . '" target="_blank" class="btn btn-sm btn-primary">Lihat Link</a>';
             })
             ->editColumn('biaya', function ($model) {
                 return 'Rp. '. number_format($model->biaya, 0, ',', '.');
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'link_ekspedisi'])
             ->make(true);
     }
 

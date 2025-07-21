@@ -21,7 +21,6 @@ class Promotion extends Model
     protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'nama_promosi',
         'kode_promosi',
         'stok',
         'diskon_harga',

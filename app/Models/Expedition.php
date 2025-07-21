@@ -11,7 +11,7 @@ class Expedition extends Model
     use HasFactory, SoftDeletes;
     
     protected $table = "ekspedisi";
-    protected $fillable = ['nama_ekspedisi', 'biaya', 'status'];
+    protected $fillable = ['nama_ekspedisi', 'biaya', 'link_ekspedisi'];
     protected $primaryKey = 'id';
     protected $guarded = ['id'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];

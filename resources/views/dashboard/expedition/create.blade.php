@@ -51,13 +51,8 @@
                         <input type="text" class="form-control" id="biaya" name="biaya" placeholder="Contoh: 10.000" value="{{ old('biaya') }}" required>
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="status" class="form-label">Status</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="" disabled selected>Pilih</option>
-                            @foreach (\App\Enums\StatusEnum::cases() as $status)
-                                <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>{{ $status->value }}</option>
-                            @endforeach
-                        </select>
+                        <label for="link_ekspedisi" class="form-label">Link Ekspedisi</label>
+                        <input type="text" class="form-control" id="link_ekspedisi" name="link_ekspedisi" placeholder="Contoh: https://jne.co.id" value="{{ old('link_ekspedisi') }}" required>
                     </div>
                 </div>
 
