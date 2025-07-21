@@ -33,14 +33,19 @@
 		                    </li>
 							@auth('User')
 								<li class="user">
-									<a href="{{ route($role.'.cart.index') }}" class="btn-user">
-										Profile
-									</a>
-								</li>		
-								<li class="shopping-cart"><a href="{{ route($role.'.cart.index') }}" class="cart"><span><small>0</small><i
-									class="icon-shopping-cart"></i></span></a>
+									<form action="{{ route('logout') }}" method="POST" style="display: inline;">
+										@csrf
+										<button type="submit" class="btn-user" style="background: none; border: none; padding: 0; cursor: pointer;">
+											Logout
+										</button>
+									</form>
 								</li>
-							@endauth
+								<li class="shopping-cart">
+									<a href="{{ route($role.'.cart.index') }}" class="cart">
+										<span><small>0</small><i class="icon-shopping-cart"></i></span>
+									</a>
+								</li>
+							@endauth	
 							@guest('User')
 								<li class="user">
 									<a href="{{ route('auth.login') }}" class="btn-user">Login</a>

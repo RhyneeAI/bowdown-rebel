@@ -37,11 +37,6 @@ Buat Promosi Baru
                     <!-- Kolom Kanan: Form Detail -->
                     <div class="col-md-7">
                         <div class="mb-3">
-                            <label for="nama_promosi" class="form-label">Nama Promosi/Voucher</label>
-                            <input type="text" class="form-control" id="nama_promosi" name="nama_promosi" required>
-                        </div>
-
-                        <div class="mb-3">
                             <label for="kode_promosi" class="form-label">Kode Promosi/Voucher</label>
                             <input type="text" class="form-control" id="kode_promosi" name="kode_promosi" required>
                         </div>

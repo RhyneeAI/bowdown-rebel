@@ -17,16 +17,16 @@ class ExpeditionService
             $validator = Validator::make($request->all(), [
                 'nama_ekspedisi' => 'required|string|max:30',
                 'biaya' => 'required|string',
-                'status' => 'required|string|in:' . implode(',', array_column(StatusEnum::cases(), 'value')),
+                'link_ekspedisi' => 'required|string|url',
             ], [
                 'nama_ekspedisi.required' => 'Nama ekspedisi harus diisi',
                 'nama_ekspedisi.string' => 'Nama ekspedisi harus berupa teks',
                 'nama_ekspedisi.max' => 'Nama ekspedisi maksimal 30 karakter',
                 'biaya.required' => 'Biaya harus diisi',
                 'biaya.string' => 'Biaya harus berupa teks',
-                'status.required' => 'Status harus diisi',
-                'status.string' => 'Status harus berupa teks',
-                'status.in' => 'Status tidak valid',
+                'link_ekspedisi.required' => 'Link ekspedisi harus diisi',
+                'link_ekspedisi.string' => 'Link ekspedisi harus berupa url',
+                'link_ekspedisi.url' => 'Link ekspedisi tidak valid',
             ]);
 
             if ($validator->fails()) {
@@ -40,7 +40,7 @@ class ExpeditionService
             return Expedition::create([
                 'nama_ekspedisi' => $validated['nama_ekspedisi'],
                 'biaya' => str_replace('.', '', $validated['biaya']),
-                'status' => $validated['status'],
+                'link_ekspedisi' => $validated['link_ekspedisi'],
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -50,15 +50,17 @@ class ExpeditionService
 
     public function getAll()
     {
-        $expedition = Expedition::select(['id', 'biaya', 'nama_ekspedisi', 'status'])->orderBy('id', 'DESC')->get();
-        
+        $expedition = Expedition::select(['id', 'biaya', 'nama_ekspedisi', 'link_ekspedisi'])->orderBy('id', 'DESC')->get();
+
         return $expedition;
     }
 
     public function getOne(String $id = '')
     {
-        $expedition = Expedition::select(['id', 'biaya', 'nama_ekspedisi', 'status'])->where('id', $id)->first();
-        
+        $expedition = Expedition::select(['id', 'biaya', 'nama_ekspedisi', 'link_ekspedisi'])->where('id', $id)->first();
+        if (!$expedition) {
+            throw new \Exception('Expedition not found');
+        }
         return $expedition;
     }
 
@@ -69,16 +71,16 @@ class ExpeditionService
             $validator = Validator::make($request->all(), [
                 'nama_ekspedisi' => 'required|string|max:30',
                 'biaya' => 'required|string',
-                'status' => 'required|string|in:' . implode(',', array_column(StatusEnum::cases(), 'value')),
+                'link_ekspedisi' => 'required|string|url',
             ], [
                 'nama_ekspedisi.required' => 'Nama ekspedisi harus diisi',
                 'nama_ekspedisi.string' => 'Nama ekspedisi harus berupa teks',
                 'nama_ekspedisi.max' => 'Nama ekspedisi maksimal 30 karakter',
                 'biaya.required' => 'Biaya harus diisi',
                 'biaya.string' => 'Biaya harus berupa teks',
-                'status.required' => 'Status harus diisi',
-                'status.string' => 'Status harus berupa teks',
-                'status.in' => 'Status tidak valid',
+                'link_ekspedisi.required' => 'Link ekspedisi harus diisi',
+                'link_ekspedisi.string' => 'Link ekspedisi harus berupa url',
+                'link_ekspedisi.url' => 'Link ekspedisi tidak valid',
             ]);
 
             if ($validator->fails()) {
@@ -93,7 +95,7 @@ class ExpeditionService
             $expedition->update([
                 'nama_ekspedisi' => $validated['nama_ekspedisi'],
                 'biaya' => str_replace('.', '', $validated['biaya']),
-                'status' => $validated['status'],
+                'link_ekspedisi' => $validated['link_ekspedisi'],
             ]);
 
             DB::commit();

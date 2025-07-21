@@ -27,15 +27,13 @@ class User extends Authenticatable
     protected $primaryKey = 'id';
     protected $guarded = [];
     protected $fillable = [
-        'nik',
         'nama',
         'tanggal_lahir',
         'id_role',
         'email',
+        'password',
         'no_hp',
         'foto',
-        'username',
-        'password',
     ];
     
 

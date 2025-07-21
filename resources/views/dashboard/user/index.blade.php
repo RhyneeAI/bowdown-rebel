@@ -19,26 +19,23 @@
                     </div> --}}
                 </div>
                 <div class="col-md-6 mb-4">
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <a href="{{ route($role.'.user.create') }}" class="btn btn-primary float-end">
                             Tambah Pengguna
                         </a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="table-responsive">
                 <table id="user_table" class="table table-striped table-bordered" style="width: 100% !important">
                     <thead>
                         <tr>
-                            <th width="15%" class="text-center">No</th>
-                            <th width="15%" class="text-center">Aksi</th>
-                            <th width="70%" class="text-center">Nama Pengguna</th>
-                            <th width="70%" class="text-center">NIK</th>
-                            <th width="70%" class="text-center">Role</th>
-                            <th width="70%" class="text-center">Email</th>
-                            <th width="70%" class="text-center">Tanggal Lahir</th>
-                            <th width="70%" class="text-center">No Hp</th>
-                            <th width="70%" class="text-center">Username</th>
+                            <th width="10%" class="text-center">No</th>
+                            <th width="40%" class="text-center">Nama Pengguna</th>
+                            <th width="30%" class="text-center">Email</th>
+                            <th width="20%" class="text-center">Tanggal Lahir</th>
+                            <th width="20%" class="text-center">No Hp</th>
+                            <th width="10%" class="text-center">Alamat</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -64,14 +61,11 @@
                         ajax: "{{ route($role.'.user.datatable') }}",
                         columns: [
                             { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
-                            { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'},
                             { data: 'nama', name: 'nama' },
-                            { data: 'nik', name: 'nik' },
-                            { data: 'role', name: 'role' },
                             { data: 'email', name: 'email' },
                             { data: 'tanggal_lahir', name: 'tanggal_lahir' },
                             { data: 'no_hp', name: 'no_hp' },
-                            { data: 'username', name: 'username' },
+                            { data: 'alamat', name: 'alamat' },
                         ]
                     });
 

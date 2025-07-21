@@ -19,6 +19,13 @@ class AuthController extends Controller
     public function register(){
         return view('web.auth.register');
     }
+    public function registerProcess(Request $request){
+        try {
+            return $this->loginService->register($request);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput($request->all());
+        }
+    }
 
     public function loginProcess(Request $request){
         try {

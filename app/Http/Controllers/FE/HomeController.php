@@ -5,6 +5,7 @@ namespace App\Http\Controllers\FE;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\CategoryService;
+use App\Models\Promotion;
 use App\Services\ProductService;
 
 class HomeController extends Controller
@@ -17,8 +18,10 @@ class HomeController extends Controller
     public function index() 
     {
         $categories = $this->categoryService->getAll();
+        $promotions = Promotion::select('foto', 'kode_promosi', 'diskon_harga')->get();
         return view('web.home')->with([
-            'categories' => $categories
+            'categories' => $categories,
+            'promotions' => $promotions
         ]);
     }
 

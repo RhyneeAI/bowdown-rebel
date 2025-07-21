@@ -31,9 +31,9 @@
                     <thead>
                         <tr>
                             <th width="15%" class="text-center">No</th>
-                            <th width="70%" class="text-center">Nama Ekspedisi</th>
-                            <th width="70%" class="text-center">Biaya</th>
-                            <th width="70%" class="text-center">Status</th>
+                            <th width="40%" class="text-center">Nama Ekspedisi</th>
+                            <th width="15%" class="text-center">Biaya</th>
+                            <th width="15%" class="text-center">Link</th>
                             <th width="15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -58,7 +58,7 @@
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
                 { data: 'nama_ekspedisi', name: 'nama_ekspedisi' },
                 { data: 'biaya', name: 'biaya' },
-                { data: 'status', name: 'status' },
+                { data: 'link_ekspedisi', name: 'link_ekspedisi' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
             ]
         });

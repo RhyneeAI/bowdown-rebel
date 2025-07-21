@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Category;
 use App\Models\User;
+use App\Models\UserAddress;
 use App\Traits\GuardTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +79,56 @@ class AuthService
             return redirect("/login")->with('success', 'Logout Berhasil!');
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string|max:150',
+            'tanggal_lahir' => 'required|date',
+            'email' => 'required|string|email|max:100|unique:user,email',
+            'password' => 'required|string|min:6',
+            'no_hp' => 'required|string|max:15',
+            'alamat' => 'required|string|max:255',
+        ], [
+            'nama.required' => 'Name is required.',
+            'tanggal_lahir.required' => 'Birth date is required.',
+            'email.required' => 'Email is required.',
+            'email.unique' => 'Email is already registered.',
+            'password.required' => 'Password is required.',
+            'no_hp.required' => 'Phone number is required.',
+            'alamat.required' => 'Address is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput($request->all())
+                ->with('error', $validator->errors()->first());
+        }
+
+        try {
+            $validated = $validator->validated();
+
+            // Simpan data user terlebih dahulu
+            $user = User::create([
+                'nama' => $validated['nama'],
+                'tanggal_lahir' => $validated['tanggal_lahir'],
+                'no_hp' => $validated['no_hp'],
+                'password' => Hash::make($validated['password']),
+                'email' => $validated['email'],
+                'id_role' => 2,
+            ]);
+
+            $user_alamat = UserAddress::create([
+                'id_user' => $user->id,
+                'alamat' => $validated['alamat'],
+                'is_main' => 1, // jika kamu menambahkan kolom is_main
+            ]);
+
+            return redirect()->route('auth.login')->with('success', "Registrasi Berhasil, Silahkan Login");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
         }
     }
 }
