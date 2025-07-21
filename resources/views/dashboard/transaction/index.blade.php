@@ -32,7 +32,9 @@
                         <tr>
                             <th>No</th>
                             <th>Aksi</th>
+                            <th>Status</th>
                             <th>No Faktur</th>
+                            <th nowrap>No Resi</th>
                             <th>Pengguna</th>
                             <th>Ekspedisi</th>
                             <th>Total Harga</th>
@@ -42,6 +44,34 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalEditLabel">Input Resi</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="receipt" class="form-label">Nomor Resi</label>
+                        <input type="text" class="form-control" id="receipt" name="receipt" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Data</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -71,8 +101,22 @@
                     class: 'text-center'
                 },
                 { 
+                    data: 'status_terbaru', 
+                    name: 'status_terbaru',
+                    render: function(data, type, row) {
+                        return '<span style="white-space: nowrap;">' + data + '</span>';
+                    }
+                },
+                { 
                     data: 'no_faktur', 
                     name: 'no_faktur',
+                    render: function(data, type, row) {
+                        return '<span style="white-space: nowrap;">' + data + '</span>';
+                    }
+                },
+                { 
+                    data: 'resi', 
+                    name: 'resi',
                     render: function(data, type, row) {
                         return '<span style="white-space: nowrap;">' + data + '</span>';
                     }
@@ -121,6 +165,12 @@
 
         table.on('xhr.dt', function () {
             Swal.close();
+        });
+
+        $(document).on('click', '.btn-receipt-update', function() {
+            let id = $(this).data('id');
+            
+            $('#modalEdit').find('form').attr('action', "{{ route($role.'.transaction.receipt-update', ':id') }}".replace(':id', id));
         });
     });
 </script>
