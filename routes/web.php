@@ -38,6 +38,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 //auth
 Route::middleware('guest:Admin,User')->group(function () {
     Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('/register', [AuthController::class, 'registerProcess'])->name('auth.register.process');
 
     // Login
     Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
