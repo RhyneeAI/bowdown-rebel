@@ -14,50 +14,24 @@
     <aside id="fh5co-hero" class="js-fullheight">
         <div class="flexslider js-fullheight">
             <ul class="slides">
-                <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_1.png);">
+                @foreach ($promotions as $promo)
+                <li style="background-image: url('{{ asset('storage/promotions/' . $promo->foto) }}')">
+
                     <div class="overlay-gradient"></div>
                     <div class="container">
                         <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
                             <div class="slider-text-inner">
                                 <div class="desc">
-                                    <h2>Gear Up in Style, Rule the Road</h2>
-                                    <p>Far beyond traffic lights and city noise, true riders know—performance is
-                                        nothing without presence.</p>
-                                    <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
-                                        </a></p>
+                                    <h2>Promo Code: {{ $promo->kode_promosi }}</h2>
+                                    <p>Save up to <strong>Rp{{ number_format($promo->diskon_harga, 0, ',', '.') }}</strong> with this special offer! Don’t miss out!</p>
+                                    <p><a href="{{ route('shop.index') }}" class="btn btn-primary btn-outline btn-lg">
+                                            Shop Now</a></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
-                <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_2.png);">
-                    <div class="container">
-                        <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
-                            <div class="slider-text-inner">
-                                <div class="desc">
-                                    <h2>Built for Speed, Designed for You</h2>
-                                    <p>From the curves of the highway to the corners of your garage, our moves with your passion.</p>
-                                    <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More    </a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li style="background-image: url({{ asset('assets') }}/web/images/img_bg_3.png);">
-                    <div class="container">
-                        <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
-                            <div class="slider-text-inner">
-                                <div class="desc">
-                                    <h2>Ride Hard, Wear Bold</h2>
-                                    <p>Not just clothing—it’s a statement for those who chase torque, thrill, and
-                                        timeless style.</p>
-                                    <p><a href="single.html" class="btn btn-primary btn-outline btn-lg">See More
-                                        </a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+                @endforeach
             </ul>
         </div>
     </aside>
