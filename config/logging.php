@@ -126,6 +126,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        
+        'midtrans_error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/midtrans_error.log'),
+            'level' => 'error', // Hanya mencatat error
+        ],
     ],
 
 ];

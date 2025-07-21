@@ -74,7 +74,7 @@ class ShopController extends Controller
 
     public function detailProducts(String $slug) 
     {
-        $product = $this->productService->getOne($slug)->load(['photos', 'variants', 'category', 'likedProduct']);
+        $product = $this->productService->getOne($slug)->load(['photos', 'variants', 'category', 'reviews', 'likedProduct']);
         return view('web.shop_detail')->with([
             'product' => $product
         ]);
@@ -109,8 +109,7 @@ class ShopController extends Controller
 
             $result = $this->reviewService->create($request);
 
-            return response()->json(['success' => 'Ulasan anda berhasil ditambahkan!'], 200);
-
+            return response()->json(['success' => 'Ulasan anda berhasil ditambahkan!', 'data' => $result], 200);
         } catch (Throwable $t) {
             return response()->json(['error' => $t->getMessage()], 500);
         }

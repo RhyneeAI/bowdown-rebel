@@ -258,7 +258,7 @@ class TransactionService
             }
 
             DB::commit();
-            return $transaction;
+            return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

@@ -58,7 +58,8 @@
                     <div class="row animate-box w-100 mt-5">
                         <div class="col-12 text-center fh5co-heading">
                             {{-- <h2>{{ $product->nama_produk }}</h2> --}}
-                            <h3 class="rating">⭐ {{ $product->rating }} / 5 </h3>
+                            <h3 class="rating" id="rating">⭐ {{ $product->rating }} / 5 </h3>
+                            <h4 class="rating" id="reviewers">&nbsp;&nbsp; ({{ $product->reviews->count() }} reviews)</h4>
                             <div class="d-flex justify-content-center align-items-center flex-column gap-2 mt-3">
                                 <form id="add-to-cart-form" class="d-flex flex-column align-items-center w-100">
                                     @csrf
@@ -179,7 +180,7 @@
                                                         </span>
                                                     </label>
                                                     <label class="rating-option">
-                                                        <input type="radio" name="rating" value="5">
+                                                        <input type="radio" name="rating" value="5" checked>
                                                         <span class="rate">
                                                             <i class="icon-star2"></i>
                                                             <i class="icon-star2"></i>
@@ -381,8 +382,12 @@
 
                 $.post(url, payload)
                     .done(response => {
+                        console.log(response);
+                        
                         showResponse(response);
                         loadReview();
+                        $('#rating').text(`⭐ ${parseFloat(response.data.rating).toFixed(2)} / 5`);
+                        $('#reviewers').html(`&nbsp;&nbsp; (${response.data.reviewers} reviews)`);
                     })
                     .fail(error => {
                         toastr.error('Gagal terhubung ke server');
@@ -396,6 +401,11 @@
                 let slug = $(this).data('slug');
                 let komentar = $('textarea[name="komentar"]').val();
                 let rating = $('input[name="rating"]:checked').val();
+
+                if(!komentar) {
+                    toastr.warning('Isi kolom komentar nya!');
+                    return;
+                }
 
                 let data = { slug, komentar, rating }
 

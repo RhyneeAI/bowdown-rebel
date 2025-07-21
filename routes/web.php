@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\HomeController;
+use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\FE\ShopController;
 
 /*
@@ -32,6 +33,7 @@ Route::get('/product/detail/{slug}', [ShopController::class, 'detailProducts'])-
 Route::get('/product/show-review', [ShopController::class, 'showReviewProduct'])->name('shop.show-review');
 
 Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
 //auth
 Route::middleware('guest:Admin,User')->group(function () {
@@ -52,5 +54,3 @@ include __DIR__ . '/user.php';
 // Route Admin
 include __DIR__ . '/admin.php';
 include __DIR__ . '/user.php';
-include __DIR__ . '/callback.php';
-

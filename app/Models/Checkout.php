@@ -42,4 +42,14 @@ class Checkout extends Model
     {
         return $this->hasMany(CheckoutDetail::class, 'id_checkout');
     }
+
+    public function checkoutManagement()
+    {
+        return $this->hasMany(CheckoutManagement::class, 'id_checkout');
+    }
+
+    public function latestStatus()
+    {
+        return $this->checkoutManagement()->orderBy('tanggal_status', 'DESC')->first();
+    }
 }

@@ -368,7 +368,7 @@
                 }
 
                 $.ajax({
-                    url: "{{ route($role.'.shop.get-products') }}",
+                    url: "{{ $role != null ? route($role.'.shop.get-products') : route('shop.get-products') }}",
                     type: 'GET',
                     data: filters,
                     dataType: 'json',
