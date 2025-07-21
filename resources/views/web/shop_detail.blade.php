@@ -69,9 +69,9 @@
                                         <button id="submitCart" type="submit" class="btn btn-primary btn-outline btn-md">
                                             <i class="fa fa-shopping-cart"></i> Keranjang
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
+                                        {{-- <button type="button" class="btn btn-primary btn-outline btn-md {{ $product->likedProduct ? 'active' : '' }}" id="wishlist" data-slug="{{ $product->slug }}">
                                             <i class="fa fa-heart"></i> Wishlist
-                                        </button>
+                                        </button> --}}
                                     </div>
                                     <div class="quantity-control mt-2 d-flex justify-content-center align-items-center">
                                         <button type="button" class="qty-btn" id="btn-minus">-</button>
