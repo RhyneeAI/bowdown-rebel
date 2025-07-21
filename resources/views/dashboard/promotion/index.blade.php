@@ -30,7 +30,6 @@
                 <thead>
                     <tr>
                         <th width="3%" class="text-center">No</th>
-                        <th width="10%" class="text-center">Nama promosi</th>
                         <th width="10%" class="text-center">Kode Promosi</th>
                         <th width="10%" class="text-center">Stok</th>
                         <th width="17%" class="text-center">Tanggal Mulai</th>
@@ -61,7 +60,6 @@
                         ajax: "{{ route($role.'.promotion.datatable') }}",
                         columns: [
                             { data: 'DT_RowIndex', name: 'DT_RowIndex', class: 'text-center'},
-                            { data: 'nama_promosi', name: 'nama_promosi' },
                             { data: 'kode_promosi', name: 'kode_promosi', class: 'text-center' },
                             { data: 'stok', name: 'stok', class: 'text-center' },
                             { data: 'tanggal_mulai', name: 'tanggal_mulai', class: 'text-center' },
