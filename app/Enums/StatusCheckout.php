@@ -15,6 +15,7 @@ enum StatusCheckout: string
         return array_map(fn($case) => $case->value, self::cases());
     }
 
+
     public static function getBadgeColor($status)
     {
         return match ($status) {

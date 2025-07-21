@@ -77,8 +77,8 @@ class TransactionController extends Controller
     public function show($id)
     {
         $transaction = $this->service->getOne($id);
-
-        return $transaction;
+        
+        return view('dashboard.transaction.show', compact('transaction'));
     }
 
     public function receiptUpdate(Request $request, $id)
