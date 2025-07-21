@@ -32,6 +32,7 @@
                         <tr>
                             <th>No</th>
                             <th>Aksi</th>
+                            <th>Tanggal</th>
                             <th>Status</th>
                             <th>No Faktur</th>
                             <th nowrap>No Resi</th>
@@ -99,6 +100,13 @@
                     orderable: false, 
                     searchable: false, 
                     class: 'text-center'
+                },
+                { 
+                    data: 'created_at', 
+                    name: 'created_at',
+                    render: function(data, type, row) {
+                        return '<span style="white-space: nowrap;">' + data + '</span>';
+                    }
                 },
                 { 
                     data: 'status_terbaru', 
