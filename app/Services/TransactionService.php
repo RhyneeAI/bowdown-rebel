@@ -264,4 +264,74 @@ class TransactionService
             throw $th;
         }
     }
+
+    public function getAll(Request $request)
+    {
+        $query = Checkout::with([
+                    'expedition:id,nama_ekspedisi', 
+                    'user:id,nama',
+                    'latestStatus:id,id_checkout,status'
+                ])
+                ->orderBy('id', 'DESC');
+                
+        if ($request->start_date) {
+            $query->where('checkout.created_at', '>=', $request->start_date . ' 00:00:00');
+        }
+
+        if($request->end_date){
+            $query->where('checkout.created_at', '<=', $request->end_date . ' 23:59:59');
+        }
+                
+        $transaction = $query->get();
+
+        return $transaction;
+    }
+
+    public function getOne($id)
+    {
+        try {
+            $transaction = Checkout::where('id', $id)->first();
+        
+            return $transaction;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function updateReceipt(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'receipt' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                DB::rollBack();
+                return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', $validator->errors()->first());
+            }
+
+            $transaction = $this->getOne($id);
+            if (!$transaction) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Transaksi tidak ditemukan')->withInput($request->all());
+            }
+
+            $transaction->update([
+                'resi' => $request->receipt
+            ]);
+
+            CheckoutManagement::create([
+                'id_checkout' => $transaction->id,
+                'status' => StatusCheckout::DIKIRIM->value
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Resi berhasil diinputkan');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
 }

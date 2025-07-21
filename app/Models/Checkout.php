@@ -26,6 +26,7 @@ class Checkout extends Model
         'total_harga',
         'diskon',
         'dibayar',
+        'resi'
     ];
 
     public function user()
@@ -50,6 +51,6 @@ class Checkout extends Model
 
     public function latestStatus()
     {
-        return $this->checkoutManagement()->orderBy('tanggal_status', 'DESC')->first();
+        return $this->hasOne(CheckoutManagement::class, 'id_checkout', 'id')->latest('tanggal_status');
     }
 }

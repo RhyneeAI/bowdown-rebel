@@ -14,4 +14,16 @@ enum StatusCheckout: string
     {
         return array_map(fn($case) => $case->value, self::cases());
     }
+
+    public static function getBadgeColor($status)
+    {
+        return match ($status) {
+            self::MENUNGGU->value => 'warning',
+            self::DIPROSES->value => 'info',
+            self::DIBATALKAN->value => 'danger',
+            self::DIKIRIM->value => 'primary',
+            self::SELESAI->value => 'success',
+            default => 'warning',
+        };
+    }
 }
