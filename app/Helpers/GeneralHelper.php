@@ -8,7 +8,7 @@ function MakeSlug(String $text, String $separator = '-')
     $slug = trim($slug, $separator);
     $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
 
-    return 'br' . RandomString(2) . '-' . $slug;
+    return 'br' . RandomString(3) . '-' . $slug;
 }
 
 function RandomString($length = 6) {

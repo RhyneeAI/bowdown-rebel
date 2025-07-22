@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ProductService;
 use App\Traits\GuardTraits;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\StatusEnum;
 
 class ProductController extends Controller
 {
@@ -52,7 +53,8 @@ class ProductController extends Controller
                 $photoUrl = count($photoPaths) > 0 ? $photoPaths[0] : '-';
                 $encodedPhotos = htmlspecialchars(json_encode($photoPaths), ENT_QUOTES, 'UTF-8');
 
-                $activeStatus = ($row->status == 'Aktif') ? 'border-active' : 'border-nonactive';
+                $active = StatusEnum::AKTIF;
+                $activeStatus = ($row->status == $active->value) ? 'border-active' : 'border-nonactive';
 
                 $cards = [];
                 $counter = 0;
@@ -64,7 +66,7 @@ class ProductController extends Controller
 
                     $photoUrl = count($photoPaths) > 0 ? $photoPaths[0] : '-';
                     $encodedPhotos = htmlspecialchars(json_encode($photoPaths), ENT_QUOTES, 'UTF-8');
-                    $activeStatus = $row->status == 'Aktif' ? '' : 'border border-danger'; // contoh class status
+                    $activeStatus = $row->status == $active->value ? '' : 'border border-danger'; // contoh class status
 
                     if ($counter % 3 === 0) {
                         $cards[] = '<div class="col-md-12 row">';

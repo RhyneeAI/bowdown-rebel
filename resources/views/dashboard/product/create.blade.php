@@ -68,7 +68,7 @@ Tambah Produk
                             <div class="my-3 d-flex align-items-center">
                                 <label class="form-label fw-semibold mt-1">Aktif / Tidak Aktif <sup class="red-asterisk">*</sup></label>
                                 <div class="form-check form-switch m-0 mx-3">
-                                    <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
+                                    <input class="form-check-input" type="checkbox" id="status" name="status" value="on" checked>
                                 </div>
                             </div>
                         </div>

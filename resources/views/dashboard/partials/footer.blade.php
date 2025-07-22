@@ -13,6 +13,7 @@
 <script src="{{ asset('assets') }}/dashboard/js/app.min.js"></script>
 <script src="{{ asset('assets') }}/dashboard/js/dashboard.js"></script>
 <script src="{{ asset('assets') }}/js/ultility.js"></script>
+<script src="{{ asset('assets') }}/js/format-rupiah.js"></script>
 <script src="{{ asset('assets') }}/js/flatpickr.min.js"></script>
 <script src="{{ asset('assets') }}/js/slimselect.min.js"></script>
 <script src="{{ asset('assets') }}/js/quill.min.js"></script>
