@@ -64,7 +64,7 @@
                             <div class="my-3 d-flex align-items-center">
                                 <label class="form-label fw-semibold mt-1">Aktif / Tidak Aktif <sup class="red-asterisk">*</sup></label>
                                 <div class="form-check form-switch m-0 mx-3">
-                                    <input class="form-check-input" type="checkbox" id="status" name="status" value="{{ $product->status }}" checked>
+                                    <input class="form-check-input" type="checkbox" id="status" name="status" {{ $product->status == 'Aktif' ? 'checked' : '' }} >
                                 </div>
                             </div>
                         </div>
@@ -239,7 +239,7 @@
                         <label class="form-label fw-semibold">Harga <sup class="red-asterisk">*</sup></label>
                         <div class="input-group">
                             <span class="input-group-text">Rp.</span>
-                            <input type="text" class="form-control harga-input" name="harga[]" required value="${varian ? FormatRupiah(varian.harga.toString()) : ''}">
+                            <input type="text" class="form-control harga-input" name="harga[]" required value="${varian ? toRupiahFormatWithDecimal(varian.harga) : ''}">
                         </div>
                     </div>
                     <div class="col-md-2">

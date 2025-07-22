@@ -41,7 +41,7 @@ class ProductService
                 'slug' => MakeSlug($validated['nama_produk']),
                 'deskripsi' => $validated['deskripsi'],
                 'unggulan' => 0,
-                'status' => GetStatusProduk($validated['status']),
+                'status' => $validated['status'] == 'on' ? StatusEnum::AKTIF->value : StatusEnum::NONAKTIF->value,
             ]);
 
             // 2. Simpan foto (jika ada)
@@ -68,15 +68,13 @@ class ProductService
         }
     }
 
-    public function update(Request $request, String $slug)
+    public function update(Request $request, String $oldSlug)
     {
-        $product = Product::where('slug', $slug)->first();
-
         $validator = Validator::make($request->all(), [
             'nama_produk' => 'required|string|max:30',
             'id_kategori' => 'required|string',
             'deskripsi' => 'required|string',
-            'status' => 'required|string',
+            'status' => 'string',
         ]);
 
         if ($validator->fails()) {
@@ -84,17 +82,25 @@ class ProductService
         }
 
         $validated = $validator->validated();
+        if(!isset($validated['status'])) {
+            $validated['status'] = StatusEnum::NONAKTIF->value;
+        } else {
+            $validated['status'] = StatusEnum::AKTIF->value;
+        }
 
         try {
+            $newSlug = MakeSlug($validated['nama_produk']);
             // 1. Simpan produk
-            $result = Product::where('slug', $slug)->update([
+            $result = Product::where('slug', $oldSlug)->update([
                 'nama_produk' => $validated['nama_produk'],
                 'id_kategori' => $validated['id_kategori'],
-                'slug' => MakeSlug($validated['nama_produk']),
+                'slug' => $newSlug,
                 'deskripsi' => $validated['deskripsi'],
                 'unggulan' => 0,
-                'status' => GetStatusProduk($validated['status']),
+                'status' => $validated['status'],
             ]);
+
+            $product = Product::where('slug', $newSlug)->first();
 
             // 2. Simpan foto (jika ada)
             if ($request->hasFile('foto')) {
@@ -156,25 +162,51 @@ class ProductService
         }
     }
 
-    protected function upsertProductVariants(Array $variants, Product $product, String $type = 'insert')
+    protected function upsertProductVariants(array $variants, Product $product, string $type = 'insert')
     {
         try {
-            if ($type === 'update') {
-                ProductVariant::where('id_produk', $product->id)->delete();
+            // Ambil semua varian berdasarkan id_produk
+            $existingVariants = ProductVariant::where('id_produk', $product->id)->get()->keyBy('ukuran')->toArray();
+            $incomingVariants = collect($variants)->keyBy('ukuran')->toArray();
+
+            // Varian yang ada di request
+            $incomingSizes = array_keys($incomingVariants);
+            // Varian yang ada di database
+            $existingSizes = array_keys($existingVariants);
+
+            // 1. Update atau insert varian
+            foreach ($incomingVariants as $ukuran => $varian) {
+                if (isset($existingVariants[$ukuran])) {
+                    // Update varian yang sudah ada
+                    ProductVariant::where('id_produk', $product->id)
+                        ->where('ukuran', $ukuran)
+                        ->update([
+                            'harga' => ParseRupiah($varian['harga']),
+                            'stok' => $varian['stok'],
+                            'min_stok' => $varian['min_stok'],
+                        ]);
+                } else {
+                    // Insert varian baru
+                    ProductVariant::create([
+                        'id_produk' => $product->id,
+                        'ukuran' => $ukuran,
+                        'harga' => ParseRupiah($varian['harga']),
+                        'stok' => $varian['stok'],
+                        'min_stok' => $varian['min_stok'],
+                    ]);
+                }
             }
 
-            foreach ($variants as $varian) {
-                ProductVariant::create([
-                    'id_produk' => $product->id,
-                    'ukuran' => $varian['ukuran'],
-                    'harga' => ParseRupiah($varian['harga']),
-                    'stok' => $varian['stok'],
-                    'min_stok' => $varian['min_stok'],
-                ]);
+            // 2. Hapus varian yang tidak ada di request
+            $sizesToDelete = array_diff($existingSizes, $incomingSizes);
+            if (!empty($sizesToDelete)) {
+                ProductVariant::where('id_produk', $product->id)
+                    ->whereIn('ukuran', $sizesToDelete)
+                    ->delete();
             }
 
             return true;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return $e->getMessage();
         }
     }
