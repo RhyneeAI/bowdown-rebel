@@ -5,6 +5,7 @@ use App\Http\Controllers\FE\ShopController;
 use App\Http\Controllers\FE\CartController;
 use App\Http\Controllers\FE\TransactionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FE\ProfileController;
 
 Route::middleware(['auth:User'])->prefix('User')->name('User.')->group(function () {
 Route::get('/dashboard', function () {
@@ -25,4 +26,12 @@ Route::get('/dashboard', function () {
     Route::post('/cart/{item}/remove', [CartController::class, 'removeCartItem'])->name('cart.remove');
 
     Route::post('/checkout', [TransactionController::class, 'checkout'])->name('transaction.checkout');
+
+    //profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/delete-alamat/{id}', [ProfileController::class, 'deleteAlamat'])->name('profile.deleteAlamat');
+    Route::post('/profile/{id}/selesai', [ProfileController::class, 'markAsSelesai'])->name('checkout.selesai');
+
+
 });
