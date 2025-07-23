@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\CategoryService;
 use App\Models\Promotion;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {

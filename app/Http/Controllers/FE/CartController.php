@@ -21,6 +21,9 @@ class CartController extends Controller
 
     public function index()
     {
+        if (!Auth::guard('User')->check()) {
+            return redirect()->route('auth.login')->with(['error' => 'Silakan login terlebih dahulu.'], 401);
+        }
         $userId = Auth::user()->id;
         $cart = $this->cartService->getOne($userId)->load('user', 'cartItems.product', 'cartItems.variantProduct');
             

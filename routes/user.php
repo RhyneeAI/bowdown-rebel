@@ -7,9 +7,9 @@ use App\Http\Controllers\FE\TransactionController;
 use App\Http\Controllers\AuthController;
 
 Route::middleware(['auth:User'])->prefix('User')->name('User.')->group(function () {
-Route::get('/dashboard', function () {
-        return redirect()->route('User.cart'); 
-    });
+    // Route::get('/dashboard', function () {
+    //     return redirect()->route('cart.index'); 
+    // });
 
     Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');

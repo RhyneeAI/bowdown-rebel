@@ -36,13 +36,13 @@
 									<form action="{{ route('logout') }}" method="POST" style="display: inline;">
 										@csrf
 										<button type="submit" class="btn-user" style="background: none; border: none; padding: 0; cursor: pointer;">
-											Logout
+											Logout 
 										</button>
 									</form>
 								</li>
-								<li class="shopping-cart">
+								<li class="shopping-cart mt-2">
 									<a href="{{ route($role.'.cart.index') }}" class="cart">
-										<span><small>0</small><i class="icon-shopping-cart"></i></span>
+										<span><small>{{ GetCartCount(auth('User')->user()->id) }}</small><i class="icon-shopping-cart" style="font-size: 1.3em;"></i></span>
 									</a>
 								</li>
 							@endauth	
@@ -51,8 +51,12 @@
 									<a href="{{ route('auth.login') }}" class="btn-user">Login</a>
 								</li>
 								<li class="shopping-cart">
-									<a href="{{ $role != null ? route($role.'.cart.index') : route('cart.index') }}" class="cart"><span><small>0</small><i
-									class="icon-shopping-cart"></i></span></a>
+									<a href="{{ $role != null ? route($role.'.cart.index') : route('cart.index') }}" class="cart">
+										<span>
+											<small>0</small>
+											<i class="icon-shopping-cart"></i>
+										</span>
+									</a>
 								</li>
 							@endguest
 		                </ul>
