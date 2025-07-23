@@ -81,10 +81,12 @@ class PromotionService
         $promotion = Promotion::where('slug', $slug)->firstOrFail();
         $filename = $promotion->foto; 
         if ($request->hasFile('foto')) {
-            DeleteFile('promotions', $promotion->foto);
+            if($filename) {
+                DeleteFile('promotions', $promotion->foto);
+            }
 
             $filename = UploadFile('promotions', $request->file('foto'));
-        }
+        }   
 
         $promotion->update([
             'kode_promosi' => $validated['kode_promosi'],

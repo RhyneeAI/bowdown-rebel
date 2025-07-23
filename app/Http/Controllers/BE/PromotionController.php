@@ -82,7 +82,7 @@ class PromotionController extends Controller
             $guard = $this->getGuardName();
             $role = Auth::guard($guard)->user()->role->role;
 
-            return redirect()->route($role.'.promotion.index')->with('success', 'Kategori berhasil disimpan');
+            return redirect()->route($role.'.promotion.index')->with('success', 'Promosi berhasil disimpan');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }
