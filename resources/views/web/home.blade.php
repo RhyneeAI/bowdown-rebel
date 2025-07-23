@@ -177,7 +177,7 @@
                                         <p>
                                             <span class="rating"> ⭐ 4.5 / 5 </span><br>
                                             <br>
-                                            <a href="" class="icon"><i class="icon-eye"></i></a>
+                                            <a href="{{ url('product/detail') }}/${item.slug}" class="icon"><i class="icon-eye"></i></a>
                                         </p>
                                     </div>
                                 </div>
