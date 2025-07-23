@@ -57,7 +57,7 @@
 
                         <div class="{{ $colClass }} col-sm-6 mb-4">
                             <div class="category-card text-center h-100">
-                                <a href="#">
+                                <a href="{{ url('/products?category=' . $item->slug) }}">
                                     <div class="image-container">
                                         <img src="{{ GetFile('categories', $item->foto) }}" alt="{{ $item->nama_kategori }}" class="img-fluid rounded" loading="lazy">
                                         <h3 class="category-title mt-3">{{ $item->nama_kategori }}</h3>
