@@ -26,7 +26,9 @@ class Checkout extends Model
         'total_harga',
         'diskon',
         'dibayar',
-        'resi'
+        'resi',
+        'token',
+        'url_payment'
     ];
 
     public function user()

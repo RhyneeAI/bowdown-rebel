@@ -54,6 +54,12 @@ class TransactionService
 
             if ($validator->fails()) {
                 DB::rollBack();
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $validator->errors()->first()
+                    ], 400);
+                }
                 return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
             }
 
@@ -62,12 +68,28 @@ class TransactionService
             $expedition = Expedition::where('id', $validated['expedition_id'])->first();
             if(!$expedition){
                 DB::rollBack();
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Expedition Not Found'
+                    ], 400);
+                }
                 return redirect()->back()->with('error', 'Expedition Not Found')->withInput($request->all());
+            }
+
+            if(!isset($validated['promotion_ids'])){
+                $validated['promotion_ids'] = [];
             }
 
             $checkPromotion = count($validated['promotion_ids']);
             if($checkPromotion > 1){
                 DB::rollBack();
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Please select only one promotion.'
+                    ], 400);
+                }
                 return redirect()->back()->with('error', 'Please select only one promotion.')->withInput($request->all());
             }
             
@@ -82,6 +104,12 @@ class TransactionService
 
             // Cek apakah semua panjang array sama
             if (count(array_unique($lengths)) !== 1) {
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'The selected products must be in a valid list.'
+                    ], 400);
+                }
                 return redirect()->back()->with('error', 'An error occurred in the product input')->withInput($request->all());
             }
 
@@ -110,6 +138,12 @@ class TransactionService
 
                 if(!$product){
                     DB::rollBack();
+                    if($request->ajax()){
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Product Not Found'
+                        ], 400);
+                    }
                     return redirect()->back()->with('error', 'Product Not Found')->withInput($request->all());
                 }
 
@@ -117,12 +151,24 @@ class TransactionService
 
                 if($product->status != StatusEnum::AKTIF->value){
                     DB::rollBack();
+                    if($request->ajax()){
+                    return response()->json([
+                            'status' => 'error',
+                            'message' => 'Product Not Active'
+                        ], 422);
+                    }
                     return redirect()->back()->with('error', 'Product Not Active')->withInput($request->all());
                 }
 
                 $productStok = (int) $product->stok;
                 if($productStok < $qty[$key]){
                     DB::rollBack();
+                    if($request->ajax()){
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Product Stock Not Enough'
+                        ], 422);
+                    }
                     return redirect()->back()->with('error', 'Product Stock Not Enough')->withInput($request->all());
                 }
 
@@ -197,6 +243,17 @@ class TransactionService
             }
 
             $total_payment -= $total_discount;
+            
+            if($total_payment != $validated['total_payment']){
+                DB::rollBack();
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Total Payment Not Match'
+                    ], 400);
+                }
+                return redirect()->back()->with('error', 'Total Payment Not Match')->withInput($request->all());
+            }
 
             $transaction = Checkout::create([
                 'id_user' => $user->id,
@@ -254,8 +311,19 @@ class TransactionService
 
             if (isset($response['error_messages'])) {
                 DB::rollBack();
+                if($request->ajax()){
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $response['error_messages'][0]
+                    ], 422);
+                }
                 return redirect()->back()->with('error', $response['error_messages'][0])->withInput($request->all());
             }
+
+            $transaction->update([
+                'token' => $response['token'],
+                'url_payment' => $response['redirect_url']
+            ]);
 
             DB::commit();
             return $response;

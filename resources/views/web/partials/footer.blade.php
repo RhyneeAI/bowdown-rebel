@@ -128,6 +128,22 @@
             toastr.error('Terjadi kesalahan tak terduga.', '!!!');
         }
     }
+
+    @if (session('success'))
+        toastr.success("{{ session('success') }}", "Berhasil!");
+    @endif
+
+    @if (session('error'))
+        toastr.error("{{ session('error') }}", "Gagal!");
+    @endif
+
+    @if (session('warning'))
+        toastr.warning("{{ session('warning') }}", "Perhatian!");
+    @endif
+
+    @if (session('info'))
+        toastr.info("{{ session('info') }}", "Informasi");
+    @endif
 </script>
 
 @stack('scripts')
