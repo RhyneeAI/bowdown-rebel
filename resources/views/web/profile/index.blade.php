@@ -244,7 +244,8 @@ border-radius: 0.2rem;
                 <div class="fh5co-tab-content tab-content" data-tab-content="2">
                     <h4>Pesanan Sedang Dikirim</h4>
                     @if ($myorder->isEmpty())
-                        <p>Tidak ada pesanan yang sedang dikirim.</p>
+                        <div class="text-center"><p>Tidak ada pesanan yang sedang dikirim.</p></div>
+
                     @else
                     <div class="row">
                         @foreach ($myorder as $order)
@@ -277,13 +278,13 @@ border-radius: 0.2rem;
                                                 @endforeach
                                             </ul>
                                         </div>
-                                        <form method="POST" action="{{ route($role.'.checkout.selesai', $order->id) }}">
-                                            @csrf
-                                            <input type="hidden" name="status" value="Selesai">
-                                            <button type="submit" class="btn btn-success btn-xs">
-                                                <i class="icon-check"></i> Tandai Selesai
-                                            </button>
-                                        </form>
+                                    <form method="POST" action="{{ route($role.'.checkout.selesai', $order->id) }}" class="status-form" onsubmit="return confirmUpdateStatus(event, this)">
+                                        @csrf
+                                        <input type="hidden" name="status" value="Selesai">
+                                        <button type="submit" class="btn btn-warning btn-xs">
+                                            <i class="icon-check"></i> Tandai Selesai
+                                        </button>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +295,7 @@ border-radius: 0.2rem;
                 <div class="fh5co-tab-content tab-content" data-tab-content="3">
                     <h4>Pesanan Sedang Dikirim</h4>
                     @if ($myhistory->isEmpty())
-                        <p>Tidak ada pesanan yang sedang dikirim.</p>
+                        <div class="text-center"><p>Tidak ada data pesanan.</p></div>
                     @else
                     <div class="row">
                         @foreach ($myhistory as $order)
@@ -327,7 +328,7 @@ border-radius: 0.2rem;
                                                 @endforeach
                                             </ul>
                                         </div>
-                                            <button type="submit" class="btn btn-success btn-xs">
+                                            <button type="button" class="btn btn-success btn-xs">
                                                 {{ $order->latestStatus->status }}
                                             </button>
                                     </div>
@@ -446,6 +447,26 @@ toastr.options = {
 @foreach ($errors->all() as $error)
     toastr.error('{{ $error }}');
 @endforeach
+
+// SweetAlert2 confirmation for status update
+function confirmUpdateStatus(event, form) {
+    event.preventDefault();
+    Swal.fire({
+        title: 'Konfirmasi Status',
+        text: 'Apakah Anda yakin ingin menandai pesanan ini sebagai Selesai?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#dc3545',
+        confirmButtonText: 'Ya, Tandai Selesai',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+    return false;
+}
 </script>
 @endpush
 
