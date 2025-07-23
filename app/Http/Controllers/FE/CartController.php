@@ -78,7 +78,7 @@ class CartController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Kupon tidak tersedia atau sudah digunakan'], 201);
             }
 
-            return response()->json(['status' => 'success', 'message' => 'Kupon tersedia', 'data' => ['diskon_harga' => $result->diskon_harga]], 200);
+            return response()->json(['status' => 'success', 'message' => 'Kupon tersedia', 'data' => ['diskon_harga' => $result->diskon_harga, 'id' => $result->id]], 200);
         } catch (Throwable $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }

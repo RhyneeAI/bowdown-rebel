@@ -21,8 +21,21 @@ class TransactionController extends Controller
                 return $transaction;
             }
 
+            if($request->ajax()){
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Checkout berhasil, silahkan lakukan pembayaran',
+                    'data' => $transaction
+                ]);
+            }
             return redirect()->route('home.index')->with('success', 'Checkout berhasil, silahkan lakukan pembayaran');
         } catch (\Throwable $th) {
+            if($request->ajax()){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $th->getMessage()
+                ], 500);
+            }
             return redirect()->back()->with('error', $th->getMessage())->withInput($request->all());
         }
     }

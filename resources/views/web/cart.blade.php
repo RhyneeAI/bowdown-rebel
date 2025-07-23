@@ -65,116 +65,134 @@
 @endpush
 @section('content')
     <div class="fh5co-loader"></div>
-    <div id="page">
-        <!-- Shopping Cart Page -->
-        <div class="container" style="padding: 60px 0;">
-        <div class="row">
-            <!-- Cart Items -->
-            @if (optional($cart->cartItems)->count() > 0)
-                <div class="col-md-8 col-sm-12">
-                    <a href="{{ route('shop.index') }}" style="display: inline-block; margin-bottom: 20px;">
-                        <i class="icon-arrow-left"></i> Continue Shopping
-                    </a>
+    <form action="{{ route($role.'.transaction.checkout') }}" method="POST" id="form-checkout">
+        @csrf
+        <div id="page">
+            <!-- Shopping Cart Page -->
+            <div class="container" style="padding: 60px 0;">
+            <div class="row">
+                <!-- Cart Items -->
+                @if (optional($cart->cartItems)->count() > 0)
+                    <div class="col-md-8 col-sm-12">
+                        <a href="{{ route('shop.index') }}" style="display: inline-block; margin-bottom: 20px;">
+                            <i class="icon-arrow-left"></i> Continue Shopping
+                        </a>
 
-                    <div class="table-responsive">
-                        <table class="table cart-table">
-                            <tbody>
-                                @foreach($cart->cartItems as $item)
-                                    <tr id="row-{{ $item->id }}">
-                                        <td style="width: 120px;">
-                                            <img src="{{ GetFile('products', $item->product->photos->first()->nama_hash ?? '') }}" class="img-responsive" alt="">
-                                        </td>
-                                        <td>
-                                            <strong style="font-size: 2.2rem;">{{ $item->product->nama_produk }}</strong><br>
-                                            <span style="font-size: 2rem;">Rp{{ number_format($item->variantProduct->harga ?? 0, 0, ',', '.') }}</span>
-                                            <p style="font-size: 1.8rem;">Size : {{ $item->variantProduct->ukuran ?? '' }}</p>
-                                        </td>
-                                        <td style="vertical-align: middle;">
-                                            <div class="quantity-control" data-item-id="{{ $item->id }}" data-variant-id="{{ $item->variantProduct->id ?? '' }}" data-initial-qty="{{ $item->qty }}">
-                                                <button class="qty-btn btn-minus" type="button">-</button>
-                                                <input type="text" name="qty[{{ $item->id }}][value]" class="qty-input" value="{{ $item->qty }}" style="font-size: 2.1rem;" readonly>
-                                                <input type="hidden" name="qty[{{ $item->id }}][id_item]" value="{{ $item->id }}">
-                                                <input type="hidden" name="qty[{{ $item->id }}][id_varian_produk]" value="{{ $item->variantProduct->id ?? '' }}">
-                                                <button class="qty-btn btn-plus" type="button">+</button>
+                        <div class="table-responsive">
+                            <table class="table cart-table">
+                                <tbody>
+                                    @foreach($cart->cartItems as $item)
+                                        {{-- <input type="hidden" name="qty[]" value="">
+                                        <input type="hidden" name="variant_product_ids[]"> --}}
+                                        <tr id="row-{{ $item->id }}">
+                                            <td style="width: 120px;">
+                                                <img src="{{ GetFile('products', $item->product->photos->first()->nama_hash ?? '') }}" class="img-responsive" alt="">
+                                            </td>
+                                            <td>
+                                                <strong style="font-size: 2.2rem;">{{ $item->product->nama_produk }}</strong><br>
+                                                <span style="font-size: 2rem;">Rp{{ number_format($item->variantProduct->harga ?? 0, 0, ',', '.') }}</span>
+                                                <p style="font-size: 1.8rem;">Size : {{ $item->variantProduct->ukuran ?? '' }}</p>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <div class="quantity-control" data-item-id="{{ $item->id }}" data-variant-id="{{ $item->variantProduct->id ?? '' }}" data-initial-qty="{{ $item->qty }}">
+                                                    <button class="qty-btn btn-minus" type="button">-</button>
+                                                    <input type="text" name="qty[]" class="qty-input" value="{{ $item->qty }}" style="font-size: 2.1rem;" readonly>
+                                                    <input type="hidden" name="variant_product_ids[]" value="{{ $item->variantProduct->id ?? '' }}">
+                                                    <button class="qty-btn btn-plus" type="button">+</button>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <p style="font-size: 2.1rem; margin-top: 20px;">Rp{{ number_format(($item->variantProduct->harga ?? 0) * $item->qty, 0, ',', '.') }}</p>
+                                            </td>
+                                            <td style="vertical-align: middle; text-align: right;">
+                                                <button type="button" class="text-danger remove-cart-item" data-id="{{ $item->id }}" style="border: none; background: none;">
+                                                    <i class="icon-cross"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="save-changes-container" style="display: none; margin-top: 2rem; float: right;">
+                            <button type="button" id="save-changes" class="btn btn-primary" style="background: #111; border-color: #111; color: #fff;">Save Changes</button>
+                        </div>
+
+                        <div class="form-inline" style="margin-top: 20px;">
+                            <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
+                            <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
+                        </div>
+                    </div>
+                @else
+                    <div class="col-md-12">
+                        <div class="text-center" style="padding: 60px 0;">
+                            <p class="lead">Tidak ada produk di keranjang.</p>
+                            <a href="{{ route('shop.index') }}" class="btn btn-dark">Belanja Sekarang</a>
+                        </div>
+                    </div>
+                @endif
+                <input type="hidden" name="total_payment" id="total_payment" value="0">
+                <input type="hidden" name="expedition_id" id="expedition_id" value="1">
+                <div id="promotion_container"></div>
+
+                <!-- Cart Totals -->
+                @if ($cart->cartItems->count() > 0)
+                    <div class="col-md-4 col-sm-12">
+                        <div style="border: 1px solid #ccc; padding: 30px;">
+                            <h3>Cart totals</h3>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="d-flex justify-content-between align-items-center">
+                                            <span>SUBTOTAL</span>
+                                            <div>
+                                                Rp <p id="subtotal" class="mb-0">0</p>
+                                                <input type="hidden" name="subtotal">
                                             </div>
                                         </td>
-                                        <td style="vertical-align: middle;">
-                                            <p style="font-size: 2.1rem; margin-top: 20px;">Rp{{ number_format(($item->variantProduct->harga ?? 0) * $item->qty, 0, ',', '.') }}</p>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: right;">
-                                            <button class="text-danger remove-cart-item" data-id="{{ $item->id }}" style="border: none; background: none;">
-                                                <i class="icon-cross"></i>
-                                            </button>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex justify-content-between align-items-center">
+                                            <span>ONGKOS KIRIM</span>
+                                            <div>
+                                                <p id="ongkir" class="mb-0">0</p>
+                                                <input type="hidden" name="ongkir" value="10000">
+                                            </div>
                                         </td>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <td class="d-flex justify-content-between align-items-center">
+                                            <span>DISCOUNT</span>
+                                            <div>
+                                                <p id="discount" class="mb-0">0</p>
+                                                <input type="hidden" name="discount">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="d-flex justify-content-between align-items-center">
+                                            <span><strong>TOTAL</strong></span>
+                                            <div>
+                                                <strong>Rp</strong> <strong id="total" class="mb-0">0</strong>
+                                                <input type="hidden" name="total">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button type="button" id="checkout-button" class="btn btn-block btn-primary" style="background: #111; border-color: #111; color: #fff;">Proceed to checkout</button>
+                            {{-- <a href="#" class="btn btn-block btn-primary" style="background: #111; border-color: #111; color: #fff;">Proceed to checkout</a> --}}
+                        </div>
                     </div>
-
-                    <div id="save-changes-container" style="display: none; margin-top: 2rem; float: right;">
-                        <button type="button" id="save-changes" class="btn btn-primary" style="background: #111; border-color: #111; color: #fff;">Save Changes</button>
-                    </div>
-
-                    <div class="form-inline" style="margin-top: 20px;">
-                        <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
-                        <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
-                    </div>
-                </div>
-            @else
-                <div class="col-md-12">
-                    <div class="text-center" style="padding: 60px 0;">
-                        <p class="lead">Tidak ada produk di keranjang.</p>
-                        <a href="{{ route('shop.index') }}" class="btn btn-dark">Belanja Sekarang</a>
-                    </div>
-                </div>
-            @endif
-
-            <!-- Cart Totals -->
-            @if ($cart->cartItems->count() > 0)
-                <div class="col-md-4 col-sm-12">
-                    <div style="border: 1px solid #ccc; padding: 30px;">
-                        <h3>Cart totals</h3>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td class="d-flex justify-content-between align-items-center">
-                                        <span>SUBTOTAL</span>
-                                        <div>
-                                            Rp <p id="subtotal" class="mb-0">0</p>
-                                            <input type="hidden" name="subtotal">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-flex justify-content-between align-items-center">
-                                        <span>DISCOUNT</span>
-                                        <div>
-                                            <p id="discount" class="mb-0">0</p>
-                                            <input type="hidden" name="discount">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="d-flex justify-content-between align-items-center">
-                                        <span><strong>TOTAL</strong></span>
-                                        <div>
-                                            <strong>Rp</strong> <strong id="total" class="mb-0">0</strong>
-                                            <input type="hidden" name="total">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a href="#" class="btn btn-block btn-primary" style="background: #111; border-color: #111; color: #fff;">Proceed to checkout</a>
-                    </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
-    </div>
+    </form>
 @endsection
 
 @push('scripts')
+<script data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}" src="{{ env('MIDTRANS_SNAP_URL', "https://app.sandbox.midtrans.com/snap/snap.js") }}"></script>
 <script>
     $(document).ready(function () {
         let hasChanges = false;
@@ -242,6 +260,7 @@
                         const diskonHarga = parseInt(response.data.diskon_harga);
                         $('#discount').text(diskonHarga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
                         $('input[name="discount"]').val(response.data.diskon_harga);
+                        $('#promotion_container').html(`<input type="hidden" name="promotion_ids[]" value="${response.data.id}">`);
                         updateOverallTotal();
                     } else if (response.status === 'error') {
                         toastr.error(response.message);
@@ -268,15 +287,22 @@
             });
 
             const discount = parseInt($('#discount').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
-            const total = subtotal - discount;
+            const ongkir = parseInt($('#ongkir').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
+            const total = subtotal + ongkir - discount;
 
             $('#subtotal').text(subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
             $('#discount').text('- Rp ' + discount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+            $('#ongkir').text('Rp ' + ongkir.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
             $('#total').text(total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
 
             $('input[name="subtotal"]').val(subtotal);
             $('input[name="discount"]').val(discount);
+            $('input[name="ongkir"]').val(ongkir);
             $('input[name="total"]').val(total);
+
+            $('#save-changes-container').toggle(hasChanges);
+
+            $('#total_payment').val(total);
         }
 
         updateOverallTotal()
@@ -336,6 +362,59 @@
                 }
             });
         });
+
+        $(document).on('click', '#checkout-button', function () {
+            // get url from form attribute
+            const url = $('#form-checkout').attr('action');
+
+            const form = $('#form-checkout')[0];
+            const formDataPayload = new FormData(form);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formDataPayload,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (res) {
+                    console.log(res)
+                    if (res.status === 'success') {
+                        snap.pay(res.data.token, {
+                            onSuccess: function(result) {
+                                // Redirect ke halaman sukses
+                                window.location.reload();
+                            },
+                            onPending: function(result) {
+                                // Redirect ke halaman menunggu pembayaran
+                                window.location.reload();
+                            },
+                            onError: function(result) {
+                                // Redirect ke halaman error
+                                window.location.reload();
+                            },
+                            onClose: function() {
+                                // 👉 Trigger saat user menutup popup tanpa membayar
+                                window.location.reload(); // ganti dengan route kamu
+                            }
+                        });
+                    } else {
+                        toastr.error(res.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log([error, xhr]);
+                    const message = xhr.responseJSON.message || 'Terjadi kesalahan: ' + error;
+                    toastr.error(message);
+                },
+                complete: function () {
+                    hasChanges = false;
+                    $('#save-changes-container').hide();
+                }
+            });
+        })
 
         $('.remove-cart-item').on('click', function (e) {
             e.preventDefault();
