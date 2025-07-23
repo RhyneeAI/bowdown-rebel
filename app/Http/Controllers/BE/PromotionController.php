@@ -50,6 +50,12 @@ class PromotionController extends Controller
 
                 return "<div class='btn-group'>$previewBtn . $editBtn . $deleteBtn</div>";
             })
+            ->editColumn('tanggal_mulai', function ($row) {
+                return FormatDMY($row->tanggal_mulai);
+            })
+            ->editColumn('tanggal_berakhir', function ($row) {
+                return FormatDMY($row->tanggal_berakhir);
+            })
             ->editColumn('diskon_harga', function ($row) {
                 return number_format($row->diskon_harga, 2, ',', '.');
             })
@@ -82,7 +88,7 @@ class PromotionController extends Controller
             $guard = $this->getGuardName();
             $role = Auth::guard($guard)->user()->role->role;
 
-            return redirect()->route($role.'.promotion.index')->with('success', 'Kategori berhasil disimpan');
+            return redirect()->route($role.'.promotion.index')->with('success', 'Promosi berhasil disimpan');
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
         }

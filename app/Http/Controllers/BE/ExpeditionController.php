@@ -82,7 +82,7 @@ class ExpeditionController extends Controller
 
             return redirect()->route($role.'.expedition.index')->with('success', 'Ekspedisi berhasil disimpan');
         } catch (\Throwable $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan.' . $e], 500);
         }
     }
 
@@ -135,7 +135,7 @@ class ExpeditionController extends Controller
 
             return response()->json(['message' => 'Ekspedisi berhasil dihapus.'], 200);
         } catch (\Throwable $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan kategori.'], 500);
+            return response()->json(['message' => 'Terjadi kesalahan saat menyimpan.'], 500);
         }   
     }
 }
