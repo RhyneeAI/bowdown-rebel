@@ -152,7 +152,7 @@
 @endpush
 
 @section('content')
-    <aside id="fh5co-header" class="fh5co-cover fh5co-cover-sm" role="banner" style="background-image:url(assets/web/images/news.png);">
+    <aside id="fh5co-header" class="fh5co-cover fh5co-cover-sm" role="banner" style="background-image:url({{ asset('assets/web/images/news.png') }});">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">

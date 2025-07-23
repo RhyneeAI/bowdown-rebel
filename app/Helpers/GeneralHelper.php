@@ -33,3 +33,8 @@ function GetCartCount($id_user = '')
     return $cart ? $cart->cartItems()->count() : 0;
 }
 
+function FormatDMY($dmy = '') 
+{
+    return date('d-m-Y', strtotime($dmy));
+}
+
