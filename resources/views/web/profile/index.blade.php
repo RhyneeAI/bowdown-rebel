@@ -93,6 +93,12 @@ border-radius: 0.2rem;
     .order-details p {
         margin-bottom: 0.5rem;
     }
+    .badge-xs {
+    font-size: 0.75rem;
+    padding: 0.25em 0.5em;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
 </style>
 @endpush
 
@@ -335,9 +341,7 @@ border-radius: 0.2rem;
                                                 @endforeach
                                             </ul>
                                         </div>
-                                            <button type="button" class="btn btn-success btn-xs">
-                                                {{ $order->latestStatus->status }}
-                                            </button>
+                                        <span class="badge badge-success badge-xs">{{ $order->latestStatus->status ?? 'Tidak ada status' }}</span>
                                     </div>
                                 </div>
                             </div>
