@@ -26,11 +26,13 @@ class ShopController extends Controller
         protected CartService $cartService
     ) {}
 
-    public function index() 
+    public function index(Request $request) 
     {
+        $categorySelection = $request->get('category') ?? '';
         $categories = $this->categoryService->getAll();
         return view('web.shop')->with([
-            'categories' => $categories
+            'categories' => $categories,
+            'categorySelection' => $categorySelection
         ]);
     }
 

@@ -8,9 +8,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\ProfileController;
 
 Route::middleware(['auth:User'])->prefix('User')->name('User.')->group(function () {
-Route::get('/dashboard', function () {
-        return redirect()->route('User.cart'); 
-    });
+    // Route::get('/dashboard', function () {
+    //     return redirect()->route('cart.index'); 
+    // });
 
     Route::get('/products', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/get-products', [ShopController::class, 'getProducts'])->name('shop.get-products');

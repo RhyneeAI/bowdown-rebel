@@ -27,3 +27,9 @@ function GetStatusProduk(String $statusCode): String {
     return $status[$index];
 }
 
+function GetCartCount($id_user = '')
+{
+    $cart = App\Models\Cart::where('id_user', $id_user)->first();
+    return $cart ? $cart->cartItems()->count() : 0;
+}
+

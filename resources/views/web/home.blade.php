@@ -57,7 +57,7 @@
 
                         <div class="{{ $colClass }} col-sm-6 mb-4">
                             <div class="category-card text-center h-100">
-                                <a href="#">
+                                <a href="{{ url('/products?category=' . $item->slug) }}">
                                     <div class="image-container">
                                         <img src="{{ GetFile('categories', $item->foto) }}" alt="{{ $item->nama_kategori }}" class="img-fluid rounded" loading="lazy">
                                         <h3 class="category-title mt-3">{{ $item->nama_kategori }}</h3>
@@ -177,7 +177,7 @@
                                         <p>
                                             <span class="rating"> ⭐ 4.5 / 5 </span><br>
                                             <br>
-                                            <a href="" class="icon"><i class="icon-eye"></i></a>
+                                            <a href="{{ url('product/detail') }}/${item.slug}" class="icon"><i class="icon-eye"></i></a>
                                         </p>
                                     </div>
                                 </div>
