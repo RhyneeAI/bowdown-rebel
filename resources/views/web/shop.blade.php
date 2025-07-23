@@ -228,7 +228,7 @@
                             <select class="custom-select me-2" name="category">
                                 <option value="All" selected>Semua</option>
                                 @foreach ($categories as $key => $value)
-                                    <option value="{{ $value->id }}">{{ ucfirst($value->nama_kategori) }}</option>
+                                    <option value="{{ $value->id }}" {{ $categorySelection == $value->slug ? 'selected' : '' }}>{{ ucfirst($value->nama_kategori) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -476,6 +476,13 @@
 
             loadProducts()
 
+            $('input[name="search"]').on('keypress', function(event) {
+                if (event.keyCode === 13 || event.key === 'Enter') {
+                    event.preventDefault();
+                    loadProducts();
+                }
+            });
+            
             $('#apply-btn, #search-btn').click(function() {
                 loadProducts();
             })

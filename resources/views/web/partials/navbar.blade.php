@@ -15,8 +15,16 @@
 		            </div>
 		            <div class="col-md-4 col-xs-4 text-right hidden-xs menu-2">
 		                <ul>
-		                    @auth('User')
-		                        <li class="has-dropdown">
+							<li class="search">
+								<div class="input-group">
+									<input type="text" placeholder="Search..">
+		                            <span class="input-group-btn">
+										<button class="btn btn-primary" type="button"><i class="icon-search"></i></button>
+		                            </span>
+		                        </div>
+		                    </li>
+							@auth('User')
+								<li class="has-dropdown">
 		                            <i class="icon-user"></i><a href="{{ route($role.'.profile.index') }}">Profile</a>
 		                            <ul class="dropdown">
 		                                <li><a href="{{ route($role.'.profile.index') }}">{{ auth('User')->user()->nama }}
@@ -33,22 +41,25 @@
 		                                </li>
 		                            </ul>
 		                        </li>
-
-		                        <li class="shopping-cart">
-		                            <a href="{{ route($role.'.cart.index') }}" class="cart">
-		                                <span><small>0</small><i class="icon-shopping-cart"></i></span>
-		                            </a>
-		                        </li>
-		                    @endauth
-		                    @guest('User')
-		                        <li class="user">
-		                            <a href="{{ route('auth.login') }}" class="btn-user">Login</a>
-		                        </li>
-		                        <li class="shopping-cart">
-		                            <a href="{{ $role != null ? route($role.'.cart.index') : route('cart.index') }}"
-		                                class="cart"><span><small>0</small><i class="icon-shopping-cart"></i></span></a>
-		                        </li>
-		                    @endguest
+								<li class="shopping-cart mt-2">
+									<a href="{{ route($role.'.cart.index') }}" class="cart">
+										<span><small>{{ GetCartCount(auth('User')->user()->id) }}</small><i class="icon-shopping-cart" style="font-size: 1.3em;"></i></span>
+									</a>
+								</li>
+							@endauth	
+							@guest('User')
+								<li class="user">
+									<a href="{{ route('auth.login') }}" class="btn-user">Login</a>
+								</li>
+								<li class="shopping-cart">
+									<a href="{{ $role != null ? route($role.'.cart.index') : route('cart.index') }}" class="cart">
+										<span>
+											<small>0</small>
+											<i class="icon-shopping-cart"></i>
+										</span>
+									</a>
+								</li>
+							@endguest
 		                </ul>
 		            </div>
 		        </div>

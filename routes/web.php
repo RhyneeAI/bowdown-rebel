@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FE\HomeController;
 use App\Http\Controllers\FE\PageController;
 use App\Http\Controllers\FE\ShopController;
+use App\Http\Controllers\FE\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +55,3 @@ include __DIR__ . '/user.php';
 
 // Route Admin
 include __DIR__ . '/admin.php';
-include __DIR__ . '/user.php';
