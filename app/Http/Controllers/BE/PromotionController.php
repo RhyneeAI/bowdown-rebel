@@ -50,6 +50,12 @@ class PromotionController extends Controller
 
                 return "<div class='btn-group'>$previewBtn . $editBtn . $deleteBtn</div>";
             })
+            ->editColumn('tanggal_mulai', function ($row) {
+                return FormatDMY($row->tanggal_mulai);
+            })
+            ->editColumn('tanggal_berakhir', function ($row) {
+                return FormatDMY($row->tanggal_berakhir);
+            })
             ->editColumn('diskon_harga', function ($row) {
                 return number_format($row->diskon_harga, 2, ',', '.');
             })
