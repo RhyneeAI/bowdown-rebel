@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('deskripsi')->nullable();
             $table->boolean('unggulan')->default(false);
-            $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Aktif');
+            $table->enum('status', ['Aktif', 'Non Aktif'])->default('Aktif');
             $table->timestamps();
             $table->softDeletes();
         });
