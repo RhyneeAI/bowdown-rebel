@@ -172,7 +172,7 @@
                                             <div>
                                                 <p id="ongkir" class="mb-0">0</p>
                                                 <input type="hidden" name="ongkir" id="input-ongkir" value="0">
-                                                <input type="hidden" name="expedition_id" id="input-expedition-id" value="1">
+                                                {{-- <input type="hidden" name="expedition_id" id="input-expedition-id" value="1"> --}}
                                                 
                                             </div>
                                         </td>

@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Enums\MidtransStatus;
 use App\Enums\StatusCheckout;
+use App\Exceptions\ResponseApiException;
 use App\Models\Checkout;
 use App\Models\CheckoutManagement;
 use App\Traits\LoggingTraits;
@@ -29,27 +30,18 @@ class CallbackService
 
             if ($reqSignature != $signature) {
                 DB::rollBack();
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid Signature',
-                ], 400);
+                throw new ResponseApiException('Invalid Signature', 400);
             }
 
             $transaction = Checkout::where('no_faktur', $order_id)->first();
             if(!$transaction){
                 DB::rollBack();
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Transaksi Tidak Ditemukan',
-                ], 404);
+                throw new ResponseApiException('Transaction Not Found', 404);
             }
 
             if($transaction->latestStatus()->status != StatusCheckout::MENUNGGU->value){
                 DB::rollBack();
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Transaksi Tidak Dapat Di Proses',
-                ], 400);
+                throw new ResponseApiException('Transaction Can Not Be Processed', 400);
             }
 
             $currentTimestamp = now();
@@ -71,10 +63,7 @@ class CallbackService
             }
 
             if($status == StatusCheckout::MENUNGGU->value){
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Transaksi Tidak Dapat Di Proses',
-                ], 400);
+                throw new ResponseApiException('Transaction Can Not Be Processed', 400);
             }
 
             $payloadUpdate = [
@@ -96,7 +85,7 @@ class CallbackService
             DB::commit();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Pembayaran Berhasil',
+                'message' => 'Payment Success',
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
