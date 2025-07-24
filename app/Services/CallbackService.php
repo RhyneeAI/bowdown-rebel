@@ -66,7 +66,7 @@ class CallbackService
                 'updated_at' => now(),
             ];
 
-            if($status == 1)
+            if($status == StatusCheckout::DIPROSES->value)
             {
                 $payloadUpdate['dibayar'] = $dibayar;
             }
