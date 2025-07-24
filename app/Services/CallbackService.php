@@ -33,13 +33,13 @@ class CallbackService
                 throw new ResponseApiException('Invalid Signature', 400);
             }
 
-            $transaction = Checkout::where('no_faktur', $order_id)->first();
+            $transaction = Checkout::with('latestStatus')->where('no_faktur', $order_id)->first();
             if(!$transaction){
                 DB::rollBack();
                 throw new ResponseApiException('Transaction Not Found', 404);
             }
 
-            if($transaction->latestStatus()->status != StatusCheckout::MENUNGGU->value){
+            if($transaction->latestStatus->status != StatusCheckout::MENUNGGU->value){
                 DB::rollBack();
                 throw new ResponseApiException('Transaction Can Not Be Processed', 400);
             }
@@ -60,10 +60,6 @@ class CallbackService
                 $status = StatusCheckout::DIBATALKAN->value;
             } else {
                 $status = StatusCheckout::MENUNGGU->value;
-            }
-
-            if($status == StatusCheckout::MENUNGGU->value){
-                throw new ResponseApiException('Transaction Can Not Be Processed', 400);
             }
 
             $payloadUpdate = [
