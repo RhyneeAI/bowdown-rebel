@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\StatusCheckout;
 use App\Enums\StatusEnum;
+use App\Exceptions\ResponseApiException;
 use App\Helpers\MidtransHelper;
 use App\Models\CartItem;
 use App\Models\Category;
@@ -18,6 +19,7 @@ use App\Traits\GuardTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionService 
@@ -54,13 +56,7 @@ class TransactionService
 
             if ($validator->fails()) {
                 DB::rollBack();
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => $validator->errors()->first()
-                    ], 400);
-                }
-                return redirect()->back()->withErrors($validator)->with('error', $validator->errors()->first())->withInput($request->all());
+                throw new ResponseApiException($validator->errors()->first(), 400);
             }
 
             $validated = $validator->validated();
@@ -68,13 +64,7 @@ class TransactionService
             $expedition = Expedition::where('id', $validated['expedition_id'])->first();
             if(!$expedition){
                 DB::rollBack();
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Expedition Not Found'
-                    ], 400);
-                }
-                return redirect()->back()->with('error', 'Expedition Not Found')->withInput($request->all());
+                throw new ResponseApiException('Expedition Not Found', 400);
             }
 
             if(!isset($validated['promotion_ids'])){
@@ -84,33 +74,20 @@ class TransactionService
             $checkPromotion = count($validated['promotion_ids']);
             if($checkPromotion > 1){
                 DB::rollBack();
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Please select only one promotion.'
-                    ], 400);
-                }
-                return redirect()->back()->with('error', 'Please select only one promotion.')->withInput($request->all());
+                throw new ResponseApiException('Please select only one promotion.', 400);
             }
             
             $variant_product_ids = $validated['variant_product_ids'];
             $qty = $validated['qty'];
 
-            // Ambil jumlah elemen dari masing-masing array
             $lengths = [
                 count($variant_product_ids),
                 count($qty),
             ];
 
-            // Cek apakah semua panjang array sama
             if (count(array_unique($lengths)) !== 1) {
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'The selected products must be in a valid list.'
-                    ], 400);
-                }
-                return redirect()->back()->with('error', 'An error occurred in the product input')->withInput($request->all());
+                DB::rollBack();
+                throw new ResponseApiException('The selected products must be in a valid list.', 400);
             }
 
             $products = DB::table('varian_produk')
@@ -138,38 +115,20 @@ class TransactionService
 
                 if(!$product){
                     DB::rollBack();
-                    if($request->ajax()){
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Product Not Found'
-                        ], 400);
-                    }
-                    return redirect()->back()->with('error', 'Product Not Found')->withInput($request->all());
+                    throw new ResponseApiException('Product Not Found', 400);
                 }
 
                 $product_ids[] = $product->id_produk;
 
                 if($product->status != StatusEnum::AKTIF->value){
                     DB::rollBack();
-                    if($request->ajax()){
-                    return response()->json([
-                            'status' => 'error',
-                            'message' => 'Product Not Active'
-                        ], 422);
-                    }
-                    return redirect()->back()->with('error', 'Product Not Active')->withInput($request->all());
+                    throw new ResponseApiException('Product Not Active', 422);
                 }
 
                 $productStok = (int) $product->stok;
                 if($productStok < $qty[$key]){
                     DB::rollBack();
-                    if($request->ajax()){
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Product Stock Not Enough'
-                        ], 422);
-                    }
-                    return redirect()->back()->with('error', 'Product Stock Not Enough')->withInput($request->all());
+                    throw new ResponseApiException('Product Stock Not Enough', 422);
                 }
 
                 $productHarga = (int) $product->harga;
@@ -194,11 +153,22 @@ class TransactionService
                     "updated_at" => $now,
                 ];
 
-                // Kurangi stok produk
                 ProductVariant::where('id', $variant_product_id)->update(['stok' => $productStok - $qty[$key]]);
 
                 $total_payment += $productHarga * $qty[$key];
             }
+
+            $item_detail_payload[] = [
+                "id" => 'Ongkos Kirim' . $expedition->nama_ekspedisi,
+                "price" => (int) $expedition->biaya,
+                "quantity" => 1,
+                "name" => $expedition->nama_ekspedisi,
+                "brand" => "Bowndown Rebel",
+                "category" => 'Ongkir',
+                "merchant_name" => "Bowndown Rebel",
+            ];
+
+            $total_payment += (int) $expedition->biaya;
 
             $now = date('Y-m-d');
             $promotions = Promotion::whereIn('id', $validated['promotion_ids'])
@@ -233,7 +203,7 @@ class TransactionService
                     "id" => 'voucher' . $promotion->id,
                     "price" => (int) $promotion->diskon_harga * -1,
                     "quantity" => 1,
-                    "name" => $promotion->nama_promosi,
+                    "name" => $promotion->nama_promosi ? $promotion->nama_promosi : $promotion->kode_promosi,
                     "brand" => "Bowndown Rebel",
                     "category" => 'Diskon',
                     "merchant_name" => "Bowndown Rebel",
@@ -246,13 +216,7 @@ class TransactionService
             
             if($total_payment != $validated['total_payment']){
                 DB::rollBack();
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Total Payment Not Match'
-                    ], 400);
-                }
-                return redirect()->back()->with('error', 'Total Payment Not Match')->withInput($request->all());
+                throw new ResponseApiException('Total Payment Not Match', 400);
             }
 
             $transaction = Checkout::create([
@@ -267,14 +231,13 @@ class TransactionService
             foreach ($checkout_detail_payload as &$item) {
                 $item['id_checkout'] = $transaction->id;
             }
-            unset($item); // untuk mencegah referensi berlanjut
+            unset($item);
 
             CheckoutDetail::insert($checkout_detail_payload);
             PromotionUsed::insert($promotion_used);
 
-            // Delete productfrom cart
             CartItem::whereIn('id_produk', $product_ids)
-                ->whereIn('id_varian_produk', $validated['variant_product_ids']) // jika cart berdasarkan varian
+                ->whereIn('id_varian_produk', $validated['variant_product_ids'])
                 ->delete();     
 
             $payload = [
@@ -311,13 +274,7 @@ class TransactionService
 
             if (isset($response['error_messages'])) {
                 DB::rollBack();
-                if($request->ajax()){
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => $response['error_messages'][0]
-                    ], 422);
-                }
-                return redirect()->back()->with('error', $response['error_messages'][0])->withInput($request->all());
+                throw new ResponseApiException($response['error_messages'][0], 422);
             }
 
             $transaction->update([

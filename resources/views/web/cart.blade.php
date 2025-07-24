@@ -1,5 +1,6 @@
 @extends('web.partials.main')
 @push('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
 .quantity-control {
     display: flex;
@@ -123,9 +124,9 @@
                             <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
                             <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff; margin-top:5px;">Apply coupon</button>
                         </div>
-                        <p style="margin-top: 10px;">Pilih Ekspedisi</p>
                         {{-- Dropdown Ekspedisi --}}
-                        <div class="form-inline">
+                        <div class="form-inline mb-4">
+                            <label style="margin-top: 10px;">Pilih Ekspedisi</label><br>
                             <select name="expedition_id" id="expedition-select" class="form-control">
                                 <option value="">Pilih Ekspedisi</option>
                                 @foreach ($expeditions as $expedition)
@@ -208,9 +209,15 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}" src="{{ env('MIDTRANS_SNAP_URL', "https://app.sandbox.midtrans.com/snap/snap.js") }}"></script>
 <script>
     $(document).ready(function () {
+        $('#expedition-select').select2({
+            width: '35%',
+            height: '40px',
+        });
+
         let hasChanges = false;
 
         // Event untuk tombol minus
@@ -292,6 +299,7 @@
                     console.error(error);
                 });
         });
+
         $('#expedition-select').on('change', function () {
             const ongkir = parseInt($(this).find(':selected').data('biaya')) || 0;
             const ekspedisiId = $(this).val() || '';
@@ -453,21 +461,34 @@
 
             const itemId = $(this).data('id');
 
-            $.ajax({
-                url: `/User/cart/${itemId}/remove`,
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'Accept': 'application/json'
-                },
-                success: function (data) {
-                    $(`#row-${itemId}`).remove();
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/User/cart/${itemId}/remove`,
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Accept': 'application/json'
+                        },
+                        success: function (data) {
+                            $(`#row-${itemId}`).remove();
 
-                    toastr.success(data.success || 'Item berhasil dihapus dari keranjang.');
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                    toastr.error('Terjadi kesalahan saat menghapus item dari keranjang.');
+                            toastr.success(data.success || 'Item berhasil dihapus dari keranjang.');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                            toastr.error('Terjadi kesalahan saat menghapus item dari keranjang.');
+                        }
+                    });
                 }
             });
         });
