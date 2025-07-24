@@ -121,7 +121,22 @@
 
                         <div class="form-inline" style="margin-top: 20px;">
                             <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Coupon code">
-                            <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff;">Apply coupon</button>
+                            <button type="button" class="btn btn-primary" id="apply-coupon" style="background: #111; border-color: #111; color: #fff; margin-top:5px;">Apply coupon</button>
+                        </div>
+                        <p style="margin-top: 10px;">Pilih Ekspedisi</p>
+                        {{-- Dropdown Ekspedisi --}}
+                        <div class="form-inline">
+                            <select name="expedition_id" id="expedition-select" class="form-control">
+                                <option value="">Pilih Ekspedisi</option>
+                                @foreach ($expeditions as $expedition)
+                                    <option 
+                                        value="{{ $expedition->id }}" 
+                                        data-biaya="{{ $expedition->biaya }}"
+                                    >
+                                        {{ $expedition->nama_ekspedisi }} - Rp{{ number_format($expedition->biaya, 0, ',', '.') }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 @else
@@ -133,7 +148,6 @@
                     </div>
                 @endif
                 <input type="hidden" name="total_payment" id="total_payment" value="0">
-                <input type="hidden" name="expedition_id" id="expedition_id" value="1">
                 <div id="promotion_container"></div>
 
                 <!-- Cart Totals -->
@@ -157,7 +171,9 @@
                                             <span>ONGKOS KIRIM</span>
                                             <div>
                                                 <p id="ongkir" class="mb-0">0</p>
-                                                <input type="hidden" name="ongkir" value="10000">
+                                                <input type="hidden" name="ongkir" id="input-ongkir" value="0">
+                                                <input type="hidden" name="expedition_id" id="input-expedition-id" value="1">
+                                                
                                             </div>
                                         </td>
                                     </tr>
@@ -276,6 +292,22 @@
                     console.error(error);
                 });
         });
+        $('#expedition-select').on('change', function () {
+            const ongkir = parseInt($(this).find(':selected').data('biaya')) || 0;
+            const ekspedisiId = $(this).val() || '';
+
+            // Update tampilan ongkir
+            $('#ongkir').text('Rp ' + ongkir.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
+
+            // Update hidden inputs
+            $('#input-ongkir').val(ongkir);
+            $('#input-expedition-id').val(ekspedisiId);
+
+            updateOverallTotal(); // pastikan fungsi ini ambil ongkir dari #input-ongkir
+        });
+
+
+
 
         // Fungsi updateOverallTotal (pastikan sudah ada dari kode sebelumnya)
         function updateOverallTotal() {
@@ -287,7 +319,7 @@
             });
 
             const discount = parseInt($('#discount').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
-            const ongkir = parseInt($('#ongkir').text().replace('- Rp ', '').replace(/\./g, '')) || 0;
+            const ongkir = parseInt($('#input-ongkir').val()) || 0;
             const total = subtotal + ongkir - discount;
 
             $('#subtotal').text(subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));

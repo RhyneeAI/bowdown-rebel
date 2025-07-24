@@ -10,13 +10,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Services\ExpeditionService;
 
 class CartController extends Controller
 {
     public function __construct(
         protected CategoryService $categoryService,
         protected ProductService $productService,
-        protected CartService $cartService
+        protected CartService $cartService,
+        protected ExpeditionService $expeditionService
     ) {}
 
     public function index()
@@ -26,8 +28,8 @@ class CartController extends Controller
         }
         $userId = Auth::user()->id;
         $cart = $this->cartService->getOne($userId)->load('user', 'cartItems.product', 'cartItems.variantProduct');
-            
-        return view('web.cart', compact('cart'));
+        $expeditions = $this->expeditionService->getAll();
+        return view('web.cart', compact('cart', 'expeditions'));
     }
 
     public function addToCart(Request $request)
