@@ -15,14 +15,14 @@
 		            </div>
 		            <div class="col-md-4 col-xs-4 text-right hidden-xs menu-2">
 		                <ul>
-							<li class="search">
+							{{-- <li class="search">
 								<div class="input-group">
 									<input type="text" placeholder="Search..">
 		                            <span class="input-group-btn">
 										<button class="btn btn-primary" type="button"><i class="icon-search"></i></button>
 		                            </span>
 		                        </div>
-		                    </li>
+		                    </li> --}}
 							@auth('User')
 								<li class="has-dropdown">
 		                            <i class="icon-user"></i><a href="{{ route($role.'.profile.index') }}">Profile</a>
