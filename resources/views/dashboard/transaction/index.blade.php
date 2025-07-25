@@ -12,18 +12,14 @@
     <div class="card">
         <div class="card-body">
             {{-- <h5 class="card-title fw-semibold mb-4">Daftar Penjualan</h5> --}}
-            <div class="row">
-                <div class="col-md-6">
-                    {{-- <div class="mb-3">
-                        <input type="text" id="searchBar" class="form-control" placeholder="Cari Penjualan...">
-                    </div> --}}
+           <div class="row align-items-center my-4">
+                <div class="col-md-6 d-flex align-items-center gap-3">
+                    <h4 class="mb-0">Filter</h4>
+                    <input type="text" name="start_date" id="start_date" class="form-control" readonly>
+                    <input type="text" name="end_date" id="end_date" class="form-control" readonly>
                 </div>
-                <div class="col-md-6 mb-4">
-                    <div class="mb-3">
-                        <a href="{{ route($role.'.expedition.create') }}" class="btn btn-primary float-end">
-                            Tambah Penjualan
-                        </a>
-                    </div>
+                <div class="col-md-6 d-flex justify-content-end">
+                    <a class="btn btn-danger" id="export-to-pdf">Export PDF</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -82,12 +78,38 @@
 @push('script')
 <script>
     $(document).ready(function() {
+        const firstDayOfMonth = new Date();
+        firstDayOfMonth.setDate(1);
+        const today = new Date();
+
+        flatpickr("#start_date", {
+            dateFormat: "Y-m-d",
+            altFormat: "j M Y",
+            altInput: true,
+            maxDate: "today",
+            defaultDate: firstDayOfMonth.toISOString().split('T')[0] 
+        });
+
+        flatpickr("#end_date", {
+            dateFormat: "Y-m-d",
+            altFormat: "j M Y",
+            altInput: true,
+            maxDate: "today",
+            defaultDate: today.toISOString().split('T')[0] 
+        });
+
         let table = $('#transaction_table').DataTable({
             processing: true,
             serverSide: true,
             orderable: true,
             searchable: true,
-            ajax: "{{ route($role.'.transaction.datatable') }}",
+            ajax: {
+                url: "{{ route($role.'.transaction.datatable') }}",
+                data: function(d) {
+                    d.start_date = $('#start_date').val();
+                    d.end_date = $('#end_date').val();
+                }
+            },
             columns: [
                 { 
                     data: 'DT_RowIndex', 
@@ -167,12 +189,23 @@
             ]
         });
 
+        $('#start_date, #end_date').on('change', function() {
+            table.draw();
+        });
+
         table.on('preXhr.dt', function () {
             ShowLoading('Memuat data...');
         });
 
         table.on('xhr.dt', function () {
             Swal.close();
+        });
+
+        $('#export-to-pdf').on('click', function(e) {
+            e.preventDefault();
+            const start_date = $('#start_date').val();
+            const end_date = $('#end_date').val();
+            window.location.href = "{{ route($role.'.transaction.export-to-pdf') }}?start_date=" + start_date + "&end_date=" + end_date;
         });
 
         $(document).on('click', '.btn-receipt-update', function() {

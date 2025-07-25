@@ -225,7 +225,7 @@
                         <!-- Kategori -->
                         <h4 class="mt-4 mb-3">Kategori</h4>
                         <div class="d-flex w-100 mt-2 mb-1">
-                            <select class="custom-select me-2" name="category">
+                            <select class="custom-select me-2" name="category" id="category">
                                 <option value="All" selected>Semua</option>
                                 @foreach ($categories as $key => $value)
                                     <option value="{{ $value->id }}" {{ $categorySelection == $value->slug ? 'selected' : '' }}>{{ ucfirst($value->nama_kategori) }}</option>
@@ -349,6 +349,14 @@
 
         $(document).ready(function () {
             let products;
+
+            new SlimSelect({
+                select: '#category',
+                settings: {
+                    placeholder: 'Pilih kategori',
+                    addToBody: true,
+                },
+            });
 
             function loadProducts(page = 1) {
                 LoadSkeletonProducts(6);
