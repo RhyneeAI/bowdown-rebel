@@ -1,17 +1,9 @@
 $(function () {
-// -----------------------------------------------------------------------
-  // Traffic Overview
-  // -----------------------------------------------------------------------
-
-  var chart = {
+  const chart = {
     series: [
       {
-        name: "New Users",
-        data: [5, 1, 17, 6, 15, 9, 6],
-      },
-      {
-        name: "Users",
-        data: [7, 11, 4, 16, 10, 14, 10],
+        name: "Pendapatan",
+        data: monthlyRevenue, // data dari blade
       },
     ],
     chart: {
@@ -19,13 +11,12 @@ $(function () {
         show: false,
       },
       type: "line",
-      fontFamily: "inherit",
-      foreColor: "#adb0bb",
       height: 320,
       stacked: false,
+      fontFamily: "inherit",
+      foreColor: "#adb0bb",
     },
-    colors: ["var(--bs-gray-300)", "var(--bs-primary)"],
-    plotOptions: {},
+    colors: ["var(--bs-primary)"],
     dataLabels: {
       enabled: false,
     },
@@ -33,50 +24,42 @@ $(function () {
       show: false,
     },
     stroke: {
-      width: 2,
+      width: 3,
       curve: "smooth",
-      dashArray: [8, 0],
     },
     grid: {
       borderColor: "rgba(0,0,0,0.1)",
       strokeDashArray: 3,
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-    yaxis: {
-      title: {
-        // text: 'Age',
-      },
     },
     xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      categories: [
+        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+        "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+      ],
+      axisBorder: { show: false },
+      axisTicks: { show: false },
     },
     yaxis: {
       tickAmount: 4,
-    },
-    markers: {
-      strokeColor: ["var(--bs-gray-300)", "var(--bs-primary)"],
-      strokeWidth: 2,
+      labels: {
+        formatter: function (val) {
+          return "Rp " + val.toLocaleString();
+        },
+      },
     },
     tooltip: {
+      y: {
+        formatter: function (val) {
+          return "Rp " + val.toLocaleString();
+        },
+      },
       theme: "dark",
     },
   };
 
-  var chart = new ApexCharts(
+  const chartRender = new ApexCharts(
     document.querySelector("#traffic-overview"),
     chart
   );
-  chart.render();
-
-
-})
+  chartRender.render();
+});
