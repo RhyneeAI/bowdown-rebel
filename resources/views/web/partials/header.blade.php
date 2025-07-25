@@ -54,6 +54,8 @@ Facebook: 		https://www.facebook.com/fh5co
 <link rel="stylesheet" href="{{ asset('assets') }}/web/css/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+<link rel="stylesheet" href="{{ asset('assets') }}/css/slimselect.min.css">
+
 <style>
 	.loading-skeleton {
 		background: #f0f0f0;

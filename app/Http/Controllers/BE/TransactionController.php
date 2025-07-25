@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\BE;
 
+use Carbon\Carbon;
+use App\Traits\GuardTraits;
 use App\Enums\StatusCheckout;
-use Illuminate\Support\Str;
+use App\Services\TransactionService;
+use App\Services\CheckoutService;
+use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Controllers\Controller;
-use App\Services\CheckoutService;
-use App\Services\TransactionService;
-use App\Traits\GuardTraits;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -88,5 +89,18 @@ class TransactionController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage())->withInput($request->all());
         }
+    }
+
+    public function exportToPDF(Request $request)
+    {
+        $transactions = $this->service->getAll($request); 
+        
+        $start_date = FormatDMY($request->start_date);
+        $end_date = FormatDMY($request->end_date);
+        
+        $pdf = Pdf::loadView('dashboard.transaction.pdf', compact('transactions', 'start_date', 'end_date'));
+        $pdf->setPaper('A4', 'landscape'); 
+
+        return $pdf->download('Laporan transaksi ' . $start_date . ' sd ' . $end_date . '.pdf');
     }
 }

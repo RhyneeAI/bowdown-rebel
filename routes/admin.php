@@ -31,6 +31,7 @@ Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(functi
 
     // Transaction
     Route::get('transaction/datatable', [TransactionController::class, 'datatable'])->name('transaction.datatable');
+    Route::get('transaction/export-pdf', [TransactionController::class, 'exportToPDF'])->name('transaction.export-to-pdf');
     Route::put('transaction-receipt-update/{id}', [TransactionController::class, 'receiptUpdate'])->name('transaction.receipt-update');
     Route::resource('transaction', TransactionController::class)->only(['index', 'show']);
 
