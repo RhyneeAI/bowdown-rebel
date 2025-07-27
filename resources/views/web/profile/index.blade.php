@@ -98,7 +98,13 @@ border-radius: 0.2rem;
     padding: 0.25em 0.5em;
     line-height: 1.5;
     border-radius: 0.2rem;
-}
+    }
+    .badge-md {
+    font-size: 1.5rem;
+    padding: 0.25em 0.5em;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+    }
 </style>
 @endpush
 
