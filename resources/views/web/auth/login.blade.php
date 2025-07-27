@@ -35,8 +35,11 @@
 					</button>
                     <br>
                     <p>Don't have an account? <a href="{{ route('auth.register') }}">Register</a></p>
+                    <p>Back to <a href="{{ url('/') }}">home page</a></p>
+
 				</form>
 			</div>
+
 		</div>
 		
 	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->

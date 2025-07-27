@@ -265,7 +265,12 @@ border-radius: 0.2rem;
                                             <p><strong>Status:</strong> {{ $order->latestStatus->status ?? 'Tidak ada status' }}</p>
                                             <p><strong>Tanggal:</strong> {{ $order->created_at->format('d M Y') }}</p>
                                             <p><strong>Ekspedisi:</strong> {{ $order->expedition->nama_ekspedisi ?? 'Tidak ada ekspedisi' }}</p>
-                                            <p><strong>Resi:</strong> {{ $order->resi ?? 'Tidak ada resi' }}</p>
+                                            <strong>Resi:</strong> {{ $order->resi ?? 'Tidak ada resi' }}
+                                                @if ($order->resi && $order->expedition && $order->expedition->link_ekspedisi)
+                                                    <button type="button" class="btn btn-success btn-xs" onclick="window.open('{{ $order->expedition->link_ekspedisi }}', '_blank')">
+                                                        <i class="icon-truck"></i> Lacak
+                                                    </button>
+                                                @endif
                                             <p><strong>Estimasi sampai :</strong> {{ $order->expedition->perkiraan_sampai ?? 'Tidak ada resi' }}</p>
                                             <p><strong>Total Harga:</strong> Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
                                             <p><strong>Diskon:</strong> Rp {{ number_format($order->diskon, 0, ',', '.') }}</p>
@@ -336,7 +341,7 @@ border-radius: 0.2rem;
                                                 @endforeach
                                             </ul>
                                         </div>
-                                        <span class="badge badge-success badge-xs">{{ $order->latestStatus->status ?? 'Tidak ada status' }}</span>
+                                        <button class="badge badge-success badge-md">{{ $order->latestStatus->status ?? 'Tidak ada status' }}</button>
                                     </div>
                                 </div>
                             </div>
