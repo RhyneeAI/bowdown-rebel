@@ -76,7 +76,7 @@ class AuthService
 
             $request->session()->regenerateToken();
 
-            return redirect("/login")->with('success', 'Logout Berhasil!');
+            return redirect("/")->with('success', 'Logout Berhasil!');
         } catch (\Throwable $th) {
             throw $th;
         }
