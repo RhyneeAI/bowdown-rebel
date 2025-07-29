@@ -248,6 +248,10 @@
             const currentQty = parseInt($quantityControl.find('.qty-input').val());
             hasChanges = hasChanges || (initialQty !== currentQty);
             $('#save-changes-container').toggle(hasChanges);
+
+            if($('#coupon_code').val() != ''){
+                $('#apply-coupon').trigger('click');
+            }
         }
 
         // Fungsi untuk memperbarui total harga per baris
@@ -278,13 +282,25 @@
             $.get(url, { coupon_code })
                 .done(response => {
                     if (response.status === 'success') {
-                        toastr.success(response.message);
+                        const minimumPembelian = parseInt(response.data.minimum_pembelian);
+                        const subTotal = $('input[name="subtotal"]').val();
+                        if(minimumPembelian > subTotal){
+                            $('#discount').text('0');
+                            $('input[name="discount"]').val('');
+                            $('#promotion_container').html(`<input type="hidden" name="promotion_ids[]" value="">`);
+                            updateOverallTotal();
+                            
+                            toastr.error(`Minimum pembelian harus Rp ${minimumPembelian.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`);
+                            return;
+                        }
 
                         const diskonHarga = parseInt(response.data.diskon_harga);
                         $('#discount').text(diskonHarga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'));
                         $('input[name="discount"]').val(response.data.diskon_harga);
                         $('#promotion_container').html(`<input type="hidden" name="promotion_ids[]" value="${response.data.id}">`);
                         updateOverallTotal();
+                        
+                        toastr.success(response.message);
                     } else if (response.status === 'error') {
                         toastr.error(response.message);
 
@@ -338,7 +354,7 @@
             $('input[name="subtotal"]').val(subtotal);
             $('input[name="discount"]').val(discount);
             $('input[name="ongkir"]').val(ongkir);
-            $('input[name="total"]').val(total);
+            $('input[name="total"]').val(subtotal + ongkir);
 
             $('#save-changes-container').toggle(hasChanges);
 

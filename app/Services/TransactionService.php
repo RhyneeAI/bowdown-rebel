@@ -186,6 +186,10 @@ class TransactionService
                     continue;
                 }
 
+                if($promotion->minimum_pembelian > ($total_payment - (int) $expedition->biaya)){
+                    continue;
+                }
+
                 $total_discount += (int) $promotion->diskon_harga;
 
                 if($promotion->stok > 0){

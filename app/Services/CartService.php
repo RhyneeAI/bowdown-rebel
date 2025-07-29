@@ -75,7 +75,7 @@ class CartService
     public function applyCoupon(Request $request)
     {
         $user = Auth::guard('User')->user();
-        $promotion = Promotion::select(['id', 'diskon_harga', 'stok'])
+        $promotion = Promotion::select(['id', 'diskon_harga', 'minimum_pembelian', 'stok'])
                               ->where('kode_promosi', $request->coupon_code)
                               ->where('stok', '>=', 1)
                               ->whereDate('tanggal_mulai', '<=', now()->toDateString())

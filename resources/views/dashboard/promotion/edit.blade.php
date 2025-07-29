@@ -38,31 +38,37 @@ Buat Promosi Baru
                     <div class="col-md-7">
                         <div class="mb-3">
                             <label for="kode_promosi" class="form-label">Kode Promosi/Voucher</label>
-                            <input type="text" class="form-control" id="kode_promosi" name="kode_promosi" value="{{ $promotion->kode_promosi }}" required>
+                            <input type="text" class="form-control" id="kode_promosi" name="kode_promosi" value="{{ old('kode_promosi') ?? $promotion->kode_promosi }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label for="stok" class="form-label">Stok / Kuota</label>
-                            <input type="number" class="form-control" id="stok" name="stok" value="{{ $promotion->stok }}" required>
+                            <input type="number" class="form-control" id="stok" name="stok" value="{{ old('stok') ?? $promotion->stok }}" required>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
                                 <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai"
-                                    value="{{ $promotion->tanggal_mulai }}">
+                                    value="{{ old('tanggal_mulai') ?? $promotion->tanggal_mulai }}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="tanggal_berakhir" class="form-label">Tanggal Berakhir</label>
                                 <input type="date" class="form-control" id="tanggal_berakhir" name="tanggal_berakhir"
-                                    value="{{ $promotion->tanggal_berakhir }}">
+                                    value="{{ old('tanggal_berakhir') ?? $promotion->tanggal_berakhir }}">
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="diskon_harga" class="form-label">Diskon Harga</label>
-                            <input type="text" class="form-control" id="diskon_harga" name="diskon_harga" value="{{ FormatRupiah((int) $promotion->diskon_harga) }}" autocomplete="off">
+                            <input type="text" class="form-control" id="diskon_harga" name="diskon_harga" value="{{ old('diskon_harga') ?? FormatRupiah((int) $promotion->diskon_harga) }}" autocomplete="off">
 
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="minimum_pembelian" class="form-label">Minimal Pembelian</label>
+                            <input type="text" class="form-control" id="minimum_pembelian" name="minimum_pembelian"
+                                placeholder="Contoh: 50.000" value="{{ old('minimum_pembelian') ?? FormatRupiah((int) $promotion->minimum_pembelian) }}" autocomplete="off">
                         </div>
 
                         <div class="text-end">
@@ -98,6 +104,13 @@ document.getElementById('foto').addEventListener('change', function(event) {
 </script>
 <script>
         $(document).on('keyup', '#diskon_harga', function () {
+            let raw = $(this).val().replace(/\D/g, ''); 
+            let limited = raw.substring(0, 8);
+            let formatted = FormatRupiah(limited);
+            $(this).val(formatted);
+        });
+
+        $(document).on('keyup', '#minimum_pembelian', function () {
             let raw = $(this).val().replace(/\D/g, ''); 
             let limited = raw.substring(0, 8);
             let formatted = FormatRupiah(limited);

@@ -24,6 +24,7 @@ class Promotion extends Model
         'kode_promosi',
         'stok',
         'diskon_harga',
+        'minimum_pembelian',
         'tanggal_mulai',
         'tanggal_berakhir',
         'foto',
