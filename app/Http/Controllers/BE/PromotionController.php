@@ -59,6 +59,9 @@ class PromotionController extends Controller
             ->editColumn('diskon_harga', function ($row) {
                 return number_format($row->diskon_harga, 2, ',', '.');
             })
+            ->editColumn('minimum_pembelian', function ($row) {
+                return number_format($row->minimum_pembelian, 2, ',', '.');
+            })
             ->rawColumns(['action'])
             ->make(true);
     }

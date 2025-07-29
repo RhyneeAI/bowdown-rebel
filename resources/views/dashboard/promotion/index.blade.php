@@ -35,6 +35,7 @@
                         <th width="17%" class="text-center">Tanggal Mulai</th>
                         <th width="18%" class="text-center">Tanggal Berakhir</th>
                         <th width="15%" class="text-center">Diskon</th>
+                        <th width="15%" class="text-center">Minimal Pembelian</th>
                         <th width="32%" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -65,6 +66,7 @@
                             { data: 'tanggal_mulai', name: 'tanggal_mulai', class: 'text-center' },
                             { data: 'tanggal_berakhir', name: 'tanggal_berakhir', class: 'text-center' },
                             { data: 'diskon_harga', name: 'diskon_harga', class: 'text-center' },
+                            { data: 'minimum_pembelian', name: 'minimum_pembelian', class: 'text-center' },
                             { data: 'action', name: 'action', orderable: false, searchable: false, class: 'text-center'}
                         ]
                     });

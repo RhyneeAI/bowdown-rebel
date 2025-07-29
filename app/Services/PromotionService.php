@@ -14,6 +14,7 @@ class PromotionService
             'kode_promosi' => 'required|string|max:30',
             'stok' => 'required|integer|min:1',
             'diskon_harga' => 'required|min:0',
+            'minimum_pembelian' => 'required|min:0',
             'tanggal_mulai' => 'required|date',
             'tanggal_berakhir' => 'required|date|after_or_equal:tanggal_mulai',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:4096',
@@ -34,29 +35,29 @@ class PromotionService
             'kode_promosi' => $validated['kode_promosi'],
             'stok' => $validated['stok'],
             'diskon_harga' => ParseRupiah($validated['diskon_harga']),
+            'minimum_pembelian' => ParseRupiah($validated['minimum_pembelian']),
             'tanggal_mulai' => $validated['tanggal_mulai'],
             'tanggal_berakhir' => $validated['tanggal_berakhir'],
             'foto' => $filename,
             'slug' => MakeSlug($validated['kode_promosi']),
-
         ]);
     }
 
     public function getAll()
     {
-        $promotion = Promotion::select(['id', 'kode_promosi','stok','diskon_harga','tanggal_mulai','tanggal_berakhir','foto','slug'])->orderBy('id', 'DESC')->get();
+        $promotion = Promotion::select(['id', 'kode_promosi','stok','diskon_harga', 'minimum_pembelian','tanggal_mulai','tanggal_berakhir','foto','slug'])->orderBy('id', 'DESC')->get();
         return $promotion;
     }
 
     public function getAllWithPaginate(Int $paginate)
     {
-        $promotion = Promotion::select(['id', 'kode_promosi','stok','diskon_harga','tanggal_mulai','tanggal_berakhir','foto','slug'])->orderBy('id', 'DESC')->paginate($paginate);
+        $promotion = Promotion::select(['id', 'kode_promosi','stok','diskon_harga', 'minimum_pembelian','tanggal_mulai','tanggal_berakhir','foto','slug'])->orderBy('id', 'DESC')->paginate($paginate);
         return $promotion;
     }
 
     public function getOne(String $slug = '')
     {
-        $promotion = Promotion::select(['id','kode_promosi','stok','diskon_harga','tanggal_mulai','tanggal_berakhir','foto','slug'])->where('slug', $slug)->first();
+        $promotion = Promotion::select(['id','kode_promosi','stok','diskon_harga', 'minimum_pembelian','tanggal_mulai','tanggal_berakhir','foto','slug'])->where('slug', $slug)->first();
         return $promotion;
     }
 
@@ -66,6 +67,7 @@ class PromotionService
             'kode_promosi' => 'required|string|max:30',
             'stok' => 'required|integer|min:1',
             'diskon_harga' => 'required|min:0',
+            'minimum_pembelian' => 'required|min:0',
             'tanggal_mulai' => 'required|date',
             'tanggal_berakhir' => 'required|date|after_or_equal:tanggal_mulai',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
@@ -92,6 +94,7 @@ class PromotionService
             'kode_promosi' => $validated['kode_promosi'],
             'stok' => $validated['stok'],
             'diskon_harga' => ParseRupiah($validated['diskon_harga']),
+            'minimum_pembelian' => ParseRupiah($validated['minimum_pembelian']),
             'tanggal_mulai' => $validated['tanggal_mulai'],
             'tanggal_berakhir' => $validated['tanggal_berakhir'],
             'foto' => $filename,
