@@ -19,7 +19,7 @@ class HomeController extends Controller
     public function index() 
     {
         $categories = $this->categoryService->getAll();
-        $promotions = Promotion::select('foto', 'kode_promosi', 'diskon_harga')->get();
+        $promotions = Promotion::select('foto', 'kode_promosi', 'diskon_harga','minimum_pembelian')->get();
         return view('web.home')->with([
             'categories' => $categories,
             'promotions' => $promotions

@@ -87,7 +87,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title d-flex align-items-center gap-2 mb-4">
-                    Traffic Overview
+                    Rekap pendapatan/bulan
                     <span>
                         <iconify-icon icon="solar:question-circle-bold" class="fs-7 d-flex text-muted"
                             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success"
@@ -98,6 +98,48 @@
                 </div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center gap-2 mb-4">
+                    Rekap order masuk/hari
+                    <span>
+                        <iconify-icon icon="solar:question-circle-bold" class="fs-7 d-flex text-muted"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success"
+                            data-bs-title="Traffic Overview"></iconify-icon>
+                    </span>
+                </h5>
+                <div id="order-overview">
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center gap-2 mb-4">
+                    Rekap barang/bulan
+                    <span>
+                        <iconify-icon icon="solar:question-circle-bold" class="fs-7 d-flex text-muted"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success"
+                            data-bs-title="Traffic Overview"></iconify-icon>
+                    </span>
+                </h5>
+                <div id="produk-overview">
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title d-flex align-items-center gap-2 mb-4">
+                    Rekap pengguna/hari
+                    <span>
+                        <iconify-icon icon="solar:question-circle-bold" class="fs-7 d-flex text-muted"
+                            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="tooltip-success"
+                            data-bs-title="Traffic Overview"></iconify-icon>
+                    </span>
+                </h5>
+                <div id="user-overview">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -105,6 +147,9 @@
 @push('script')
 <script>
     const monthlyRevenue = @json($monthlyRevenue);
+    const getDailyOrderCount = @json($getDailyOrderCount);
+    const getMonthlyProductCount = @json($getMonthlyProductCount);
+    const getDailyUserCount = @json($getDailyUserCount);
 </script>
 
 @endpush

@@ -18,6 +18,9 @@ class DashboardController extends Controller
     {
         $data = $this->dashboardService->getDashboardData();
         $monthlyRevenue = $this->dashboardService->getMonthlyRevenue();
-        return view('dashboard.dashboard', $data, compact('monthlyRevenue'));
+        $getDailyOrderCount = $this->dashboardService->getDailyOrderCount();
+        $getMonthlyProductCount = $this->dashboardService->getMonthlyProductCount();
+        $getDailyUserCount = $this->dashboardService->getDailyUserCount();
+        return view('dashboard.dashboard', $data, compact('monthlyRevenue', 'getDailyOrderCount', 'getMonthlyProductCount','getDailyUserCount'));
     }
 }

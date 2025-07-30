@@ -21,12 +21,15 @@
                     <div class="container">
                         <div class="col-md-6 col-md-offset-3 col-md-pull-3 js-fullheight slider-text">
                             <div class="slider-text-inner">
-                                <div class="desc">
-                                    <h2>Promo Code: {{ $promo->kode_promosi }}</h2>
-                                    <p>Save up to <strong>Rp{{ number_format($promo->diskon_harga, 0, ',', '.') }}</strong> with this special offer! Don’t miss out!</p>
-                                    <p><a href="{{ route('shop.index') }}" class="btn btn-primary btn-outline btn-lg">
-                                            Shop Now</a></p>
-                                </div>
+                            <div class="desc">
+                                <h2>Promo Code: {{ $promo->kode_promosi }}</h2>
+                                <p>Save up to <strong>Rp{{ number_format($promo->diskon_harga, 0, ',', '.') }}</strong> with this special offer! Don’t miss out!</p>
+                                <p>Minimum purchase: <strong>Rp{{ number_format($promo->minimum_pembelian, 0, ',', '.') }}</strong></p>
+                                <p>
+                                    <a href="{{ route('shop.index') }}" class="btn btn-primary btn-outline btn-lg">Shop Now</a>
+                                </p>
+                            </div>
+
                             </div>
                         </div>
                     </div>
