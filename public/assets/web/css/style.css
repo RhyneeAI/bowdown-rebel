@@ -110,16 +110,6 @@ h1, h2, h3, h4, h5, h6, figure {
     display: none;
   }
 }
-.fh5co-nav .menu-2 li.search {
-  float: left;
-  width: 50%;
-  font-family: "Playfair Display", serif;
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-  padding: 0;
-  margin: -5px 0 0 50px;
-}
 .fh5co-nav .menu-2 li.login {
   float: left;
   width: 10%;
