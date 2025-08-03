@@ -244,7 +244,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Stok <sup class="red-asterisk">*</sup></label>
-                        <input type="text" class="form-control" name="stok[]" value="${varian ? varian.stok : 1}">
+                        <input type="text" class="form-control" name="stok[]" value="${varian ? varian.stok : 1}" readonly>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label fw-semibold">Min Stok <sup class="red-asterisk">*</sup></label>

@@ -237,6 +237,16 @@ class ProductService
         return $product;
     }
 
+   public function getVariant(String $slug = '')
+    {
+        return Product::with(['variants' => function ($query) {
+            $query->select(['id', 'id_produk', 'ukuran', 'harga', 'stok', 'min_stok']);
+        }])
+        ->select(['id', 'nama_produk', 'slug'])
+        ->where('slug', $slug)
+        ->first();
+    }
+
     public function getHotProducts()
     {
         $hotProducts = Product::select(['id', 'nama_produk', 'slug', 'status', 'unggulan', 'rating'])
@@ -405,6 +415,28 @@ class ProductService
             return false;
         }
     }
+
+    public function updateStockVariant(Request $request)
+    {
+        try {
+            $variant = ProductVariant::find($request->variant_id);
+
+            if (!$variant) {
+                return response()->json(['message' => 'Variant tidak ditemukan'], 404);
+            }
+
+            $stokTambah = (int) $request->stok_tambah;
+            $stokBaru = $variant->stok + $stokTambah;
+
+            $variant->stok = $stokBaru;
+            $variant->save();
+
+            return $variant;
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal memperbarui stok', 'error' => $e->getMessage()], 500);
+        }
+    }
+
 
     public function delete(String $slug) 
     {

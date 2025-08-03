@@ -23,6 +23,8 @@ Route::middleware(['auth:Admin'])->prefix('Admin')->name('Admin.')->group(functi
 
     // Produk
     Route::get('product/list', [ProductController::class, 'list'])->name('product.list');
+    Route::get('product/get-variant', [ProductController::class, 'getVariant'])->name('product.get-variant');
+    Route::post('product/update-stock-variant', [ProductController::class, 'updateStockVariant'])->name('product.update-stock-variant');
     Route::resource('product', ProductController::class);
 
     // Promosi

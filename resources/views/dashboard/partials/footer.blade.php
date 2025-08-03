@@ -9,7 +9,6 @@
 <script src="{{ asset('assets') }}/dashboard/libs/simplebar/dist/simplebar.js"></script>
 <script src="{{ asset('assets') }}/dashboard/js/sidebarmenu.js"></script>
 <script src="{{ asset('assets') }}/dashboard/js/app.min.js"></script>
-<script src="{{ asset('assets') }}/dashboard/js/dashboard.js"></script>
 <script src="{{ asset('assets') }}/js/ultility.js"></script>
 <script src="{{ asset('assets') }}/js/format-rupiah.js"></script>
 <script src="{{ asset('assets') }}/js/flatpickr.min.js"></script>
@@ -89,5 +88,10 @@
             toastr.error("{{ $error }}", "Gagal!");
         @endforeach
     @endif
+
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+
 </script>
 @stack('script')
