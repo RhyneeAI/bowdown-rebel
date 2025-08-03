@@ -14,6 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\UserAddress;
 use App\Models\Checkout;
 use App\Enums\StatusCheckout;
+use App\Models\CheckoutManagement;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -26,12 +28,19 @@ class ProfileController extends Controller
     {
         $user = Auth::user()->load('addresses');
         $userId = Auth::user()->id;
-        $myorder = Checkout::where('id_user',$userId)
-        ->whereHas('latestStatus', function($query){
-            $query->where('status',StatusCheckout::DIKIRIM->value);
+        $myorder = Checkout::where('id_user', $userId)
+        ->whereHas('latestStatus', function ($query) {
+            $query->whereIn('status', [
+                StatusCheckout::DIPROSES->value,
+                StatusCheckout::DIKIRIM->value,
+            ]);
         })
-        ->with(['checkoutDetail','latestStatus'])
+        ->with(['checkoutDetail', 'latestStatus'])
+        ->orderBy('created_at', 'desc')
         ->get();
+
+
+
 
         $myhistory = Checkout::where('id_user',$userId)
         ->whereHas('latestStatus',function($query){

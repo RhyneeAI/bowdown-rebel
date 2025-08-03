@@ -254,9 +254,9 @@ border-radius: 0.2rem;
                 </div>
 
                 <div class="fh5co-tab-content tab-content" data-tab-content="2">
-                    <h4>Pesanan Sedang Dikirim</h4>
+                    <h4>Pesanan saya</h4>
                     @if ($myorder->isEmpty())
-                        <div class="text-center"><p>Tidak ada pesanan yang sedang dikirim.</p></div>
+                        <div class="text-center"><p>Tidak ada pesanan yang sedang diproses atau dikirim.</p></div>
 
                     @else
                     <div class="row">
@@ -277,7 +277,6 @@ border-radius: 0.2rem;
                                                         <i class="icon-truck"></i> Lacak
                                                     </button>
                                                 @endif
-                                            <p><strong>Estimasi sampai :</strong> {{ $order->expedition->perkiraan_sampai ?? 'Tidak ada resi' }}</p>
                                             <p><strong>Total Harga:</strong> Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
                                             <p><strong>Diskon:</strong> Rp {{ number_format($order->diskon, 0, ',', '.') }}</p>
                                             <p><strong>Produk:</strong></p>
@@ -295,13 +294,16 @@ border-radius: 0.2rem;
                                                 @endforeach
                                             </ul>
                                         </div>
-                                    <form method="POST" action="{{ route($role.'.checkout.selesai', $order->id) }}" class="status-form" onsubmit="return confirmUpdateStatus(event, this)">
-                                        @csrf
-                                        <input type="hidden" name="status" value="Selesai">
-                                        <button type="submit" class="btn btn-warning btn-xs">
-                                            <i class="icon-check"></i> Tandai Selesai
-                                        </button>
-                                    </form>
+                                    @if ($order->latestStatus && $order->latestStatus->status === \App\Enums\StatusCheckout::DIKIRIM->value)
+                                        <form method="POST" action="{{ route($role.'.checkout.selesai', $order->id) }}" class="status-form" onsubmit="return confirmUpdateStatus(event, this)">
+                                            @csrf
+                                            <input type="hidden" name="status" value="Selesai">
+                                            <button type="submit" class="btn btn-warning btn-xs">
+                                                <i class="icon-check"></i> Tandai Selesai
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +331,6 @@ border-radius: 0.2rem;
                                             <p>
                                                 <strong>Resi:</strong> {{ $order->resi ?? 'Tidak ada resi' }}
                                             </p>
-                                            <p><strong>Estimasi sampai :</strong> {{ $order->expedition->perkiraan_sampai ?? 'Tidak ada resi' }}</p>
                                             <p><strong>Total Harga:</strong> Rp {{ number_format($order->total_harga, 0, ',', '.') }}</p>
                                             <p><strong>Diskon:</strong> Rp {{ number_format($order->diskon, 0, ',', '.') }}</p>
                                             <p><strong>Produk:</strong></p>
