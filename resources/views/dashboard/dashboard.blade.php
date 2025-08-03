@@ -145,11 +145,11 @@
 @endsection
 
 @push('script')
-<script>
-    const monthlyRevenue = @json($monthlyRevenue);
-    const getDailyOrderCount = @json($getDailyOrderCount);
-    const getMonthlyProductCount = @json($getMonthlyProductCount);
-    const getDailyUserCount = @json($getDailyUserCount);
-</script>
-
+    <script>
+        const monthlyRevenue = @json($monthlyRevenue);
+        const getDailyOrderCount = @json($getDailyOrderCount);
+        const getMonthlyProductCount = @json($getMonthlyProductCount);
+        const getDailyUserCount = @json($getDailyUserCount);
+    </script>
+    <script src="{{ asset('assets') }}/dashboard/js/dashboard.js"></script>
 @endpush

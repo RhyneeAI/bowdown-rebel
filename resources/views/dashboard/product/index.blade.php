@@ -77,6 +77,7 @@ Daftar Produk
 
 @section('modal')
     @include('dashboard.product.modal-image')
+    @include('dashboard.product.modal-add_stock')
 @endsection
 
 @push('script')
@@ -158,5 +159,100 @@ Daftar Produk
             });
         });
     });
+
+    $(document).ready(function () {
+        const modal = $('#AddStockModal');
+        const select = modal.find('#variant-ukuran');
+
+        select.off('change').on('change', function () {
+            const stokAwal = parseInt($(this).find(':selected').data('stok')) || 0;
+            const variantId = $(this).find(':selected').data('id') || '';
+            modal.find('#variant-id').val(variantId);
+            modal.find('#stok-sebelumnya').val(stokAwal);
+            modal.find('#stok-tambah').val('');
+            modal.find('#stok-total').val(stokAwal);
+        });
+
+        modal.find('#stok-tambah').off('input').on('input', function () {
+            const tambah = parseInt($(this).val()) || 0;
+            const stokAwal = parseInt(modal.find('#stok-sebelumnya').val()) || 0;
+            modal.find('#stok-total').val(stokAwal + tambah);
+        });
+
+        $('#btn-update-stock').off('click').on('click', function () {
+            const url = "{{ route($role.'.product.update-stock-variant') }}";
+            const data = {
+                variant_id: $('#variant-id').val(),
+                stok_tambah: $('#stok-tambah').val()
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.post(url, data)
+                .done(res => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Stok diperbarui',
+                        text: res.message
+                    }).then(() => {
+                        loadCard();
+    
+                        modal.find('#variant-id').val('');
+                        modal.find('#stok-sebelumnya').val('');
+                        modal.find('#stok-tambah').val('');
+                        modal.find('#stok-total').val('');
+                    });
+
+                    modal.modal('hide');
+                })
+                .fail(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal update stok',
+                        text: err.responseJSON?.message || 'Terjadi kesalahan'
+                    });
+                });
+        });
+    });
+
+    $(document).on('show.bs.modal', '#AddStockModal', function (event) {
+        const url = "{{ route($role.'.product.get-variant') }}";
+        const button = $(event.relatedTarget);
+        const slug = button.data('slug');
+        const modal = $(this);
+        const select = modal.find('#variant-ukuran');
+
+        ShowLoading('Memuat ...');
+
+        $.get(url, { slug: slug }, function (res) {
+            const product = res.variant;
+
+            if (product) {
+                modal.find('#product-slug').val(product.slug);
+                modal.find('#product-nama').text(product.nama_produk);
+
+                select.empty().append(`<option value="">Pilih ukuran</option>`);
+
+                if (product.variants && product.variants.length > 0) {
+                    product.variants.forEach(function (v) {
+                        select.append(`<option value="${v.ukuran}" data-id="${v.id}" data-stok="${v.stok}">${v.ukuran} (Stok : ${v.stok})</option>`);
+                    });
+                } else {
+                    select.append(`<option disabled>Tidak ada varian</option>`);
+                }
+
+                Swal.close();
+            } else {
+                Swal.fire('Gagal', 'Produk tidak ditemukan', 'error');
+            }
+        }).fail(function () {
+            Swal.fire('Error', 'Gagal memuat data produk', 'error');
+        });
+    });
+
 </script>
 @endpush

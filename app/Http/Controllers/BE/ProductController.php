@@ -88,6 +88,10 @@ class ProductController extends Controller
                                         <iconify-icon icon="mdi:eye" style="font-size: 18px; padding-top: 3px"></iconify-icon>
                                     </span>
 
+                                    <span class="btn btn-sm btn-success btn-preview" data-bs-toggle="modal" data-bs-target="#AddStockModal" data-slug="' . $row->slug . '" style="cursor: pointer;">
+                                        <iconify-icon icon="mdi:plus" style="font-size: 18px; padding-top: 3px"></iconify-icon>
+                                    </span>
+
                                     <a href="' . route($role.'.product.edit', $row->slug) . '" class="btn btn-sm btn-warning btn-edit" style="cursor: pointer;">
                                         <iconify-icon icon="mdi:pencil" style="font-size: 18px; padding-top: 3px"></iconify-icon>
                                     </a>
@@ -117,6 +121,31 @@ class ProductController extends Controller
         ]);
     }
 
+    public function getVariant(Request $request) 
+    {
+        $variant = $this->service->getVariant($request->slug);
+        return response()->json([
+            'variant' => $variant
+        ]);
+    }
+
+    public function updateStockVariant(Request $request) 
+    {
+        try {
+            $result = $this->service->updateStockVariant($request);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Stok produk berhasil ditambahkan',
+                'system_message' => $result,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menambahkan stok produk',
+            ], 500);
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
