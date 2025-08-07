@@ -16,6 +16,7 @@ use App\Models\Checkout;
 use App\Enums\StatusCheckout;
 use App\Models\CheckoutManagement;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -28,16 +29,25 @@ class ProfileController extends Controller
     {
         $user = Auth::user()->load('addresses');
         $userId = Auth::user()->id;
-        $myorder = Checkout::where('id_user', $userId)
-        ->whereHas('latestStatus', function ($query) {
-            $query->whereIn('status', [
-                StatusCheckout::DIPROSES->value,
-                StatusCheckout::DIKIRIM->value,
+        $latestStatuses = DB::table('manajemen_checkout as cm1')
+            ->select('cm1.id_checkout')
+            ->join(
+                DB::raw('(SELECT id_checkout, MAX(tanggal_status) as max_tanggal FROM manajemen_checkout GROUP BY id_checkout) as cm2'),
+                function ($join) {
+                    $join->on('cm1.id_checkout', '=', 'cm2.id_checkout')
+                        ->on('cm1.tanggal_status', '=', 'cm2.max_tanggal');
+                }
+            )
+            ->whereIn('cm1.status', [
+                'Diproses',
+                'Dikirim'
             ]);
-        })
-        ->with(['checkoutDetail', 'latestStatus'])
-        ->orderBy('created_at', 'desc')
-        ->get();
+
+        $myorder = Checkout::where('id_user', $userId)
+            ->whereIn('id', $latestStatuses)
+            ->with(['checkoutDetail', 'latestStatus'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
 

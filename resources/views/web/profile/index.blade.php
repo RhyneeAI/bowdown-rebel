@@ -272,7 +272,7 @@ border-radius: 0.2rem;
                                             <p><strong>Tanggal:</strong> {{ $order->created_at->format('d M Y') }}</p>
                                             <p><strong>Ekspedisi:</strong> {{ $order->expedition->nama_ekspedisi ?? 'Tidak ada ekspedisi' }}</p>
                                             <strong>Resi:</strong> {{ $order->resi ?? 'Tidak ada resi' }}
-                                                @if ($order->resi && $order->expedition && $order->expedition->link_ekspedisi)
+                                                @if ($order->resi && $order->expedition && $order->expedition->link_ekspedisi && $order->latestStatus && $order->latestStatus->status === \App\Enums\StatusCheckout::DIKIRIM->value )
                                                     <button type="button" class="btn btn-success btn-xs" onclick="window.open('{{ $order->expedition->link_ekspedisi }}', '_blank')">
                                                         <i class="icon-truck"></i> Lacak
                                                     </button>
