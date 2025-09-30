@@ -1,0 +1,48 @@
+name: Basic CI
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+
+jobs:
+  basic-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'  # Laravel 10 butuh min PHP 8.1
+        extensions: mbstring, xml, ctype, iconv, intl, bcmath, pdo, sqlite
+        coverage: none
+
+    - name: Validate Composer
+      run: composer validate --no-check-all
+
+    - name: Check PHP syntax
+      run: |
+        find app/ -name "*.php" -exec php -l {} \;
+        find database/ -name "*.php" -exec php -l {} \;
+        find tests/ -name "*.php" -exec php -l {} \;
+
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Install dependencies
+      run: composer install --no-progress --prefer-dist
+
+    - name: Generate key
+      run: php artisan key:generate
+
+    - name: Check Laravel structure
+      run: php artisan route:list --no-interaction && php artisan config:clear
+
+    - name: Run basic Laravel checks
+      run: |
+        php artisan --version
+        php -r "echo 'PHP: ' . PHP_VERSION . \"\n\";"
